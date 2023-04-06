@@ -2,10 +2,10 @@ import { Expose } from 'class-transformer';
 import BaseEntity from './Entity';
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import User from './User';
-// import Post from './Post';
+import Post from './Post';
 
 @Entity('places')
-export default class Sub extends BaseEntity {
+export default class Place extends BaseEntity {
   @Index()
   @Column({ unique: true })
   name: string;
@@ -32,8 +32,8 @@ export default class Sub extends BaseEntity {
   @JoinColumn({ name: 'username', referencedColumnName: 'username' })
   user: User;
 
-  // @OneToMany(() => Post, (post) => post.sub)
-  // posts: Post[];
+  @OneToMany(() => Post, (post) => post.place)
+  posts: Post[];
 
   @Expose()
   get imageUrl(): string {

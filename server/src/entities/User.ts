@@ -10,8 +10,8 @@ import {
 } from 'typeorm';
 import BaseEntity from './Entity';
 import bcrypt from 'bcryptjs';
-// import Post from './Post';
-// import Vote from './Vote';
+import Post from './Post';
+import Vote from './Vote';
 
 // 명시적으로 매핑할 테이블을 지정
 // 'users'라는 이름을 사용하여 User 엔티티가 users 테이블과 매핑되도록 설정
@@ -36,11 +36,11 @@ export default class User extends BaseEntity {
   @Length(6, 255, { message: '비밀번호는 6자리 이상이어야 합니다.' })
   password: string;
 
-  // @OneToMany(() => Post, (post) => post.user)
-  // posts: Post[];
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 
-  // @OneToMany(() => Vote, (vote) => vote.user)
-  // votes: Vote[];
+  @OneToMany(() => Vote, (vote) => vote.user)
+  votes: Vote[];
 
   // User 엔티티가 데이터베이스에 삽입되기 전에 해당 엔티티의 password 필드를 bcrypt를 이용하여 해싱하는 작업
   @BeforeInsert()
