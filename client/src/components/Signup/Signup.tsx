@@ -1,10 +1,12 @@
-import axios from 'axios';
 import React, { FormEvent, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
+import { axiosInstance } from '../../configs/axios';
 import CommonButton from '../Common/CommonButton';
 import InputGroup from '../InputGroup/InputGroup';
 import S from './Signup.styles';
 
 function Signup() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -20,11 +22,12 @@ function Signup() {
     e.preventDefault();
 
     try {
-      await axios.post('/auth/signup', {
+      await axiosInstance.post('/auth/signup', {
         email,
         password,
         username,
       });
+      // router.push('/login')
     } catch (error: any) {
       console.error(error);
       setErrors(error.response.data || {});
@@ -44,6 +47,7 @@ function Signup() {
       {/* 이메일 */}
       <h3>이메일 주소</h3>
       <InputGroup
+        type="email"
         placeholder="이메일 주소 입력"
         value={email}
         isfill={email}
@@ -53,6 +57,7 @@ function Signup() {
       {/* 닉네임 */}
       <h3>닉네임</h3>
       <InputGroup
+        type="text"
         placeholder="닉네임 입력"
         value={username}
         isfill={username}
@@ -62,6 +67,7 @@ function Signup() {
       <h4>플레이스 활동 시 필요한 닉네임을 입력해 주세요.</h4>
       <h3>비밀번호</h3>
       <InputGroup
+        type="password"
         placeholder="비밀번호 입력"
         value={password}
         isfill={password}
