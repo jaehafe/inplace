@@ -1,12 +1,19 @@
 import express, { Response } from 'express';
 import morgan from 'morgan';
+import cors from 'cors';
 import { AppDataSource } from './data-source';
 import authRoutes from './routes/auth';
 
 const app = express();
+const origin = 'http://localhost:3000';
 
 app.use(express.json());
 app.use(morgan('dev'));
+app.use(
+  cors({
+    origin,
+  })
+);
 
 app.get('/', (_, res: Response) => {
   res.send('server is running!!!');
