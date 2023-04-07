@@ -5,7 +5,7 @@ import M from './MainPage.styles';
 function MainPage() {
   return (
     <M.MainPageWrapper>
-      <LogoHeader />
+      <LogoHeader headerIcons={true} />
       인플레이스
     </M.MainPageWrapper>
   );
