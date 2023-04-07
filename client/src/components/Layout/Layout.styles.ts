@@ -21,7 +21,13 @@ const Container = styled.div`
   }
 `;
 
+const SignupLayoutWrapper = styled.div`
+  position: relative;
+  min-height: 100vh;
+`;
+
 const L = {
   Container,
+  SignupLayoutWrapper,
 };
 export default L;
