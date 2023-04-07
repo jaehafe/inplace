@@ -4,6 +4,7 @@ import { axiosInstance } from '../../configs/axios';
 import CommonButton from '../Common/CommonButton';
 import InputGroup from '../InputGroup/InputGroup';
 import S from './Signup.styles';
+import Link from 'next/link';
 
 function Signup() {
   const router = useRouter();
@@ -58,7 +59,7 @@ function Signup() {
       <h3>닉네임</h3>
       <InputGroup
         type="text"
-        placeholder="닉네임 입력"
+        placeholder="인플레이스에서 어떻게 불러드릴까요?"
         value={username}
         isfill={username}
         setValue={setUsername}
@@ -75,6 +76,10 @@ function Signup() {
         error={errors.password}
       />
       <h4>6자리 이상 20자리 이하</h4>
+      <h4>이미 회원이신가요?</h4>
+      <Link href="/login">
+        <h5>로그인 하러 가기</h5>
+      </Link>
       <CommonButton
         type="primary"
         onClick={onClickSignup}

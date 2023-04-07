@@ -41,6 +41,12 @@ const SignupWrapper = styled.div`
     color: ${({ theme }) => theme.gray600};
     text-align: left;
   }
+
+  > h4:last-of-type {
+    border-top: 0.1px solid ${({ theme }) => theme.gray600};
+    padding-top: 10px;
+    margin-top: 80px;
+  }
 `;
 
 // const SignupInput = styled(Input)<InputProps>`
