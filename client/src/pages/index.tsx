@@ -1,17 +1,14 @@
 import React from 'react';
 import Image from 'next/image';
-import { betaImages } from '../../configs/betaImages';
+import { AppImages } from '../configs/AppImages';
+import MainPage from '../components/MainPage/MainPage';
 
 function Home() {
   return (
-    <div>
-      123
-      <Image
-        src={betaImages.InPlaceLogo}
-        alt="logo"
-        // style={{ width: '100px', height: '100px' }}
-      />
-    </div>
+    <>
+      <MainPage />
+      {/* <Image src={AppImages.InPlaceLogo} alt="logo" property="true" /> */}
+    </>
   );
 }
 

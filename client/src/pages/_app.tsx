@@ -6,6 +6,8 @@ import localFont from '@next/font/local';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import theme from '../styles/theme';
+import AppLayout from '../components/Layout/AppLayout';
+import Head from 'next/head';
 
 const pretendard = localFont({
   src: [
@@ -56,7 +58,15 @@ export default function App({ Component, pageProps }: AppProps) {
           <ReactQueryDevtools initialIsOpen={false} />
         ) : null}
         <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
+          <Head>
+            <title>인플레이스</title>
+            <meta name="title" content="인플레이스" />
+          </Head>
+          <AppLayout>
+            <main>
+              <Component {...pageProps} />
+            </main>
+          </AppLayout>
         </ThemeProvider>
       </Hydrate>
     </QueryClientProvider>
