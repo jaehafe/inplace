@@ -1,11 +1,11 @@
-import '@styles/globals.css';
+import '../styles/globals.css';
 
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { AppProps } from 'next/app';
 import localFont from '@next/font/local';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import theme from '@styles/theme';
+import theme from '../styles/theme';
 
 const pretendard = localFont({
   src: [
