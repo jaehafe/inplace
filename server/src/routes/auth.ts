@@ -1,5 +1,8 @@
-import { validate } from 'class-validator';
+import { isEmpty, validate } from 'class-validator';
 import { Request, Response, Router } from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import cookie from 'cookie';
 import User from '../entities/User';
 
 const router = Router();
@@ -50,6 +53,48 @@ const signup = async (req: Request, res: Response) => {
   }
 };
 
+// 로그인
+const login = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  try {
+    let errors: any = {};
+
+    if (isEmpty(email)) errors.email = '이메일은 비워둘 수 없습니다.';
+    if (isEmpty(password)) errors.password = '비밀번호는 비워둘 수 없습니다.';
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json(errors);
+    }
+
+    // db에서 email로 유저 찾기
+    const user = await User.findOneBy({ email });
+
+    // 해당하는 email의 user가 없으면 에러 보내기
+    if (!user)
+      return res.status(404).json({ email: '가입한 이메일이 없습니다.' });
+
+    // 유저가 있다면 db의 비밀번호와 입력한 비밀번호 비교
+    const passwordMatches = await bcrypt.compare(password, user.password);
+
+    // 비밀번호가 다르면 에러 보내기
+    if (!passwordMatches) {
+      return res.status(401).json({ password: '비밀번호가 잘못되었습니다.' });
+    }
+
+    // 비밀번호가 맞으면 토큰 생성
+    const token = jwt.sign({ email }, process.env.JWT_SECRET);
+
+    // 쿠키 저장
+    res.set('Set-Cookie', cookie.serialize('token', token));
+
+    return res.json({ user, token });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json(error);
+  }
+};
+
 router.post('/signup', signup);
+router.post('/login', login);
 
 export default router;
