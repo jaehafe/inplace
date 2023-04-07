@@ -42,6 +42,10 @@ const SignupWrapper = styled.div`
     text-align: left;
   }
 
+  > h2:first-of-type {
+    margin-top: 10px;
+  }
+
   > h4:last-of-type {
     border-top: 0.1px solid ${({ theme }) => theme.gray600};
     padding-top: 10px;
