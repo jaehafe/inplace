@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useMemo, useState } from 'react';
 import CommonButton from '../Common/CommonButton';
 import InputGroup from '../InputGroup/InputGroup';
 import S from './Signup.styles';
@@ -10,6 +10,11 @@ function Signup() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<any>({});
   console.log(email, username, password);
+
+  const isDisabled = useMemo(
+    () => Boolean(!email || !username || !password),
+    [email, username, password]
+  );
 
   const onClickSignup = async (e: FormEvent) => {
     e.preventDefault();
@@ -64,8 +69,11 @@ function Signup() {
         error={errors.nickname}
       />
       <h4>6자리 이상 20자리 이하</h4>
-      <CommonButton type="primary" onClick={onClickSignup} disabled={false}>
-        {/* disabled={isDisabled} */}
+      <CommonButton
+        type="primary"
+        onClick={onClickSignup}
+        disabled={isDisabled}
+      >
         회원가입
       </CommonButton>
     </S.SignupWrapper>
