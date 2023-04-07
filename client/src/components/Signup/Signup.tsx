@@ -62,7 +62,7 @@ function Signup() {
         value={username}
         isfill={username}
         setValue={setUsername}
-        error={errors.nickname}
+        error={errors.username}
       />
       <h4>플레이스 활동 시 필요한 닉네임을 입력해 주세요.</h4>
       <h3>비밀번호</h3>
@@ -72,7 +72,7 @@ function Signup() {
         value={password}
         isfill={password}
         setValue={setPassword}
-        error={errors.nickname}
+        error={errors.password}
       />
       <h4>6자리 이상 20자리 이하</h4>
       <CommonButton

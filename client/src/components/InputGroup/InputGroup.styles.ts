@@ -4,7 +4,11 @@ import styled from 'styled-components';
 interface InputProps {
   isfill?: string | number | object | null;
 }
-const InputWrapper = styled.div``;
+const InputWrapper = styled.div`
+  > small {
+    color: ${({ theme }) => theme.negative};
+  }
+`;
 const StyledInput = styled(Input)<InputProps>`
   padding: 8px 10px;
   font-weight: 400;
@@ -12,11 +16,7 @@ const StyledInput = styled(Input)<InputProps>`
     ${({ theme, isfill }) => (isfill ? theme.gray500 : theme.gray200)};
   border-radius: 8px;
 
-  /* & + & {
-    margin-top: 12px;
-  }
-
-  &.ant-input-affix-wrapper-readonly {
+  /* &.ant-input-affix-wrapper-readonly {
     &:hover {
       border: 1px solid ${({ theme }) => theme.gray200};
     }

@@ -25,6 +25,7 @@ function InputGroup({
         placeholder={placeholder}
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        isfill={isfill}
       />
       <small>{error}</small>
     </I.InputWrapper>
