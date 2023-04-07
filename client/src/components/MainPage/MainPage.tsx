@@ -6,7 +6,7 @@ function MainPage() {
   return (
     <M.MainPageWrapper>
       <LogoHeader />
-      MainPage
+      인플레이스
     </M.MainPageWrapper>
   );
 }

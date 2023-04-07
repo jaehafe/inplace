@@ -8,7 +8,7 @@ function LogoHeader() {
   return (
     <L.LogoHeaderWrapper>
       <Link href="/">
-        <Image src={AppImages.InPlaceLogo} alt="inplace-logo" width={50} height={50} />
+        <Image src={AppImages.InPlaceLogo} alt="inplace-logo" width="50" height="50" />
       </Link>
     </L.LogoHeaderWrapper>
   );

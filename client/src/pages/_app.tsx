@@ -52,7 +52,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Hydrate state={pageProps.dehydratedState}>
+      <Hydrate state={pageProps?.dehydratedState}>
         <GlobalStyle />
         {process.env.NODE_ENV !== 'production' ? (
           <ReactQueryDevtools initialIsOpen={false} />
