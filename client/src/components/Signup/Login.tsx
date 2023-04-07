@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useMemo, useState } from 'react';
+import React, { FormEvent, useMemo, useState } from 'react';
+import { axiosInstance } from '../../configs/axios';
 import CommonButton from '../Common/CommonButton';
 import InputGroup from '../InputGroup/InputGroup';
 import S from './Signup.styles';
@@ -16,8 +17,14 @@ function Login() {
     [email, password]
   );
 
-  const onClickLogin = () => {
-    router.push('/');
+  const onClickLogin = async () => {
+    try {
+      await axiosInstance.post('/auth/login', { email, password });
+      // router.push('/');
+    } catch (error: any) {
+      console.error(error);
+      setErrors(error.response.data || {});
+    }
   };
 
   return (
