@@ -11,4 +11,9 @@ export default styled(Button)`
   font-weight: 600;
   border: 0;
   background-color: ${({ theme }) => theme.primary};
+
+  &:hover,
+  &:active {
+    background-color: ${({ theme }) => theme.primary} !important;
+  }
 `;

@@ -43,29 +43,29 @@ const SignupWrapper = styled.div`
   }
 `;
 
-const SignupInput = styled(Input)<InputProps>`
-  padding: 8px 10px;
-  font-weight: 400;
-  border: 1px solid
-    ${({ theme, isfill }) => (isfill ? theme.gray500 : theme.gray200)};
-  border-radius: 8px;
+// const SignupInput = styled(Input)<InputProps>`
+//   padding: 8px 10px;
+//   font-weight: 400;
+//   border: 1px solid
+//     ${({ theme, isfill }) => (isfill ? theme.gray500 : theme.gray200)};
+//   border-radius: 8px;
 
-  /* & + & {
-    margin-top: 12px;
-  }
+//   /* & + & {
+//     margin-top: 12px;
+//   }
 
-  &.ant-input-affix-wrapper-readonly {
-    &:hover {
-      border: 1px solid ${({ theme }) => theme.gray200};
-    }
-    & * {
-      cursor: pointer;
-    }
-  } */
-`;
+//   &.ant-input-affix-wrapper-readonly {
+//     &:hover {
+//       border: 1px solid ${({ theme }) => theme.gray200};
+//     }
+//     & * {
+//       cursor: pointer;
+//     }
+//   } */
+// `;
 
 const S = {
   SignupWrapper,
-  SignupInput,
+  // SignupInput,
 };
 export default S;
