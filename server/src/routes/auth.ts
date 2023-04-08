@@ -27,8 +27,7 @@ const signup = async (req: Request, res: Response) => {
 
     // 이미 있으면 error
     if (emailUser) errors.email = '이미 해당 이메일이 사용되었습니다.';
-    if (usernameUser)
-      errors.username = '이미 해당 사용자 이름이 사용되었습니다.';
+    if (usernameUser) errors.username = '이미 해당 사용자 이름이 사용되었습니다.';
 
     if (Object.keys(errors).length > 0) {
       return res.status(400).json(errors);
@@ -70,8 +69,7 @@ const login = async (req: Request, res: Response) => {
     const user = await User.findOneBy({ email });
 
     // 해당하는 email의 user가 없으면 에러 보내기
-    if (!user)
-      return res.status(404).json({ email: '가입한 이메일이 없습니다.' });
+    if (!user) return res.status(404).json({ email: '가입한 이메일이 없습니다.' });
 
     // 유저가 있다면 db의 비밀번호와 입력한 비밀번호 비교
     const passwordMatches = await bcrypt.compare(password, user.password);

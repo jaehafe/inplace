@@ -1,13 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { makeId } from '../utils/helper';
 import BaseEntity from './Entity';
 import Post from './Post';
