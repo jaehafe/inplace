@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
 import { axiosInstance } from '../../configs/axios';
-import useAuthStore from '../../store/store';
+import useAuthStore from '../../store/authStore';
 import CommonButton from '../Common/CommonButton';
 import InputGroup from '../InputGroup/InputGroup';
 import S from './Signup.styles';
