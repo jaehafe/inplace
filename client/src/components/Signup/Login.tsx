@@ -14,11 +14,7 @@ function Login() {
   const [errors, setErrors] = useState<any>({});
 
   const { login, logout, stopLoading, loadUser } = useAuthStore();
-  const [authenticated, user, loading] = useAuthStore((state) => [
-    state.authenticated,
-    state.user,
-    state.loading,
-  ]);
+  const authenticated = useAuthStore((state) => state.authenticated);
 
   if (authenticated) router.push('/');
   console.log('authenticated', authenticated);

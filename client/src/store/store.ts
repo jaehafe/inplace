@@ -15,8 +15,8 @@ interface AuthState {
   loadUser: () => Promise<void>;
 }
 
-const useAuthStore = create<AuthState>(
-  (set, get) => ({
+const useAuthStore = create<AuthState>()(
+  devtools((set, get) => ({
     authenticated: false,
     user: undefined,
     loading: true,
@@ -40,10 +40,7 @@ const useAuthStore = create<AuthState>(
         // get().stopLoading();
       }
     },
-  })
-  // {
-  //   name: 'auth-storage',
-  // }
+  }))
 );
 
 export default useAuthStore;
