@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
 import { axiosInstance } from '../../configs/axios';
+import useAuthStore from '../../store/store';
 import CommonButton from '../Common/CommonButton';
 import InputGroup from '../InputGroup/InputGroup';
 import S from './Signup.styles';
@@ -12,6 +13,16 @@ function Login() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<any>({});
 
+  const { login, logout, stopLoading, loadUser } = useAuthStore();
+  const [authenticated, user, loading] = useAuthStore((state) => [
+    state.authenticated,
+    state.user,
+    state.loading,
+  ]);
+
+  if (authenticated) router.push('/');
+  console.log('authenticated', authenticated);
+
   const isDisabled = useMemo(
     () => Boolean(!email || !password),
     [email, password]
@@ -19,7 +30,8 @@ function Login() {
 
   const onClickLogin = async () => {
     try {
-      await axiosInstance.post('/auth/login', { email, password });
+      const res = await axiosInstance.post('/auth/login', { email, password });
+      login(res.data?.user);
       // router.push('/');
     } catch (error: any) {
       console.error(error);

@@ -15,7 +15,7 @@ interface AuthState {
   loadUser: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>(
+const useAuthStore = create<AuthState>(
   (set, get) => ({
     authenticated: false,
     user: undefined,
@@ -25,6 +25,7 @@ export const useAuthStore = create<AuthState>(
       set(() => ({
         authenticated: true,
         user,
+        loading: false,
       })),
     logout: () => set(() => ({ authenticated: false, user: undefined })),
     stopLoading: () => set(() => ({ loading: false })),
@@ -35,7 +36,8 @@ export const useAuthStore = create<AuthState>(
       } catch (error) {
         console.error(error);
       } finally {
-        get().stopLoading();
+        set((state) => ({ ...state, loading: false }));
+        // get().stopLoading();
       }
     },
   })
@@ -43,3 +45,5 @@ export const useAuthStore = create<AuthState>(
   //   name: 'auth-storage',
   // }
 );
+
+export default useAuthStore;
