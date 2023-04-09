@@ -5,6 +5,7 @@ import HotPosts from '../Posts/HotPosts';
 import LogoHeader from '../LogoHeader/LogoHeader';
 import M from './MainPage.styles';
 import Places from '../Posts/Places';
+import WritePostButton from '../Common/WritePostButton/WritePostButton';
 
 const displayBody = (value: string | number) => {
   switch (value) {
@@ -39,6 +40,7 @@ function MainPage() {
       </M.StyledSpace>
 
       <>{displayBody(value)}</>
+      <WritePostButton />
     </M.MainPageWrapper>
   );
 }
