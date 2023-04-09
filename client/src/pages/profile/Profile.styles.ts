@@ -45,7 +45,6 @@ const Wrapper = styled.div`
 `;
 
 const InfoWrapper = styled.div`
-  border: 1px solid;
   margin-top: 30px;
   display: flex;
   justify-content: space-between;

@@ -6,6 +6,7 @@ interface IProfileImageProps {
   height?: number | string | any;
   src?: string | any;
   alt?: string;
+  style?: any;
 }
 
 function ProfileImage({
@@ -13,6 +14,7 @@ function ProfileImage({
   height = 80,
   src = 'https://www.gravatar.com/avatar?d=mp&f=y',
   alt = 'profile-logo',
+  style,
 }: IProfileImageProps) {
   return (
     <>
@@ -21,7 +23,8 @@ function ProfileImage({
         alt={alt}
         width={width}
         height={height}
-        style={{ borderRadius: '50%' }}
+        // style={{ borderRadius: '50%' }}
+        style={style}
       />
     </>
   );

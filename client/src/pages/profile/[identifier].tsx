@@ -22,7 +22,7 @@ function Profile() {
     {
       key: '응답한 글',
       label: `응답한 글`,
-      children: <ProfileCommentTab />,
+      children: <>123</>,
     },
   ];
 
