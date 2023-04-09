@@ -6,7 +6,8 @@ import { AppImages } from '../../configs/AppImages';
 import { Button, Divider } from 'antd';
 import { useRouter } from 'next/router';
 import useAuthStore from '../../store/AuthStore';
-import { RightOutlined } from '@ant-design/icons';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import B from '../Common/BackButton';
 
 interface IProps {
   headerIcons?: boolean;
@@ -17,10 +18,10 @@ function LogoHeader({ headerIcons }: IProps) {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const user = useAuthStore((state) => state?.user);
-  // console.log(user);
+  console.log(user);
 
   const buttons = [
-    { text: '작성 글', onClick: () => console.log('작성 글 버튼 클릭') },
+    { text: '작성 글', onClick: () => router.push('/profile/identifier') },
     { text: '작성 댓글', onClick: () => console.log('작성 댓글 버튼 클릭') },
     {
       text: '프로필 편집',
@@ -138,7 +139,14 @@ function LogoHeader({ headerIcons }: IProps) {
           </L.MyDrawer>
         </>
       ) : (
-        ''
+        <B.BackButton
+          type="dashed"
+          shape="round"
+          size="large"
+          onClick={() => router.back()}
+        >
+          <LeftOutlined />
+        </B.BackButton>
       )}
     </L.LogoHeaderWrapper>
   );
