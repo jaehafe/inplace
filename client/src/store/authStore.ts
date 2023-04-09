@@ -1,9 +1,7 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import { devtools } from 'zustand/middleware';
 import { User } from '../types';
 import { axiosInstance } from '../configs/axios';
-import { ReactNode, useEffect } from 'react';
 
 interface AuthState {
   authenticated: boolean;
