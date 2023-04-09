@@ -64,23 +64,6 @@ const BodyWrapper = styled.div`
   }
 `;
 
-const PostDrawer = styled(Drawer)`
-  position: sticky;
-  left: 0;
-  width: 320px !important;
-  margin: auto;
-  border-radius: 20px;
-
-  & div.ant-drawer-content-wrapper {
-    box-shadow: none !important;
-  }
-
-  & div.ant-drawer-body {
-    display: flex;
-    flex-direction: column;
-  }
-`;
-
 const VoteResultWrapper = styled.div`
   margin-top: 10px;
   display: flex;
@@ -135,6 +118,23 @@ const Comment = styled.span`
   gap: 10px;
   color: ${({ theme }) => theme.gray650};
   font-size: 13px;
+`;
+
+const PostDrawer = styled(Drawer)`
+  position: sticky;
+  left: 0;
+  width: 320px !important;
+  margin: auto;
+  border-radius: 20px;
+
+  & div.ant-drawer-content-wrapper {
+    box-shadow: none !important;
+  }
+
+  & div.ant-drawer-body {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const P = {

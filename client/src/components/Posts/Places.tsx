@@ -1,8 +1,13 @@
 import React from 'react';
-import P from './Posts.styles';
+import Posts from './Posts';
 
 function Places() {
-  return <P.Wrapper>Places</P.Wrapper>;
+  return (
+    <div>
+      {/* <Posts /> */}
+      123
+    </div>
+  );
 }
 
 export default Places;

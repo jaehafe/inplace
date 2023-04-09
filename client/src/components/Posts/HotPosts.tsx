@@ -1,8 +1,12 @@
 import React from 'react';
-import P from './Posts.styles';
+import Posts from './Posts';
 
 function HotPosts() {
-  return <P.Wrapper>HotPosts</P.Wrapper>;
+  return (
+    <div>
+      <Posts />
+    </div>
+  );
 }
 
 export default HotPosts;
