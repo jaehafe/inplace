@@ -1,10 +1,49 @@
-import { Drawer } from 'antd';
+import { Button, Drawer } from 'antd';
 import styled from 'styled-components';
 
 const LogoHeaderWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+
+  & h3 {
+    margin: 24px 0 12px;
+    font-size: 16px;
+    font-weight: 500;
+    color: ${({ theme }) => theme.gray800};
+    text-align: left;
+  }
+
+  & h4 {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 400;
+    color: ${({ theme }) => theme.gray800};
+    text-align: left;
+  }
+
+  & p {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: ${({ theme }) => theme.gra600};
+  }
+
+  & h4 {
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: ${({ theme }) => theme.gray600};
+    text-align: left;
+  }
+
+  & span {
+    font-size: 10px;
+    font-weight: 400;
+    color: ${({ theme }) => theme.gray500};
+    text-align: left;
+  }
 `;
 
 const HeaderIcons = styled.div`
@@ -38,8 +77,27 @@ const DrawerHeader = styled.header`
   gap: 10px;
 `;
 
-const DrawerBodyWrapper = styled.div`
-  border: 1px solid;
+const DrawerBodyWrapper = styled.div``;
+
+const ProfileWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledButton = styled(Button)`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+`;
+
+const LoginOutWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const L = {
@@ -48,6 +106,9 @@ const L = {
   MyDrawer,
   DrawerHeader,
   DrawerBodyWrapper,
+  ProfileWrapper,
+  LoginOutWrapper,
+  StyledButton,
 };
 
 export default L;
