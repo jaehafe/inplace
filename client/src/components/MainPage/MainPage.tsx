@@ -26,7 +26,7 @@ function MainPage() {
   return (
     <M.MainPageWrapper>
       <LogoHeader headerIcons={true} />
-      <Space direction="horizontal">
+      <M.StyledSpace direction="horizontal">
         <Segmented
           options={[
             { label: '전체', value: '전체' },
@@ -36,7 +36,7 @@ function MainPage() {
           value={value}
           onChange={setValue}
         />
-      </Space>
+      </M.StyledSpace>
 
       <>{displayBody(value)}</>
     </M.MainPageWrapper>
