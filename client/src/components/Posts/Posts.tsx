@@ -130,7 +130,7 @@ function AllPosts() {
         onClose={() => setOpen(false)}
         open={open}
         key="bottom"
-        height={250}
+        height={'auto'}
       >
         <Button type="text" shape="round">
           공유
@@ -142,6 +142,14 @@ function AllPosts() {
         <Divider />
         <Button type="text" shape="round">
           팔로우
+        </Button>
+        <Divider />
+        <Button type="text" shape="round">
+          수정
+        </Button>
+        <Divider />
+        <Button type="text" shape="round">
+          삭제
         </Button>
       </P.PostDrawer>
     </P.Wrapper>

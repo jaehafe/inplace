@@ -123,7 +123,8 @@ const Comment = styled.span`
 const PostDrawer = styled(Drawer)`
   position: sticky;
   left: 0;
-  width: 320px !important;
+  width: 390px !important;
+
   margin: auto;
   border-radius: 20px;
 

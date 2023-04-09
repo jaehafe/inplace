@@ -18,7 +18,7 @@ function WritePostButton() {
         onClose={() => setOpen(false)}
         open={open}
         key="bottom"
-        height={310}
+        height={'auto'}
       >
         <Button type="text" shape="round">
           OX 질문
