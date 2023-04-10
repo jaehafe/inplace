@@ -6,13 +6,6 @@ import LogoHeader from '../components/LogoHeader/LogoHeader';
 import Login from '../components/Signup/Login';
 
 function LogIn() {
-  const router = useRouter();
-  const { data: me } = authMeAPI();
-  console.log('me>>>', me);
-
-  if (me) {
-    router.push('/');
-  }
   return (
     <SignupLayout>
       <>

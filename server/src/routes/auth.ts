@@ -141,6 +141,22 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
+// 로그아웃
+const logout = async (_: Request, res: Response) => {
+  res.set(
+    'Set-Cookie',
+    cookie.serialize('token', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      expires: new Date(0),
+      path: '/',
+    })
+  );
+
+  res.status(200).json({ success: true });
+};
+
 router.post('/images', upload.single('image'), (req: RequestWithFile, res: Response) => {
   console.log('req.file.path>>> ', req.file.path);
   res.json(req.file.path);
@@ -148,5 +164,6 @@ router.post('/images', upload.single('image'), (req: RequestWithFile, res: Respo
 router.get('/me', userMiddleware, authMiddleware, me);
 router.post('/signup', signup);
 router.post('/login', login);
+router.post('/logout', userMiddleware, authMiddleware, logout);
 
 export default router;

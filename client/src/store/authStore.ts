@@ -1,8 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { User } from '../types';
-import { axiosInstance } from '../configs/axios';
-import { authMeAPI } from '../apis/auth';
 
 interface AuthState {
   authenticated: boolean;
@@ -29,7 +27,6 @@ const useAuthStore = create<AuthState>()(
     logout: () => set(() => ({ authenticated: false, user: undefined })),
     stopLoading: () => set(() => ({ loading: false })),
     loadUser: async () => {
-      // authMeAPI();
       // try {
       //   const res = await axiosInstance.get('/auth/me');
       //   get().login(res.data);

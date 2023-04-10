@@ -4,6 +4,7 @@ import {
   useQuery,
   UseQueryOptions,
 } from '@tanstack/react-query';
+import { message } from 'antd';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { axiosInstance, baseURL } from '../configs/axios';
@@ -30,6 +31,22 @@ export const loginAPI = (
     axiosInstance.post(queryKey, data).then((res) => res.data);
 
   return useMutation([queryKey], queryFn, { ...options });
+};
+
+export const logoutAPI = () => {
+  const router = useRouter();
+  const queryKey = `${baseURL}/auth/logout`;
+  const queryFn = () => axiosInstance.post(queryKey).then((res) => res.data);
+
+  const onSuccess = () => {
+    message.success('로그아웃 성공');
+    router.reload();
+  };
+  const onError = () => {
+    message.error('로그아웃 실패');
+  };
+
+  return useMutation([queryKey], queryFn, { onSuccess, onError });
 };
 
 export const authMeAPI = (

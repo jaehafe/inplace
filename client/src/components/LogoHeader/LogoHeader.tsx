@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import useAuthStore from '../../store/authStore';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import B from '../Common/BackButton';
+import { logoutAPI } from '../../apis/auth';
 
 interface IProps {
   headerIcons?: boolean;
@@ -33,6 +34,12 @@ function LogoHeader({ headerIcons }: IProps) {
     { text: '로그인', onClick: () => router.push('/login') },
     { text: '회원가입', onClick: () => router.push('/signup') },
   ];
+
+  const { mutate } = logoutAPI();
+  const handleLogout = () => {
+    mutate();
+    // router.reload();
+  };
 
   return (
     <L.LogoHeaderWrapper>
@@ -115,7 +122,7 @@ function LogoHeader({ headerIcons }: IProps) {
                   <L.StyledButton
                     type="text"
                     shape="round"
-                    onClick={() => router.push('/signup')}
+                    onClick={handleLogout}
                   >
                     로그아웃
                   </L.StyledButton>
