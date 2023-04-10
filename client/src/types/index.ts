@@ -11,3 +11,8 @@ export interface ISignup {
   username: string;
   imageUrl: string;
 }
+
+export interface ILogin {
+  email: string;
+  password: string;
+}

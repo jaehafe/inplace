@@ -85,8 +85,7 @@ function Signup() {
   const onClickSignup = async (e: FormEvent) => {
     e.preventDefault();
 
-    const data = { email, password, username };
-    mutate(data as ISignup);
+    mutate({ email, password, username } as ISignup);
   };
 
   return (

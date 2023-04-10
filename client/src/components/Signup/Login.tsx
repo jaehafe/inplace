@@ -1,8 +1,11 @@
+import { AxiosError } from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
+import { loginAPI } from '../../apis/auth';
 import { axiosInstance } from '../../configs/axios';
 import useAuthStore from '../../store/AuthStore';
+import { ILogin } from '../../types';
 import CommonButton from '../Common/CommonButton';
 import InputGroup from '../InputGroup/InputGroup';
 import S from './Signup.styles';
@@ -14,6 +17,10 @@ function Login() {
   const [errors, setErrors] = useState<any>({});
 
   const { login, logout, stopLoading, loadUser } = useAuthStore();
+  const onError = (error: AxiosError) => {
+    setErrors(error.response?.data || {});
+  };
+  const { mutate } = loginAPI({ onError });
   const authenticated = useAuthStore((state) => state.authenticated);
 
   if (authenticated) router.push('/');
@@ -24,15 +31,8 @@ function Login() {
     [email, password]
   );
 
-  const onClickLogin = async () => {
-    try {
-      const res = await axiosInstance.post('/auth/login', { email, password });
-      login(res.data?.user);
-      // router.push('/');
-    } catch (error: any) {
-      console.error(error);
-      setErrors(error.response.data || {});
-    }
+  const onClickLogin = () => {
+    mutate({ email, password });
   };
 
   return (
