@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import cookieParser from 'cookie-parser';
 
 import { AppDataSource } from './data-source';
 
@@ -17,6 +18,7 @@ app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
+app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 // // /img 경로로 들어오는 모든 요청에 대해, uploads 디렉토리에 저장된 이미지 파일을 응답으로 제공
 // app.use('/img', express.static(path.join(__dirname, 'server/uploads')));
