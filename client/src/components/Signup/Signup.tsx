@@ -1,6 +1,5 @@
 import React, { FormEvent, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import { axiosInstance } from '../../configs/axios';
 import CommonButton from '../Common/CommonButton';
 import InputGroup from '../InputGroup/InputGroup';
 import S from './Signup.styles';
@@ -13,6 +12,9 @@ import {
 } from 'antd/es/upload';
 import { message, Upload } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { signupAPI } from '../../apis/auth';
+import { ISignup } from '../../types';
+import { AxiosError } from 'axios';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -41,6 +43,11 @@ function Signup() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<any>({});
+
+  const onError = (error: AxiosError) => {
+    setErrors(error.response?.data || {});
+  };
+  const { mutate } = signupAPI({ onError });
 
   // 프로필 업로드
   const [profileUploadLoading, setProfileUploadLoading] = useState(false);
@@ -78,18 +85,8 @@ function Signup() {
   const onClickSignup = async (e: FormEvent) => {
     e.preventDefault();
 
-    try {
-      await axiosInstance.post('/auth/signup', {
-        email,
-        password,
-        username,
-        imageUrl,
-      });
-      // router.push('/login')
-    } catch (error: any) {
-      console.error(error);
-      setErrors(error.response.data || {});
-    }
+    const data = { email, password, username };
+    mutate(data as ISignup);
   };
 
   return (
