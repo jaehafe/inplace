@@ -2,14 +2,14 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 
 export const AppDataSource = new DataSource({
-  type: 'postgres',
+  type: 'mysql',
   host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: 'password',
-  database: 'postgres',
+  port: 3306,
+  username: 'root',
+  password: '123456789',
+  database: 'inplace',
   synchronize: true,
-  logging: false,
+  logging: true,
   entities: ['src/entities/**/*.ts'],
   migrations: [],
   subscribers: [],

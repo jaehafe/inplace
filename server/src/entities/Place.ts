@@ -7,7 +7,7 @@ import Post from './Post';
 @Entity('places')
 export default class Place extends BaseEntity {
   @Index()
-  @Column({ unique: true })
+  @Column()
   name: string;
 
   @Column()

@@ -1,13 +1,13 @@
 import { IsEmail, Length } from 'class-validator';
 import { Exclude } from 'class-transformer';
-import { Entity, Column, Index, OneToMany, BeforeInsert } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany, BeforeInsert } from 'typeorm';
 import BaseEntity from './Entity';
 import bcrypt from 'bcryptjs';
 import Post from './Post';
 import Vote from './Vote';
 
 // 명시적으로 매핑할 테이블을 지정
-// 'users'라는 이름을 사용하여 User 엔티티가 users 테이블과 매핑되도록 설정(db에 'users' 이름으로 저장)
+// 'users'라는 이름을 사용하여 User 엔티티가 users 테이블과 매핑되도록 설정(db에 'users' 이름으로 )
 @Entity('users')
 export default class User extends BaseEntity {
   // 인덱스는 데이터베이스에서 데이터를 검색할 때 성능을 향상시키는 데 사용
@@ -16,12 +16,12 @@ export default class User extends BaseEntity {
   @Index()
   @IsEmail(undefined, { message: '이메일 주소가 잘못되었습니다.' })
   @Length(1, 255, { message: '이메일 주소는 비워둘 수 없습니다.' })
-  @Column({ unique: true })
+  @Column()
   email: string;
 
   @Index()
   @Length(3, 32, { message: '사용자 이름은 3자 이상이어야 합니다.' })
-  @Column({ unique: true })
+  @Column()
   username: string;
 
   @Exclude()
