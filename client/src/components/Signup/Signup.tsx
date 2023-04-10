@@ -5,6 +5,35 @@ import CommonButton from '../Common/CommonButton';
 import InputGroup from '../InputGroup/InputGroup';
 import S from './Signup.styles';
 import Link from 'next/link';
+import {
+  RcFile,
+  UploadChangeParam,
+  UploadFile,
+  UploadProps,
+} from 'antd/es/upload';
+import { message, Upload } from 'antd';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result as string));
+  reader.readAsDataURL(img);
+};
+
+const beforeUpload = (file: RcFile) => {
+  const isJpgOrPng =
+    file.type === 'image/jpeg' ||
+    file.type === 'image/png' ||
+    file.type === 'image/svg';
+  if (!isJpgOrPng) {
+    message.error('JPG/PNG/SVG 형식의 파일만 업로드 가능합니다.');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('2MB이하의 파일사이즈만 업로드 가능합니다.');
+  }
+  return isJpgOrPng && isLt2M;
+};
 
 function Signup() {
   const router = useRouter();
@@ -12,7 +41,34 @@ function Signup() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<any>({});
-  console.log(email, username, password);
+
+  // 프로필 업로드
+  const [profileUploadLoading, setProfileUploadLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string>();
+
+  const handleProfileChange: UploadProps['onChange'] = (
+    info: UploadChangeParam<UploadFile>
+  ) => {
+    if (info.file.status === 'uploading') {
+      setProfileUploadLoading(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj as RcFile, (url) => {
+        setProfileUploadLoading(false);
+        setImageUrl(url);
+      });
+    }
+  };
+
+  const uploadButton = (
+    <div>
+      {profileUploadLoading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
+  console.log(email, username, password, imageUrl);
 
   const isDisabled = useMemo(
     () => Boolean(!email || !username || !password),
@@ -27,6 +83,7 @@ function Signup() {
         email,
         password,
         username,
+        imageUrl,
       });
       // router.push('/login')
     } catch (error: any) {
@@ -76,6 +133,26 @@ function Signup() {
         error={errors.password}
       />
       <h4>6자리 이상 20자리 이하</h4>
+      {/* 프로필 이미지 업로드 */}
+      <h3>프로필 이미지</h3>
+      <Upload
+        name="avatar"
+        listType="picture-card"
+        className="avatar-uploader"
+        showUploadList={false}
+        beforeUpload={beforeUpload}
+        onChange={handleProfileChange}
+      >
+        {imageUrl ? (
+          <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+        ) : (
+          uploadButton
+        )}
+      </Upload>
+      <h4>
+        png, jpeg, svg 파일만 가능하며, 2MB 이하의 파일만 업로드 가능합니다.
+      </h4>
+      {/*  */}
       <h4>이미 회원이신가요?</h4>
       <Link href="/login">
         <h5>로그인 하러 가기</h5>
