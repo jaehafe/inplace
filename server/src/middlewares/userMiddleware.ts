@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../entities/User';
 
-export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+export const userMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.cookies.token;
     console.log('token>>', token);

@@ -1,10 +1,12 @@
 import { Tabs, TabsProps } from 'antd';
+import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import React from 'react';
 import ProfileImage from '../../components/Common/ProfileImage';
 import ProfileCommentTab from '../../components/Common/ProfileTab/ProfileCommentTab';
 import ProfilePostTab from '../../components/Common/ProfileTab/ProfilePostTab';
 import LogoHeader from '../../components/LogoHeader/LogoHeader';
+import { axiosInstance } from '../../configs/axios';
 import P from './Profile.styles';
 
 function Profile() {
@@ -53,3 +55,19 @@ function Profile() {
 }
 
 export default Profile;
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  try {
+    const cookie = req.headers.cookie;
+    if (!cookie) throw new Error('Missing auth token cookie');
+
+    // 쿠키가 있으면 백엔드에서 인증 처리
+    await axiosInstance.get('/auth/me', { headers: { cookie } });
+
+    return { props: {} };
+  } catch (error) {
+    // 백엔드 요청에서 준 cookie를 사용해 인증 처리할 때 에러가 나면 /login 페이지로 이동
+    res.writeHead(307, { Location: '/login' }).end();
+    return { props: {} };
+  }
+};

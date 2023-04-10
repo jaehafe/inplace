@@ -7,6 +7,8 @@ import User from '../entities/User';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import { userMiddleware } from '../middlewares/userMiddleware';
+import { authMiddleware } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -19,6 +21,12 @@ const mapError = (errors: Object[]) => {
     prev[err.property] = Object.entries(err.constraints)[0][1];
     return prev;
   }, {});
+};
+
+const me = async (req: Request, res: Response) => {
+  console.log('res.locals>>', res.locals);
+
+  return res.json(res.locals.user);
 };
 
 try {
@@ -137,6 +145,7 @@ router.post('/images', upload.single('image'), (req: RequestWithFile, res: Respo
   console.log('req.file.path>>> ', req.file.path);
   res.json(req.file.path);
 });
+router.get('/me', userMiddleware, authMiddleware, me);
 router.post('/signup', signup);
 router.post('/login', login);
 
