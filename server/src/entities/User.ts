@@ -1,6 +1,6 @@
 import { IsEmail, Length } from 'class-validator';
 import { Exclude } from 'class-transformer';
-import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany, BeforeInsert } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany, BeforeInsert, OneToOne, JoinColumn } from 'typeorm';
 import BaseEntity from './Entity';
 import bcrypt from 'bcryptjs';
 import Post from './Post';
@@ -23,6 +23,11 @@ export default class User extends BaseEntity {
   @Length(3, 32, { message: '사용자 이름은 3자 이상이어야 합니다.' })
   @Column()
   username: string;
+
+  // @OneToOne(() => UserProfileImage, (userprofile) => userprofile.user)
+  // @JoinColumn()
+  @Column({ default: '123' })
+  imageUrl: string;
 
   @Exclude()
   @Column()

@@ -4,6 +4,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import User from '../entities/User';
+import fs from 'fs';
+
+const imagePath = '/uploads';
 
 const router = Router();
 
@@ -16,6 +19,7 @@ const mapError = (errors: Object[]) => {
 
 const signup = async (req: Request, res: Response) => {
   const { email, username, password } = req.body;
+  // const { file }: any = req;
   console.log(email, username, password);
 
   try {
@@ -38,6 +42,17 @@ const signup = async (req: Request, res: Response) => {
     user.email = email;
     user.username = username;
     user.password = password;
+
+    // if (file) {
+    //   // 파일이 업로드되었으면
+    //   const filename = `${Date.now()}_${file.originalname}`; // 새로운 파일 이름 생성
+    //   const filepath = `${imagePath}/${filename}`; // 파일 경로
+
+    //   // 이미지 파일 저장
+    //   fs.writeFileSync(filepath, file.buffer);
+
+    //   user.imageUrl = filepath;
+    // }
 
     errors = await validate(user);
 
