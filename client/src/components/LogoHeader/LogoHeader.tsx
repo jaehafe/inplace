@@ -5,7 +5,7 @@ import L from './LogoHeader.styles';
 import { AppImages } from '../../configs/AppImages';
 import { Button, Divider } from 'antd';
 import { useRouter } from 'next/router';
-import useAuthStore from '../../store/AuthStore';
+import useAuthStore from '../../store/authStore';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import B from '../Common/BackButton';
 

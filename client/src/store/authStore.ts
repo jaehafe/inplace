@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { User } from '../types';
 import { axiosInstance } from '../configs/axios';
