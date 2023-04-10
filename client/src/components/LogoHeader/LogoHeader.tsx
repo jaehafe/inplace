@@ -18,7 +18,7 @@ function LogoHeader({ headerIcons }: IProps) {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const user = useAuthStore((state) => state?.user);
-  console.log(user);
+  console.log('user', user);
 
   const buttons = [
     { text: '작성 글', onClick: () => router.push('/profile/identifier') },

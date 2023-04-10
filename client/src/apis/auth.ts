@@ -25,7 +25,5 @@ export const loginAPI = (
   const queryFn = (data: ILogin) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
 
-  const onSuccess = () => router.push('/');
-
-  return useMutation([queryKey], queryFn, { onSuccess, ...options });
+  return useMutation([queryKey], queryFn, { ...options });
 };

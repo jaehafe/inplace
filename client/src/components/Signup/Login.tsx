@@ -3,9 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
 import { loginAPI } from '../../apis/auth';
-import { axiosInstance } from '../../configs/axios';
 import useAuthStore from '../../store/AuthStore';
-import { ILogin } from '../../types';
 import CommonButton from '../Common/CommonButton';
 import InputGroup from '../InputGroup/InputGroup';
 import S from './Signup.styles';
@@ -20,11 +18,16 @@ function Login() {
   const onError = (error: AxiosError) => {
     setErrors(error.response?.data || {});
   };
-  const { mutate } = loginAPI({ onError });
+  const onSuccess = (res: any) => {
+    login(res.user);
+  };
+  const { mutate } = loginAPI({ onSuccess, onError });
   const authenticated = useAuthStore((state) => state.authenticated);
+  const user = useAuthStore((state) => state.user);
 
   if (authenticated) router.push('/');
   console.log('authenticated', authenticated);
+  console.log('user', user);
 
   const isDisabled = useMemo(
     () => Boolean(!email || !password),
