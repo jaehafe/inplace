@@ -26,8 +26,8 @@ export default class User extends BaseEntity {
 
   // @OneToOne(() => UserProfileImage, (userprofile) => userprofile.user)
   // @JoinColumn()
-  @Column({ default: '123' })
-  imageUrl: string;
+  @Column({ nullable: true })
+  imagePath: string;
 
   @Exclude()
   @Column()

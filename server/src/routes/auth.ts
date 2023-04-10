@@ -4,11 +4,15 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import User from '../entities/User';
+import multer from 'multer';
+import path from 'path';
 import fs from 'fs';
 
-const imagePath = '/uploads';
-
 const router = Router();
+
+interface RequestWithFile extends Request {
+  file: any; // 혹은 multer.File 타입
+}
 
 const mapError = (errors: Object[]) => {
   return errors.reduce((prev: any, err: any) => {
@@ -17,10 +21,35 @@ const mapError = (errors: Object[]) => {
   }, {});
 };
 
+try {
+  fs.accessSync('uploads');
+} catch (error) {
+  console.error('업로드 폴더 생성');
+  fs.mkdirSync('uploads');
+}
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, 'uploads');
+    },
+    filename(req, file, done) {
+      // image.png
+      const ext = path.extname(file.originalname); // 확장자 추출(png)
+      const basename = path.basename(file.originalname, ext); // 이름 추출(image)
+      done(null, basename + '_' + new Date().getTime() + ext);
+    },
+  }),
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB 이하의 파일만 허용
+});
+
+// 회원가입
 const signup = async (req: Request, res: Response) => {
-  const { email, username, password } = req.body;
-  // const { file }: any = req;
-  console.log(email, username, password);
+  const { email, username, password, imagePath } = req.body;
+  const { files }: any = req;
+  console.log('files>>>', files);
+
+  console.log(email, username, password, files);
 
   try {
     let errors: any = {};
@@ -42,17 +71,7 @@ const signup = async (req: Request, res: Response) => {
     user.email = email;
     user.username = username;
     user.password = password;
-
-    // if (file) {
-    //   // 파일이 업로드되었으면
-    //   const filename = `${Date.now()}_${file.originalname}`; // 새로운 파일 이름 생성
-    //   const filepath = `${imagePath}/${filename}`; // 파일 경로
-
-    //   // 이미지 파일 저장
-    //   fs.writeFileSync(filepath, file.buffer);
-
-    //   user.imageUrl = filepath;
-    // }
+    user.imagePath = imagePath;
 
     errors = await validate(user);
 
@@ -114,6 +133,10 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
+router.post('/images', upload.single('image'), (req: RequestWithFile, res: Response) => {
+  console.log('req.file.path>>> ', req.file.path);
+  res.json(req.file.path);
+});
 router.post('/signup', signup);
 router.post('/login', login);
 

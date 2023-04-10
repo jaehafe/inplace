@@ -5,7 +5,7 @@ interface InputProps {
   isfill?: string | number | object | null;
 }
 
-const SignupWrapper = styled.div`
+const SignupWrapper = styled.form`
   text-align: left;
 
   & h3 {

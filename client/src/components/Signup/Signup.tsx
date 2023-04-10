@@ -1,4 +1,4 @@
-import React, { FormEvent, useMemo, useState } from 'react';
+import React, { FormEvent, useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import CommonButton from '../Common/CommonButton';
 import InputGroup from '../InputGroup/InputGroup';
@@ -12,7 +12,7 @@ import {
 } from 'antd/es/upload';
 import { message, Upload } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { signupAPI } from '../../apis/auth';
+import { signupAPI, uploadImageAPI } from '../../apis/auth';
 import { ISignup } from '../../types';
 import { AxiosError } from 'axios';
 
@@ -52,6 +52,8 @@ function Signup() {
   // 프로필 업로드
   const [profileUploadLoading, setProfileUploadLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
+  const [imageInfo, setImageInfo] = useState<any>(null);
+  const [imagePath, setImagePath] = useState<string>('');
 
   const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
@@ -62,6 +64,17 @@ function Signup() {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
+      const imageData = info.file.originFileObj;
+      const imageFormData = new FormData();
+
+      imageFormData.append('image', imageData as any);
+
+      uploadImageAPI<any>(imageFormData).then((res) => {
+        console.log('imageData>>>>>>', res.data);
+
+        return setImagePath(res.data);
+      });
+      setImageInfo(info.file.originFileObj);
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setProfileUploadLoading(false);
         setImageUrl(url);
@@ -75,7 +88,7 @@ function Signup() {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
-  console.log(email, username, password, imageUrl);
+  // console.log(email, username, password, imageUrl);
 
   const isDisabled = useMemo(
     () => Boolean(!email || !username || !password),
@@ -84,12 +97,13 @@ function Signup() {
 
   const onClickSignup = async (e: FormEvent) => {
     e.preventDefault();
+    console.log('imageInfo', imageInfo);
 
-    mutate({ email, password, username } as ISignup);
+    mutate({ email, password, username, imagePath } as ISignup);
   };
 
   return (
-    <S.SignupWrapper>
+    <S.SignupWrapper onSubmit={onClickSignup} encType="multipart/form-data">
       <h2>
         인플레이스 활동에 필요한
         <br />
@@ -132,12 +146,13 @@ function Signup() {
       {/* 프로필 이미지 업로드 */}
       <h3>프로필 이미지</h3>
       <Upload
-        name="avatar"
+        name="image"
         listType="picture-card"
         className="avatar-uploader"
         showUploadList={false}
         beforeUpload={beforeUpload}
         onChange={handleProfileChange}
+        // onChange={handleImage}
       >
         {imageUrl ? (
           <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
@@ -153,11 +168,7 @@ function Signup() {
       <Link href="/login">
         <h5>로그인 하러 가기</h5>
       </Link>
-      <CommonButton
-        type="primary"
-        onClick={onClickSignup}
-        disabled={isDisabled}
-      >
+      <CommonButton type="primary" disabled={isDisabled} htmlType="submit">
         회원가입
       </CommonButton>
     </S.SignupWrapper>

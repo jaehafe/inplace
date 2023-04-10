@@ -10,15 +10,16 @@ import authRoutes from './routes/auth';
 
 dotenv.config();
 const app = express();
-// const origin = 'http://localhost:3000';
 const origin = process.env.ORIGIN;
 
+app.use(cors({ origin, credentials: true }));
+app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 // app.use(express.static(path.join(__dirname, 'public')));
 // // /img 경로로 들어오는 모든 요청에 대해, uploads 디렉토리에 저장된 이미지 파일을 응답으로 제공
 // app.use('/img', express.static(path.join(__dirname, 'server/uploads')));
-app.use(cors({ origin, credentials: true }));
 
 dotenv.config();
 

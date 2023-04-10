@@ -1,5 +1,5 @@
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
-import { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { axiosInstance, baseURL } from '../configs/axios';
 import { ILogin, ISignup } from '../types';
@@ -20,10 +20,13 @@ export const signupAPI = (
 export const loginAPI = (
   options?: UseMutationOptions<AxiosResponse<string>, AxiosError, ILogin>
 ) => {
-  const router = useRouter();
   const queryKey = `${baseURL}/auth/login`;
   const queryFn = (data: ILogin) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
 
   return useMutation([queryKey], queryFn, { ...options });
+};
+
+export const uploadImageAPI = <T>(data: FormData) => {
+  return axiosInstance.post<T>(`${baseURL}/auth/images`, data);
 };

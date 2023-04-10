@@ -26,8 +26,6 @@ function Login() {
   const user = useAuthStore((state) => state.user);
 
   if (authenticated) router.push('/');
-  console.log('authenticated', authenticated);
-  console.log('user', user);
 
   const isDisabled = useMemo(
     () => Boolean(!email || !password),
