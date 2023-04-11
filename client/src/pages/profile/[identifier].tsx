@@ -5,7 +5,7 @@ import React from 'react';
 import ProfileImage from '../../components/Common/ProfileImage';
 import ProfileCommentTab from '../../components/Common/ProfileTab/ProfileCommentTab';
 import ProfilePostTab from '../../components/Common/ProfileTab/ProfilePostTab';
-import LogoHeader from '../../components/LogoHeader/LogoHeader';
+import LogoHeader from '../../components/Header/LogoHeader/LogoHeader';
 import { axiosInstance } from '../../configs/axios';
 import P from './Profile.styles';
 

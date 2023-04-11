@@ -2,7 +2,7 @@ import { Divider, Segmented, Space } from 'antd';
 import React, { useState } from 'react';
 import AllPosts from '../Posts/AllPosts';
 import HotPosts from '../Posts/HotPosts';
-import LogoHeader from '../LogoHeader/LogoHeader';
+import LogoHeader from '../Header/LogoHeader/LogoHeader';
 import M from './MainPage.styles';
 import Places from '../Posts/Places';
 import WritePostButton from '../Common/WritePostButton/WritePostButton';

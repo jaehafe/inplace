@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import L from './LogoHeader.styles';
-import { AppImages } from '../../configs/AppImages';
+import { AppImages } from '../../../configs/AppImages';
 import { Button, Divider } from 'antd';
 import { useRouter } from 'next/router';
-import useAuthStore from '../../store/authStore';
+import useAuthStore from '../../../store/authStore';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import B from '../Common/BackButton';
-import { authMeAPI, logoutAPI } from '../../apis/user';
+import B from '../../Common/BackButton';
+import { authMeAPI, logoutAPI } from '../../../apis/user';
 import { useCookies } from 'react-cookie';
 
 interface IProps {

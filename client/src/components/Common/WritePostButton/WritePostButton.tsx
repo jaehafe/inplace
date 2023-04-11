@@ -1,10 +1,12 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Divider } from 'antd';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import W from './WritePostButton.styles';
 
 function WritePostButton() {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <>
@@ -20,7 +22,7 @@ function WritePostButton() {
         key="bottom"
         height={'auto'}
       >
-        <Button type="text" shape="round">
+        <Button type="text" shape="round" onClick={() => router.push('/post')}>
           OX 질문
         </Button>
         <Divider />

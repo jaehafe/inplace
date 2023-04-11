@@ -1,6 +1,6 @@
 import React from 'react';
 import SignupLayout from '../components/Layout/SignupLayout';
-import LogoHeader from '../components/LogoHeader/LogoHeader';
+import LogoHeader from '../components/Header/LogoHeader';
 import Signup from '../components/Signup/Signup';
 
 function SignUp() {
