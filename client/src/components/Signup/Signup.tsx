@@ -65,6 +65,10 @@ function Signup() {
     if (info.file.status === 'done') {
       // Get this url from response in real world.
       const imageData = info.file.originFileObj;
+      console.log('info>>>', info);
+
+      console.log('imageData>>', imageData);
+
       const imageFormData = new FormData();
 
       imageFormData.append('image', imageData as any);

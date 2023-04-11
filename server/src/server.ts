@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import { AppDataSource } from './data-source';
 
 import authRoutes from './routes/auth';
+import postRoutes from './routes/posts';
 
 dotenv.config();
 const app = express();
@@ -26,6 +27,7 @@ app.get('/', (_, res: Response) => {
   res.send('server is running!!!');
 });
 app.use('/api/auth', authRoutes);
+app.use('/api/posts', postRoutes);
 
 let port = 4000;
 

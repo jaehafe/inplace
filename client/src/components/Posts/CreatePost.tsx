@@ -11,7 +11,7 @@ import { RcFile, UploadChangeParam, UploadFile } from 'antd/es/upload';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
-import { createPostAPI } from '../../apis/post';
+import { createPostAPI, uploadPostImagesAPI } from '../../apis/post';
 import { axiosInstance } from '../../configs/axios';
 import CommonButton from '../Common/CommonButton';
 import PostHeader from '../Header/PostHeader/PostHeader';
@@ -44,12 +44,14 @@ function CreatePost() {
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
+  const [imageInfo, setImageInfo] = useState<any>(null);
+  const [imagePath, setImagePath] = useState<string>('');
 
   const router = useRouter();
-  const { post: postTitle } = router.query;
-  console.log('postTitle', postTitle);
+  // const { post: postTitle } = router.query;
+  // console.log('postTitle', postTitle);
 
-  const handleChange: UploadProps['onChange'] = (
+  const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
   ) => {
     if (info.file.status === 'uploading') {
@@ -57,7 +59,19 @@ function CreatePost() {
       return;
     }
     if (info.file.status === 'done') {
-      // Get this url from response in real world.
+      const imageData = info.file.originFileObj;
+      const imageFormData = new FormData();
+
+      const { fileList } = info;
+
+      for (let i = 0; i < fileList.length; i++) {
+        imageFormData.append('postImages', fileList[i].originFileObj as any);
+      }
+      uploadPostImagesAPI<any>(imageFormData).then((res) => {
+        console.log('post imageData>>>>', res.data);
+        return setImagePath(res.data);
+      });
+      // setImageInfo(info.file.originFileObj);
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setLoading(false);
         setImageUrl(url);
@@ -163,14 +177,14 @@ function CreatePost() {
         <br />
         <br />
         <Upload
-          name="avatar"
+          name="postImages"
+          multiple
           listType="picture-card"
           className="avatar-uploader"
           showUploadList={true}
           beforeUpload={beforeUpload}
-          onChange={handleChange}
+          onChange={handleProfileChange}
           maxCount={5}
-          multiple
         >
           {imageUrl ? (
             <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />

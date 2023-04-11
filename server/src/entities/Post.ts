@@ -29,6 +29,9 @@ export default class Post extends BaseEntity {
   @Column()
   username: string;
 
+  @Column({ nullable: true })
+  imagePath: string;
+
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: 'username', referencedColumnName: 'username' })
   user: User;

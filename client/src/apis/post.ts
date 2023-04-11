@@ -23,3 +23,7 @@ export const createPostAPI = (
 
   return useMutation([queryKey], queryFn, { onSuccess, onError, ...options });
 };
+
+export const uploadPostImagesAPI = <T>(data: FormData) => {
+  return axiosInstance.post<T>(`${baseURL}/posts/images`, data);
+};
