@@ -52,23 +52,25 @@ function CreatePost() {
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
-  const [imageInfo, setImageInfo] = useState<any>(null);
   const [imagePath, setImagePath] = useState<string>('');
 
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-
   const router = useRouter();
-  // const { post: postTitle } = router.query;
-  // console.log('postTitle', postTitle);
+
+  const onSuccess = (data: any) => {
+    console.log('data>>>', data);
+    setImagePath(data);
+
+    // message.success('이미지 업로드 완료');
+    // router.push('/');
+  };
+
+  console.log('imagePath>>', imagePath);
+
+  const { mutate: uploadPostImageMutate } = uploadPostImagesAPI({ onSuccess });
 
   const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
   ) => {
-    console.log('info>>', info);
-
     if (info.file.status === 'uploading') {
       setLoading(true);
       return;
@@ -87,18 +89,9 @@ function CreatePost() {
         imageFormData.append('postImages', fileList[i].originFileObj as any);
       }
 
-      uploadPostImagesAPI<any>(imageFormData).then((res) => {
-        console.log('post imageData>>>>', res.data);
-        return setImagePath(res.data);
-      });
-
-      setImageInfo(info.file.originFileObj);
-      // console.log('imageInfo', imageInfo);
+      uploadPostImageMutate(imageFormData);
     }
   };
-  // console.log('imagePath>>>', imagePath);
-
-  //////////////
 
   // const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
   //   console.log('newFileList', newFileList);

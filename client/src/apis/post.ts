@@ -24,6 +24,23 @@ export const createPostAPI = (
   return useMutation([queryKey], queryFn, { onSuccess, onError, ...options });
 };
 
-export const uploadPostImagesAPI = <T>(data: FormData) => {
-  return axiosInstance.post<T>(`${baseURL}/posts/images`, data);
+export const uploadPostImagesAPI = (
+  options?: UseMutationOptions<AxiosResponse<string>, AxiosError, any>
+): any => {
+  const router = useRouter();
+  const queryKey = `${baseURL}/posts/images`;
+  const queryFn = (data: any) =>
+    axiosInstance.post(queryKey, data).then((res) => res.data);
+
+  const onError = () => {
+    message.error(
+      '이미지 업로드 실패 하였습니다. 로그인 후 다시 시도해주세요.'
+    );
+  };
+
+  return useMutation([queryKey], queryFn, { ...options, onError });
 };
+
+// export const uploadPostImagesAPI = (data: FormData) => {
+//   return axiosInstance.post(`${baseURL}/posts/images`, data);
+// };
