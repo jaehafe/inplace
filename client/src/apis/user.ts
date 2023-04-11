@@ -48,10 +48,12 @@ export const logoutAPI = () => {
   return useMutation([queryKey], queryFn, { onSuccess, onError });
 };
 
-export const authMeAPI = () => {
+export const authMeAPI = (
+  options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
+) => {
   const queryKey = `${baseURL}/auth/me`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
-  return useQuery([queryKey], queryFn);
+  return useQuery([queryKey], queryFn, { ...options });
 };
 
 export const uploadImageAPI = <T>(data: FormData) => {

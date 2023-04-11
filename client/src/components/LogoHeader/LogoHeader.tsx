@@ -9,6 +9,7 @@ import useAuthStore from '../../store/authStore';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import B from '../Common/BackButton';
 import { authMeAPI, logoutAPI } from '../../apis/user';
+import { useCookies } from 'react-cookie';
 
 interface IProps {
   headerIcons?: boolean;
@@ -17,6 +18,7 @@ interface IProps {
 function LogoHeader({ headerIcons }: IProps) {
   const router = useRouter();
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [cookie] = useCookies(['inplace']);
 
   const user = useAuthStore((state) => state?.user);
 
@@ -24,7 +26,7 @@ function LogoHeader({ headerIcons }: IProps) {
   const handleLogout = () => {
     logoutMutate();
   };
-  const { data: userInfo } = authMeAPI();
+  const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
   // console.log('userInfo>>', userInfo);
 
   const buttons = [

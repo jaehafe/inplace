@@ -1,6 +1,10 @@
 import '../styles/globals.css';
 
-import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  Hydrate,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import type { AppProps } from 'next/app';
 import localFont from '@next/font/local';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
