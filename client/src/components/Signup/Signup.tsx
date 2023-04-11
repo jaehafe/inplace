@@ -156,7 +156,6 @@ function Signup() {
         showUploadList={false}
         beforeUpload={beforeUpload}
         onChange={handleProfileChange}
-        // onChange={handleImage}
       >
         {imageUrl ? (
           <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
