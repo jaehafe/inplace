@@ -39,8 +39,7 @@ export const logoutAPI = () => {
   const queryFn = () => axiosInstance.post(queryKey).then((res) => res.data);
 
   const onSuccess = () => {
-    message.success('로그아웃 성공');
-    router.reload();
+    message.success('로그아웃 성공').then(() => router.reload());
   };
   const onError = () => {
     message.error('로그아웃 실패');
@@ -49,12 +48,10 @@ export const logoutAPI = () => {
   return useMutation([queryKey], queryFn, { onSuccess, onError });
 };
 
-export const authMeAPI = (
-  options?: UseQueryOptions<AxiosResponse<any>, AxiosError, any, string[]>
-) => {
+export const authMeAPI = () => {
   const queryKey = `${baseURL}/auth/me`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
-  return useQuery([queryKey], queryFn, { ...options });
+  return useQuery([queryKey], queryFn);
 };
 
 export const uploadImageAPI = <T>(data: FormData) => {

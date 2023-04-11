@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import useAuthStore from '../../store/authStore';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import B from '../Common/BackButton';
-import { logoutAPI } from '../../apis/auth';
+import { authMeAPI, logoutAPI } from '../../apis/user';
 
 interface IProps {
   headerIcons?: boolean;
@@ -19,7 +19,13 @@ function LogoHeader({ headerIcons }: IProps) {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const user = useAuthStore((state) => state?.user);
-  console.log('user', user);
+
+  const { mutate: logoutMutate } = logoutAPI();
+  const handleLogout = () => {
+    logoutMutate();
+  };
+  const { data: userInfo } = authMeAPI();
+  // console.log('userInfo>>', userInfo);
 
   const buttons = [
     { text: '작성 글', onClick: () => router.push('/profile/identifier') },
@@ -34,12 +40,6 @@ function LogoHeader({ headerIcons }: IProps) {
     { text: '로그인', onClick: () => router.push('/login') },
     { text: '회원가입', onClick: () => router.push('/signup') },
   ];
-
-  const { mutate } = logoutAPI();
-  const handleLogout = () => {
-    mutate();
-    // router.reload();
-  };
 
   return (
     <L.LogoHeaderWrapper>
@@ -95,10 +95,10 @@ function LogoHeader({ headerIcons }: IProps) {
                   style={{ borderRadius: '50px' }}
                   alt="avatar"
                 />
-                {user && (
+                {userInfo && (
                   <>
                     <span>안녕하세요</span>
-                    <h3>{user.username}님</h3>
+                    <h3>{userInfo?.username}님</h3>
                   </>
                 )}
               </L.ProfileWrapper>
@@ -118,7 +118,7 @@ function LogoHeader({ headerIcons }: IProps) {
 
               <Divider />
               <L.LoginOutWrapper>
-                {user ? (
+                {userInfo ? (
                   <L.StyledButton
                     type="text"
                     shape="round"

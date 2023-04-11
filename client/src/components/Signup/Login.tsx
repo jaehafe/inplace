@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
-import { loginAPI } from '../../apis/auth';
+import { loginAPI } from '../../apis/user';
 import useAuthStore from '../../store/authStore';
 import CommonButton from '../Common/CommonButton';
 import InputGroup from '../InputGroup/InputGroup';

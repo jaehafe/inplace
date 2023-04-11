@@ -4,8 +4,7 @@ import User from '../entities/User';
 
 export const userMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.cookies.token;
-    console.log('token>>', token);
+    const token = req.cookies.inplace;
 
     if (!token) return next();
 
@@ -14,7 +13,6 @@ export const userMiddleware = async (req: Request, res: Response, next: NextFunc
 
     // 토큰에서 나온 유저 이메일을 db에서 가져오기
     const user = await User.findOneBy({ email });
-    console.log('user>>>', user);
 
     // 유저 정보를 res.locals에 저장
     res.locals.user = user;

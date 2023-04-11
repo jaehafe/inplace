@@ -12,7 +12,7 @@ import {
 } from 'antd/es/upload';
 import { message, Upload } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { signupAPI, uploadImageAPI } from '../../apis/auth';
+import { signupAPI, uploadImageAPI } from '../../apis/user';
 import { ISignup } from '../../types';
 import { AxiosError } from 'axios';
 
