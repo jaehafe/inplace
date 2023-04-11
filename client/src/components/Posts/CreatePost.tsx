@@ -11,6 +11,7 @@ import { RcFile, UploadChangeParam, UploadFile } from 'antd/es/upload';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
+import { createPostAPI } from '../../apis/post';
 import { axiosInstance } from '../../configs/axios';
 import CommonButton from '../Common/CommonButton';
 import PostHeader from '../Header/PostHeader/PostHeader';
@@ -35,7 +36,6 @@ const beforeUpload = (file: RcFile) => {
 };
 
 function CreatePost() {
-  const router = useRouter();
   const [title, setTitle] = useState('');
   const [upVote, setUpVote] = useState('');
   const [neutralVote, setNeutralVote] = useState('');
@@ -44,6 +44,10 @@ function CreatePost() {
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
+
+  const router = useRouter();
+  const { post: postTitle } = router.query;
+  console.log('postTitle', postTitle);
 
   const handleChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
@@ -69,27 +73,37 @@ function CreatePost() {
   );
 
   const isDisabled = useMemo(
-    () => Boolean(!title || !upVote || !neutralVote || !downVote),
+    () =>
+      Boolean(
+        !title.trim() ||
+          !upVote.trim() ||
+          !neutralVote.trim() ||
+          !downVote.trim()
+      ),
     [title, upVote, neutralVote, downVote]
   );
+
+  const { mutate: createPostMutate } = createPostAPI();
 
   const handleSubmitPost = async (e: FormEvent) => {
     e.preventDefault();
 
-    try {
-      const res = await axiosInstance.post('/posts', {
-        title,
-        upVote,
-        neutralVote,
-        downVote,
-        desc,
-      });
-      console.log('post res>>', res);
+    createPostMutate({ title, upVote, neutralVote, downVote, desc });
 
-      // router.push(`/`);
-    } catch (error) {
-      console.error(error);
-    }
+    // try {
+    //   const res = await axiosInstance.post('/posts', {
+    //     title,
+    //     upVote,
+    //     neutralVote,
+    //     downVote,
+    //     desc,
+    //   });
+    //   console.log('post res>>', res);
+
+    //   // router.push(`/post/${post.identifier}/${post.slug}`);
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   return (
