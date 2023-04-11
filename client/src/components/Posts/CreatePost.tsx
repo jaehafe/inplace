@@ -17,11 +17,13 @@ import CommonButton from '../Common/CommonButton';
 import PostHeader from '../Header/PostHeader/PostHeader';
 import P from './Posts.styles';
 
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
+const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
 
 const beforeUpload = (file: RcFile) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -47,6 +49,11 @@ function CreatePost() {
   const [imageInfo, setImageInfo] = useState<any>(null);
   const [imagePath, setImagePath] = useState<string>('');
 
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [previewTitle, setPreviewTitle] = useState('');
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
   const router = useRouter();
   // const { post: postTitle } = router.query;
   // console.log('postTitle', postTitle);
@@ -61,6 +68,7 @@ function CreatePost() {
     if (info.file.status === 'done') {
       const imageData = info.file.originFileObj;
       const imageFormData = new FormData();
+      console.log('info>>>', info);
 
       const { fileList } = info;
 
@@ -72,11 +80,36 @@ function CreatePost() {
         return setImagePath(res.data);
       });
       // setImageInfo(info.file.originFileObj);
-      getBase64(info.file.originFileObj as RcFile, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
     }
+  };
+
+  //////////////
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as RcFile);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1)
+    );
+  };
+
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    console.log('newFileList', newFileList);
+
+    setFileList(newFileList);
+
+    const imageFormData = new FormData();
+
+    for (let i = 0; i < newFileList.length; i++) {
+      imageFormData.append('postImages', newFileList[i].originFileObj as any);
+    }
+    uploadPostImagesAPI<any>(imageFormData).then((res) => {
+      console.log('post imageData>>>>', res.data);
+      return setImagePath(res.data);
+    });
   };
 
   const uploadButton = (
@@ -176,7 +209,19 @@ function CreatePost() {
         </Collapse>
         <br />
         <br />
+
         <Upload
+          name="postImages"
+          multiple
+          listType="picture-card"
+          fileList={fileList}
+          onPreview={handlePreview}
+          onChange={handleChange}
+          maxCount={5}
+        >
+          {fileList.length >= 5 ? null : uploadButton}
+        </Upload>
+        {/* <Upload
           name="postImages"
           multiple
           listType="picture-card"
@@ -191,7 +236,7 @@ function CreatePost() {
           ) : (
             uploadButton
           )}
-        </Upload>
+        </Upload> */}
         <span>최대 5장까지 업로드할 수 있습니다.</span>
 
         <CommonButton type="primary" htmlType="submit" disabled={isDisabled}>
