@@ -17,13 +17,19 @@ import CommonButton from '../Common/CommonButton';
 import PostHeader from '../Header/PostHeader/PostHeader';
 import P from './Posts.styles';
 
-const getBase64 = (file: RcFile): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
+// const getBase64 = (file: RcFile): Promise<string> =>
+//   new Promise((resolve, reject) => {
+//     const reader = new FileReader();
+//     reader.readAsDataURL(file);
+//     reader.onload = () => resolve(reader.result as string);
+//     reader.onerror = (error) => reject(error);
+//   });
+
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result as string));
+  reader.readAsDataURL(img);
+};
 
 const beforeUpload = (file: RcFile) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -61,56 +67,54 @@ function CreatePost() {
   const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
   ) => {
+    console.log('info>>', info);
+
     if (info.file.status === 'uploading') {
       setLoading(true);
       return;
     }
     if (info.file.status === 'done') {
-      const imageData = info.file.originFileObj;
       const imageFormData = new FormData();
-      console.log('info>>>', info);
+
+      getBase64(info.file.originFileObj as RcFile, (url) => {
+        setLoading(false);
+        setImageUrl(url);
+      });
 
       const { fileList } = info;
 
       for (let i = 0; i < fileList.length; i++) {
         imageFormData.append('postImages', fileList[i].originFileObj as any);
       }
+
       uploadPostImagesAPI<any>(imageFormData).then((res) => {
         console.log('post imageData>>>>', res.data);
         return setImagePath(res.data);
       });
-      // setImageInfo(info.file.originFileObj);
+
+      setImageInfo(info.file.originFileObj);
+      // console.log('imageInfo', imageInfo);
     }
   };
+  // console.log('imagePath>>>', imagePath);
 
   //////////////
-  const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as RcFile);
-    }
 
-    setPreviewImage(file.url || (file.preview as string));
-    setPreviewOpen(true);
-    setPreviewTitle(
-      file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1)
-    );
-  };
+  // const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+  //   console.log('newFileList', newFileList);
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    console.log('newFileList', newFileList);
+  //   setFileList(newFileList);
 
-    setFileList(newFileList);
+  //   const imageFormData = new FormData();
 
-    const imageFormData = new FormData();
-
-    for (let i = 0; i < newFileList.length; i++) {
-      imageFormData.append('postImages', newFileList[i].originFileObj as any);
-    }
-    uploadPostImagesAPI<any>(imageFormData).then((res) => {
-      console.log('post imageData>>>>', res.data);
-      return setImagePath(res.data);
-    });
-  };
+  //   for (let i = 0; i < newFileList.length; i++) {
+  //     imageFormData.append('postImages', newFileList[i].originFileObj as any);
+  //   }
+  //   uploadPostImagesAPI<any>(imageFormData).then((res) => {
+  //     console.log('post imageData>>>>', res.data);
+  //     return setImagePath(res.data);
+  //   });
+  // };
 
   const uploadButton = (
     <div>
@@ -210,7 +214,7 @@ function CreatePost() {
         <br />
         <br />
 
-        <Upload
+        {/* <Upload
           name="postImages"
           multiple
           listType="picture-card"
@@ -220,8 +224,8 @@ function CreatePost() {
           maxCount={5}
         >
           {fileList.length >= 5 ? null : uploadButton}
-        </Upload>
-        {/* <Upload
+        </Upload> */}
+        <Upload
           name="postImages"
           multiple
           listType="picture-card"
@@ -231,12 +235,8 @@ function CreatePost() {
           onChange={handleProfileChange}
           maxCount={5}
         >
-          {imageUrl ? (
-            <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
-          ) : (
-            uploadButton
-          )}
-        </Upload> */}
+          {uploadButton}
+        </Upload>
         <span>최대 5장까지 업로드할 수 있습니다.</span>
 
         <CommonButton type="primary" htmlType="submit" disabled={isDisabled}>

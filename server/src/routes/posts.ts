@@ -48,8 +48,8 @@ const createPost = async (req: Request, res: Response) => {
 
 router.post(
   '/images',
-  // userMiddleware,
-  // authMiddleware,
+  userMiddleware,
+  authMiddleware,
   upload.array('postImages'),
   async (req: RequestWithFile, res: Response) => {
     console.log('req>>', req.files);
