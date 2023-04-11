@@ -1,8 +1,11 @@
 import { AxiosError } from 'axios';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { FormEvent, useMemo, useState } from 'react';
+import { Router, useRouter } from 'next/router';
+import React, { FormEvent, useEffect, useMemo, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { loginAPI } from '../../apis/user';
+import { axiosInstance } from '../../configs/axios';
 import useAuthStore from '../../store/authStore';
 import CommonButton from '../Common/CommonButton';
 import InputGroup from '../InputGroup/InputGroup';
@@ -13,6 +16,11 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<any>({});
+  const [cookie] = useCookies(['inplace']);
+
+  // useEffect(() => {
+  //   if (cookie) router.push('/');
+  // }, [cookie]);
 
   const { login, logout, stopLoading, loadUser } = useAuthStore();
   const onError = (error: AxiosError) => {
@@ -20,12 +28,9 @@ function Login() {
   };
   const onSuccess = (res: any) => {
     login(res.user);
+    router.push('/');
   };
   const { mutate } = loginAPI({ onSuccess, onError });
-  const authenticated = useAuthStore((state) => state.authenticated);
-  const user = useAuthStore((state) => state.user);
-
-  if (authenticated) router.push('/');
 
   const isDisabled = useMemo(
     () => Boolean(!email || !password),

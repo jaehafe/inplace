@@ -27,7 +27,7 @@ function LogoHeader({ headerIcons }: IProps) {
     logoutMutate();
   };
   const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
-  // console.log('userInfo>>', userInfo);
+  console.log('userInfo>>', userInfo);
 
   const buttons = [
     { text: '작성 글', onClick: () => router.push('/profile/identifier') },
