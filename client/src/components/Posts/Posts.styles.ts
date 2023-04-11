@@ -138,6 +138,8 @@ const PostDrawer = styled(Drawer)`
   }
 `;
 
+// CreatePost
+
 const P = {
   Wrapper,
   HeaderWrapper,

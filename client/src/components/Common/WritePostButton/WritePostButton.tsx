@@ -22,7 +22,11 @@ function WritePostButton() {
         key="bottom"
         height={'auto'}
       >
-        <Button type="text" shape="round" onClick={() => router.push('/post')}>
+        <Button
+          type="text"
+          shape="round"
+          onClick={() => router.push('/post/create')}
+        >
           OX 질문
         </Button>
         <Divider />
