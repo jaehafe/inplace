@@ -17,14 +17,6 @@ import CommonButton from '../Common/CommonButton';
 import PostHeader from '../Header/PostHeader/PostHeader';
 import P from './Posts.styles';
 
-// const getBase64 = (file: RcFile): Promise<string> =>
-//   new Promise((resolve, reject) => {
-//     const reader = new FileReader();
-//     reader.readAsDataURL(file);
-//     reader.onload = () => resolve(reader.result as string);
-//     reader.onerror = (error) => reject(error);
-//   });
-
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result as string));
@@ -32,13 +24,16 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
 };
 
 const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  const isJpgOrPng =
+    file.type === 'image/jpeg' ||
+    file.type === 'image/png' ||
+    file.type === 'image/svg';
   if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
+    message.error('JPG/PNG/SVG 형식의 파일만 업로드 가능합니다.');
   }
-  const isLt2M = file.size / 1024 / 1024 < 2;
+  const isLt2M = file.size / 1024 / 1024 < 20;
   if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
+    message.error('총 20MB이하의 파일사이즈만 업로드 가능합니다.');
   }
   return isJpgOrPng && isLt2M;
 };
@@ -83,7 +78,6 @@ function CreatePost() {
 
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setLoading(false);
-        setImageUrl(url);
       });
 
       const { fileList } = info;
@@ -97,21 +91,12 @@ function CreatePost() {
     }
   };
 
-  // const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-  //   console.log('newFileList', newFileList);
+  const { mutate: createPostMutate } = createPostAPI();
 
-  //   setFileList(newFileList);
-
-  //   const imageFormData = new FormData();
-
-  //   for (let i = 0; i < newFileList.length; i++) {
-  //     imageFormData.append('postImages', newFileList[i].originFileObj as any);
-  //   }
-  //   uploadPostImagesAPI<any>(imageFormData).then((res) => {
-  //     console.log('post imageData>>>>', res.data);
-  //     return setImagePath(res.data);
-  //   });
-  // };
+  const handleSubmitPost = async (e: FormEvent) => {
+    e.preventDefault();
+    createPostMutate({ title, upVote, neutralVote, downVote, desc });
+  };
 
   const uploadButton = (
     <div>
@@ -130,29 +115,6 @@ function CreatePost() {
       ),
     [title, upVote, neutralVote, downVote]
   );
-
-  const { mutate: createPostMutate } = createPostAPI();
-
-  const handleSubmitPost = async (e: FormEvent) => {
-    e.preventDefault();
-
-    createPostMutate({ title, upVote, neutralVote, downVote, desc });
-
-    // try {
-    //   const res = await axiosInstance.post('/posts', {
-    //     title,
-    //     upVote,
-    //     neutralVote,
-    //     downVote,
-    //     desc,
-    //   });
-    //   console.log('post res>>', res);
-
-    //   // router.push(`/post/${post.identifier}/${post.slug}`);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-  };
 
   return (
     <div>
@@ -210,27 +172,16 @@ function CreatePost() {
         </Collapse>
         <br />
         <br />
-
-        {/* <Upload
-          name="postImages"
-          multiple
-          listType="picture-card"
-          fileList={fileList}
-          onPreview={handlePreview}
-          onChange={handleChange}
-          maxCount={5}
-        >
-          {fileList.length >= 5 ? null : uploadButton}
-        </Upload> */}
         <Upload
           name="postImages"
-          multiple
+          multiple={true}
           listType="picture-card"
           className="avatar-uploader"
           showUploadList={true}
           beforeUpload={beforeUpload}
           onChange={handleImageChange}
           maxCount={5}
+          // disabled={Boolean(imagePath.length === 5)}
         >
           {uploadButton}
         </Upload>
