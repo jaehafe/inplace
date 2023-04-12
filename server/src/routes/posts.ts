@@ -5,6 +5,7 @@ import fs from 'fs';
 import multer from 'multer';
 import path from 'path';
 import Post from '../entities/Post';
+import Image from '../entities/Image';
 
 const router = Router();
 
@@ -57,6 +58,25 @@ const createPost = async (req: Request, res: Response) => {
     post.username = user;
 
     await post.save();
+
+    // 이미지 업로드 및 게시물에 연결
+    console.log('imagePath>>>', imagePath);
+
+    const savedPost = await Post.findOneBy({ id: post.id });
+
+    const images = [];
+    for (const file of imagePath) {
+      const image = new Image();
+      image.src = file;
+      image.post = post;
+      await image.save();
+      images.push(image);
+    }
+
+    for (const image of images) {
+      post.images = image.id;
+    }
+
     return res.json(post);
   } catch (error) {
     console.error(error);

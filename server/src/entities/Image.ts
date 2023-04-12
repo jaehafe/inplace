@@ -4,7 +4,7 @@ import Post from './Post';
 
 @Entity('images')
 export default class Image extends BaseEntity {
-  @Column()
+  @Column({ nullable: true })
   src: string;
 
   @ManyToOne(() => Post, (post) => post.images)
