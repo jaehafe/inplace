@@ -26,20 +26,22 @@ function MainPage() {
 
   return (
     <M.MainPageWrapper>
-      <LogoHeader headerIcons={true} />
-      <M.StyledSpace direction="horizontal">
-        <Segmented
-          options={[
-            { label: '전체', value: '전체' },
-            { label: '인기글', value: '인기글' },
-            { label: '플레이스', value: '플레이스' },
-          ]}
-          value={value}
-          onChange={setValue}
-        />
-      </M.StyledSpace>
+      <M.HeaderWrapper>
+        <LogoHeader headerIcons={true} />
+        <M.StyledSpace direction="horizontal">
+          <Segmented
+            options={[
+              { label: '전체', value: '전체' },
+              { label: '인기글', value: '인기글' },
+              { label: '플레이스', value: '플레이스' },
+            ]}
+            value={value}
+            onChange={setValue}
+          />
+        </M.StyledSpace>
+      </M.HeaderWrapper>
 
-      <>{displayBody(value)}</>
+      <M.BodyWrapper>{displayBody(value)}</M.BodyWrapper>
       <WritePostButton />
     </M.MainPageWrapper>
   );

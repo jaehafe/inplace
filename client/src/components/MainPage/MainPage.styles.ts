@@ -26,9 +26,23 @@ const StyledSpace = styled(Space)`
   margin-top: 10px;
 `;
 
+const HeaderWrapper = styled.div`
+  z-index: 1;
+  position: fixed;
+  width: 346px;
+  background-color: #fff;
+`;
+
+const BodyWrapper = styled.div`
+  position: relative;
+  padding-top: 120px;
+`;
+
 const M = {
   MainPageWrapper,
   StyledSpace,
+  HeaderWrapper,
+  BodyWrapper,
 };
 
 export default M;
