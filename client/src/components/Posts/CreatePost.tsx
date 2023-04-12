@@ -101,6 +101,7 @@ function CreatePost() {
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     if (isUploadable(newFileList)) {
+      setLoading(true);
       setFileList(newFileList);
       // if (newFileList.some((file) => file.status !== 'done')) {
       //   // setLoading(true);
@@ -128,7 +129,6 @@ function CreatePost() {
       //   console.log('!!!!!!!!!!!!!!!!!!!!!');
       // }
 
-      setLoading(true);
       if (newFileList.every((file) => file.status === 'done')) {
         const imageFormData = new FormData();
         setLoading(false);
