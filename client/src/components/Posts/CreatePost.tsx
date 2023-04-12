@@ -68,7 +68,8 @@ function CreatePost() {
 
   const { mutate: uploadPostImageMutate } = uploadPostImagesAPI({ onSuccess });
 
-  const handleProfileChange: UploadProps['onChange'] = (
+  //
+  const handleImageChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
   ) => {
     if (info.file.status === 'uploading') {
@@ -225,7 +226,7 @@ function CreatePost() {
           className="avatar-uploader"
           showUploadList={true}
           beforeUpload={beforeUpload}
-          onChange={handleProfileChange}
+          onChange={handleImageChange}
           maxCount={5}
         >
           {uploadButton}

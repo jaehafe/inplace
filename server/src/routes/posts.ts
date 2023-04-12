@@ -12,6 +12,13 @@ interface RequestWithFile extends Request {
   files: any[];
 }
 
+interface DestinationCallback {
+  (error: Error | null, destination: string): void;
+}
+interface FileNameCallback {
+  (error: Error | null, filename: string): void;
+}
+
 try {
   fs.accessSync('uploads');
 } catch (error) {
@@ -21,10 +28,10 @@ try {
 
 const upload = multer({
   storage: multer.diskStorage({
-    destination(req, file, done) {
+    destination(req, file, done: DestinationCallback) {
       done(null, 'uploads');
     },
-    filename(req, file, done) {
+    filename(req, file, done: FileNameCallback) {
       const ext = path.extname(file.originalname); // 확장자 추출(png)
       const basename = path.basename(file.originalname, ext); // 이름 추출(image)
       done(null, basename + '_' + new Date().getTime() + ext);
