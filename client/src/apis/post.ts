@@ -1,4 +1,9 @@
-import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import {
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+  UseQueryOptions,
+} from '@tanstack/react-query';
 import { message } from 'antd';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
@@ -43,4 +48,12 @@ export const uploadPostImagesAPI = (
   };
 
   return useMutation([queryKey], queryFn, { ...options, onError });
+};
+
+export const getAllPostAPI = (
+  options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
+) => {
+  const queryKey = `${baseURL}/posts`;
+  const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
+  return useQuery([queryKey], queryFn, { ...options });
 };

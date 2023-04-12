@@ -6,6 +6,7 @@ import multer from 'multer';
 import path from 'path';
 import Post from '../entities/Post';
 import Image from '../entities/Image';
+import { AppDataSource } from '../data-source';
 
 const router = Router();
 
@@ -83,7 +84,20 @@ const createPost = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'something went wrong' });
   }
 };
+const getAllPosts = async (req: Request, res: Response) => {
+  try {
+    const allPosts = await Post.find({
+      order: { createdAt: 'DESC' },
+      relations: ['votes', 'comments', 'images'],
+    });
 
+    return res.json(allPosts);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'something went wrong' });
+  }
+};
+router.get('/', getAllPosts);
 router.post(
   '/images',
   userMiddleware,

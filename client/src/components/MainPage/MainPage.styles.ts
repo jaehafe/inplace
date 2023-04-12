@@ -2,8 +2,6 @@ import { Space } from 'antd';
 import styled from 'styled-components';
 
 const MainPageWrapper = styled.section`
-  border: 1px solid;
-
   & h1 {
     font-size: 20px;
     font-weight: 700;
