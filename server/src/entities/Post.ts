@@ -13,7 +13,7 @@ export default class Post extends BaseEntity {
   @Column()
   identifier: string;
 
-  @Column()
+  @Column({ type: 'text' })
   title: string;
 
   @Index()
@@ -21,16 +21,16 @@ export default class Post extends BaseEntity {
   slug: string;
 
   @Column({ nullable: true, type: 'text' })
-  body: string;
+  desc: string;
 
-  @Column()
+  @Column({ nullable: true })
   placeName: string;
 
   @Column()
   username: string;
 
-  @Column({ nullable: true })
-  imagePath: string;
+  @Column({ type: 'json', nullable: true })
+  imagePath: string[];
 
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: 'username', referencedColumnName: 'username' })
@@ -47,6 +47,15 @@ export default class Post extends BaseEntity {
   @Exclude()
   @OneToMany(() => Vote, (vote) => vote.post)
   votes: Vote[];
+
+  @Column({ type: 'varchar', length: 30 })
+  upVote: string;
+
+  @Column({ type: 'varchar', length: 30 })
+  neutralVote: string;
+
+  @Column({ type: 'varchar', length: 30 })
+  downVote: string;
 
   @Expose() get url(): string {
     return `/${this.placeName}/${this.identifier}/${this.slug}`;

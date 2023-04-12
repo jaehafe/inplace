@@ -6,7 +6,7 @@ import { axiosInstance, baseURL } from '../configs/axios';
 
 export const createPostAPI = (
   options?: UseMutationOptions<AxiosResponse<string>, AxiosError, any>
-) => {
+): any => {
   const router = useRouter();
   const queryKey = `${baseURL}/posts`;
   const queryFn = (data: any) =>
@@ -14,14 +14,18 @@ export const createPostAPI = (
 
   const onSuccess = () => {
     message.success('게시물이 생성 완료');
-    router.push('/');
+    // router.push('/');
   };
 
   const onError = () => {
     message.error('게시물 생성 실패');
   };
 
-  return useMutation([queryKey], queryFn, { onSuccess, onError, ...options });
+  return useMutation([queryKey], queryFn, {
+    onSuccess,
+    onError,
+    ...options,
+  });
 };
 
 export const uploadPostImagesAPI = (
@@ -40,7 +44,3 @@ export const uploadPostImagesAPI = (
 
   return useMutation([queryKey], queryFn, { ...options, onError });
 };
-
-// export const uploadPostImagesAPI = (data: FormData) => {
-//   return axiosInstance.post(`${baseURL}/posts/images`, data);
-// };

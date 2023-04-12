@@ -4,6 +4,7 @@ import { userMiddleware } from '../middlewares/userMiddleware';
 import fs from 'fs';
 import multer from 'multer';
 import path from 'path';
+import Post from '../entities/Post';
 
 const router = Router();
 
@@ -41,17 +42,39 @@ const upload = multer({
 });
 
 const createPost = async (req: Request, res: Response) => {
-  const { title, upVote, neutralVote, downVote, desc } = req.body;
+  const { title, upVote, neutralVote, downVote, desc, imagePath } = req.body;
 
   const user = res.locals.user;
 
   try {
-    res.json({ success: '성공' });
+    const post = new Post();
+    post.title = title;
+    post.upVote = upVote;
+    post.neutralVote = neutralVote;
+    post.downVote = downVote;
+    post.desc = desc;
+    post.imagePath = imagePath;
+    post.username = user;
+
+    await post.save();
+    res.json(post);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'something went wrong' });
   }
 };
+
+// const getPost = async (req: Request, res: Response) => {
+//   const id = req.params.id;
+
+//   try {
+//     const post = await Post.findOneOrFail(id);
+//     res.json(post);
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ error: 'something went wrong' });
+//   }
+// };
 
 router.post(
   '/images',

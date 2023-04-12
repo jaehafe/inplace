@@ -84,7 +84,13 @@ function CreatePost() {
     // router.push('/');
   };
   const { mutate: uploadPostImageMutate } = uploadPostImagesAPI({ onSuccess });
-  const { mutate: createPostMutate } = createPostAPI();
+
+  const onSuccessCreatePost = (data: any) => {
+    console.log('data>>>>', data);
+  };
+  const { mutate: createPostMutate } = createPostAPI({
+    onSuccess: onSuccessCreatePost,
+  });
 
   console.log('imagePath>>', imagePath);
 
@@ -156,13 +162,15 @@ function CreatePost() {
 
   const handleSubmitPost = async (e: FormEvent) => {
     e.preventDefault();
-    createPostMutate({ title, upVote, neutralVote, downVote, desc });
+    console.log('12312123');
+
+    createPostMutate({ title, upVote, neutralVote, downVote, desc, imagePath });
   };
 
   return (
     <div>
       <PostHeader />
-      <div onSubmit={handleSubmitPost}>
+      <form onSubmit={handleSubmitPost}>
         {/* 제목 */}
         <Input.TextArea
           showCount
@@ -243,7 +251,7 @@ function CreatePost() {
         <CommonButton type="primary" htmlType="submit" disabled={isDisabled}>
           작성완료
         </CommonButton>
-      </div>
+      </form>
     </div>
   );
 }
