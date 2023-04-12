@@ -72,11 +72,11 @@ function CreatePost() {
   const handleImageChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
   ) => {
-    if (info.file.status === 'uploading') {
+    if (info.fileList.some((file) => file.status !== 'done')) {
       setLoading(true);
       return;
     }
-    if (info.file.status === 'done') {
+    if (!info.fileList.some((file) => file.status !== 'done')) {
       const imageFormData = new FormData();
 
       getBase64(info.file.originFileObj as RcFile, (url) => {
@@ -91,6 +91,7 @@ function CreatePost() {
       }
 
       uploadPostImageMutate(imageFormData);
+      console.log('!!!!!!!!!!!!!!!!!!!!!');
     }
   };
 
