@@ -76,6 +76,8 @@ function CreatePost() {
       setLoading(true);
       return;
     }
+    // fileList 안에 있는 애들 마다 업로드가 성공하면 아래 코드가 실행
+    // fileList 안에 있는 애들 전부 업로드가 성공하면 아래 코드 실행해
     if (!info.fileList.some((file) => file.status !== 'done')) {
       const imageFormData = new FormData();
 
