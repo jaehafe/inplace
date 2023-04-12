@@ -53,28 +53,16 @@ const createPost = async (req: Request, res: Response) => {
     post.neutralVote = neutralVote;
     post.downVote = downVote;
     post.desc = desc;
-    post.imagePath = imagePath;
+    post.images = imagePath;
     post.username = user;
 
     await post.save();
-    res.json(post);
+    return res.json(post);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'something went wrong' });
   }
 };
-
-// const getPost = async (req: Request, res: Response) => {
-//   const id = req.params.id;
-
-//   try {
-//     const post = await Post.findOneOrFail(id);
-//     res.json(post);
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ error: 'something went wrong' });
-//   }
-// };
 
 router.post(
   '/images',
@@ -91,3 +79,15 @@ router.post(
 router.post('/', userMiddleware, authMiddleware, createPost);
 
 export default router;
+
+// const getPost = async (req: Request, res: Response) => {
+//   const id = req.params.id;
+
+//   try {
+//     const post = await Post.findOneOrFail(id);
+//     res.json(post);
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ error: 'something went wrong' });
+//   }
+// };

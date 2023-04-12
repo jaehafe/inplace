@@ -6,6 +6,7 @@ import Vote from './Vote';
 import Comment from './Comment';
 import { Exclude, Expose } from 'class-transformer';
 import { makeId, slugify } from '../utils/helper';
+import Image from './Image';
 
 @Entity('posts')
 export default class Post extends BaseEntity {
@@ -29,8 +30,8 @@ export default class Post extends BaseEntity {
   @Column()
   username: string;
 
-  @Column({ type: 'json', nullable: true })
-  imagePath: string[];
+  @OneToMany(() => Image, (image) => image.post)
+  images: Image[];
 
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: 'username', referencedColumnName: 'username' })
