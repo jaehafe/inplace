@@ -17,25 +17,52 @@ import CommonButton from '../Common/CommonButton';
 import PostHeader from '../Header/PostHeader/PostHeader';
 import P from './Posts.styles';
 
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
+// const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+//   const reader = new FileReader();
+//   reader.addEventListener('load', () => callback(reader.result as string));
+//   reader.readAsDataURL(img);
+// };
 
-const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng =
-    file.type === 'image/jpeg' ||
-    file.type === 'image/png' ||
-    file.type === 'image/svg';
-  if (!isJpgOrPng) {
-    message.error('JPG/PNG/SVG 형식의 파일만 업로드 가능합니다.');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 20;
-  if (!isLt2M) {
-    message.error('총 20MB이하의 파일사이즈만 업로드 가능합니다.');
-  }
-  return isJpgOrPng && isLt2M;
+const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
+// const beforeUpload = (file: RcFile) => {
+//   const isJpgOrPng =
+//     file.type === 'image/jpeg' ||
+//     file.type === 'image/png' ||
+//     file.type === 'image/svg';
+//   if (!isJpgOrPng) {
+//     message.error('JPG/PNG/SVG 형식의 파일만 업로드 가능합니다.');
+//   }
+//   const isLt2M = file.size / 1024 / 1024 < 20;
+//   if (!isLt2M) {
+//     message.error('총 20MB이하의 파일사이즈만 업로드 가능합니다.');
+//   }
+//   return isJpgOrPng && isLt2M;
+// };
+
+const isUploadable = (fileList: UploadFile[]) => {
+  return fileList.every((file) => {
+    const isJpgOrPng =
+      file.type === 'image/jpeg' ||
+      file.type === 'image/png' ||
+      file.type === 'image/svg';
+    if (!isJpgOrPng) {
+      message.error('JPG/PNG/SVG 형식의 파일만 업로드 가능합니다.');
+      return false;
+    }
+    const isLt2M = file.size! / 1024 / 1024 < 20;
+    if (!isLt2M) {
+      message.error('총 20MB이하의 파일사이즈만 업로드 가능합니다.');
+      return false;
+    }
+    return true;
+  });
 };
 
 function CreatePost() {
@@ -46,64 +73,20 @@ function CreatePost() {
   const [desc, setDesc] = useState('');
 
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string>();
   const [imagePath, setImagePath] = useState<string>('');
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const router = useRouter();
 
   const onSuccess = (data: any) => {
-    console.log('data>>>', data);
     setImagePath(data);
-
     // message.success('이미지 업로드 완료');
     // router.push('/');
   };
-
-  console.log('imagePath>>', imagePath);
-
   const { mutate: uploadPostImageMutate } = uploadPostImagesAPI({ onSuccess });
-
-  //
-  const handleImageChange: UploadProps['onChange'] = (
-    info: UploadChangeParam<UploadFile>
-  ) => {
-    if (info.fileList.some((file) => file.status !== 'done')) {
-      setLoading(true);
-      return;
-    }
-    // fileList 안에 있는 애들 마다 업로드가 성공하면 아래 코드가 실행
-    // fileList 안에 있는 애들 전부 업로드가 성공하면 아래 코드 실행해
-    if (!info.fileList.some((file) => file.status !== 'done')) {
-      const imageFormData = new FormData();
-
-      getBase64(info.file.originFileObj as RcFile, (url) => {
-        setLoading(false);
-      });
-
-      const { fileList } = info;
-
-      for (let i = 0; i < fileList.length; i++) {
-        imageFormData.append('postImages', fileList[i].originFileObj as any);
-      }
-
-      uploadPostImageMutate(imageFormData);
-      console.log('!!!!!!!!!!!!!!!!!!!!!');
-    }
-  };
-
   const { mutate: createPostMutate } = createPostAPI();
 
-  const handleSubmitPost = async (e: FormEvent) => {
-    e.preventDefault();
-    createPostMutate({ title, upVote, neutralVote, downVote, desc });
-  };
-
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
+  console.log('imagePath>>', imagePath);
 
   const isDisabled = useMemo(
     () =>
@@ -115,6 +98,66 @@ function CreatePost() {
       ),
     [title, upVote, neutralVote, downVote]
   );
+
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    if (isUploadable(newFileList)) {
+      setFileList(newFileList);
+      // if (newFileList.some((file) => file.status !== 'done')) {
+      //   // setLoading(true);
+
+      //   return;
+      // }
+
+      // // fileList 안에 있는 애들 마다 업로드가 성공하면 아래 코드가 실행
+      // // fileList 안에 있는 애들 전부 업로드가 성공하면 아래 코드 실행
+      // if (!newFileList.some((file) => file.status !== 'done')) {
+      //   const imageFormData = new FormData();
+      //   setLoading(false);
+      //   // getBase64(newFileList.originFileObj as RcFile, (url) => {
+      //   //   setLoading(false);
+      //   // });
+
+      //   for (let i = 0; i < newFileList.length; i++) {
+      //     imageFormData.append(
+      //       'postImages',
+      //       newFileList[i].originFileObj as any
+      //     );
+      //   }
+
+      //   uploadPostImageMutate(imageFormData);
+      //   console.log('!!!!!!!!!!!!!!!!!!!!!');
+      // }
+
+      setLoading(true);
+      if (newFileList.every((file) => file.status === 'done')) {
+        const imageFormData = new FormData();
+        setLoading(false);
+
+        for (let i = 0; i < newFileList.length; i++) {
+          imageFormData.append(
+            'postImages',
+            newFileList[i].originFileObj as any
+          );
+        }
+
+        uploadPostImageMutate(imageFormData);
+        console.log('!!!!!!!!!!!!!!!!!!!!!');
+      }
+    }
+  };
+
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      {/* <PlusOutlined /> */}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
+
+  const handleSubmitPost = async (e: FormEvent) => {
+    e.preventDefault();
+    createPostMutate({ title, upVote, neutralVote, downVote, desc });
+  };
 
   return (
     <div>
@@ -172,7 +215,7 @@ function CreatePost() {
         </Collapse>
         <br />
         <br />
-        <Upload
+        {/* <Upload
           name="postImages"
           multiple={true}
           listType="picture-card"
@@ -184,6 +227,16 @@ function CreatePost() {
           // disabled={Boolean(imagePath.length === 5)}
         >
           {uploadButton}
+        </Upload> */}
+        <Upload
+          listType="picture-card"
+          fileList={fileList}
+          onChange={handleChange}
+          // beforeUpload={beforeUpload}
+          multiple={true}
+          maxCount={5}
+        >
+          {fileList.length >= 5 ? null : uploadButton}
         </Upload>
         <span>최대 5장까지 업로드할 수 있습니다.</span>
 
