@@ -1,9 +1,10 @@
 import { HeartOutlined, HeartTwoTone, MoreOutlined } from '@ant-design/icons';
-import { Button, Collapse, Divider, Input } from 'antd';
+import { Button, Collapse, Divider, Input, message } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useMemo, useState } from 'react';
+import { createCommentAPI } from '../../apis/post';
 import { axiosInstance } from '../../configs/axios';
 import P from './Posts.styles';
 
@@ -11,20 +12,22 @@ function PostComment({ comments, identifier, userInfo }: any) {
   console.log('comments:>>>', comments);
   const router = useRouter();
   const [newComment, setNewComment] = useState('');
+  const { mutate: createCommentMutate } = createCommentAPI(identifier);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (newComment.trim() === '') return;
-    console.log('댓글 추가');
-    try {
-      await axiosInstance.post(`/post/${identifier}/comments`, {
-        body: newComment,
-      });
-      setNewComment('');
-    } catch (error) {
-      console.error(error);
+    if (newComment.trim() === '') {
+      return message.error('최소 5글자 이상 입력해 주세요');
     }
+
+    createCommentMutate({ body: newComment });
+    setNewComment('');
   };
+
+  const isDisabled = useMemo(
+    () => Boolean(newComment.trim().length < 5),
+    [newComment]
+  );
 
   return (
     <P.DetailCommentWrapper>
@@ -42,10 +45,15 @@ function PostComment({ comments, identifier, userInfo }: any) {
                 bordered={false}
                 showCount
                 maxLength={300}
+                value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 style={{ height: 200, resize: 'none' }}
               />
-              <P.CommentSubmitButton type="text" htmlType="submit">
+              <P.CommentSubmitButton
+                type="primary"
+                htmlType="submit"
+                disabled={isDisabled}
+              >
                 추가
               </P.CommentSubmitButton>
             </form>

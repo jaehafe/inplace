@@ -72,3 +72,26 @@ export const getDetailPostAPI = (
   };
   return useQuery([queryKey], queryFn, { onError, ...options });
 };
+
+export const createCommentAPI = (
+  identifier: string,
+  options?: UseMutationOptions<AxiosResponse<string>, AxiosError, any>
+): any => {
+  const queryKey = `${baseURL}/posts/${identifier}/comments`;
+  const queryFn = (data: any) =>
+    axiosInstance.post(queryKey, data).then((res) => res.data);
+
+  const onSuccess = () => {
+    message.success('댓글 생성 완료');
+  };
+
+  const onError = () => {
+    message.error('댓글 생성 실패');
+  };
+
+  return useMutation([queryKey], queryFn, {
+    onSuccess,
+    onError,
+    ...options,
+  });
+};

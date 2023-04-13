@@ -7,6 +7,7 @@ import path from 'path';
 import Post from '../entities/Post';
 import Image from '../entities/Image';
 import { AppDataSource } from '../data-source';
+import Comment from '../entities/Comment';
 
 const router = Router();
 
@@ -114,6 +115,29 @@ const getDetailPost = async (req: Request, res: Response) => {
   }
 };
 
+const createPostComment = async (req: Request, res: Response) => {
+  const { identifier } = req.params;
+  const { body } = req.body;
+
+  try {
+    const post = await Post.findOneByOrFail({ identifier });
+    const comment = new Comment();
+    comment.body = body;
+    comment.user = res.locals.user;
+    comment.post = post;
+
+    if (res.locals.user) {
+      post.setUserVote(res.locals.user);
+    }
+
+    await comment.save();
+    return res.json(comment);
+  } catch (error) {
+    console.error(error);
+    return res.status(404).json({ error: '게시물을 찾을 수 없습니다.' });
+  }
+};
+
 router.get('/', getAllPosts);
 router.get('/:identifier', getDetailPost);
 router.post(
@@ -129,6 +153,7 @@ router.post(
   }
 );
 router.post('/', userMiddleware, authMiddleware, createPost);
+router.post('/:identifier/comments', userMiddleware, createPostComment);
 
 export default router;
 

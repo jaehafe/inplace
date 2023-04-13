@@ -14,6 +14,6 @@ export default styled(Button)`
 
   &:hover,
   &:active {
-    background-color: ${({ theme }) => theme.primary} !important;
+    background-color: ${({ theme }) => theme.gray600} !important;
   }
 `;

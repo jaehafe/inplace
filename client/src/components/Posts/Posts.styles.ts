@@ -174,6 +174,11 @@ const CommentHeader = styled.div`
 const CommentSubmitButton = styled(Button)`
   background-color: ${({ theme }) => theme.primary};
   color: ${({ theme }) => theme.white};
+
+  &:hover,
+  &:active {
+    background-color: ${({ theme }) => theme.gray600} !important;
+  }
 `;
 const CommentBodyWrapper = styled.div`
   display: flex;
