@@ -5,14 +5,22 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
 import { createCommentAPI, getCommentsAPI } from '../../apis/post';
-import { axiosInstance } from '../../configs/axios';
+import { axiosInstance, baseURL } from '../../configs/axios';
 import P from './Posts.styles';
 import { formattedDate } from '../../utils';
+import { useQueryClient } from '@tanstack/react-query';
 
 function PostComment({ identifier, userInfo, commentData }: any) {
   const router = useRouter();
   const [newComment, setNewComment] = useState('');
-  const { mutate: createCommentMutate } = createCommentAPI(identifier);
+  const queryClient = useQueryClient();
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries([`${baseURL}/posts/${identifier}/comments`]);
+  };
+  const { mutate: createCommentMutate } = createCommentAPI(identifier, {
+    onSuccess,
+  });
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
