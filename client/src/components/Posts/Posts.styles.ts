@@ -202,6 +202,14 @@ const CommentInfoHeader = styled.div`
     color: ${({ theme }) => theme.gray800};
   }
 `;
+const CommentEditButton = styled(Button)`
+  margin-right: 10px;
+  /* background-color: ${({ theme }) => theme.white} !important; */
+  & > span {
+    /* color: ${({ theme }) => theme.gray600} !important; */
+  }
+`;
+const CommentCancelButton = styled(Button)``;
 const CommentInfo = styled.div`
   width: 100%;
   display: flex;
@@ -275,6 +283,8 @@ const P = {
   CommentHeader,
   CommentSubmitButton,
   PostComment,
+  CommentEditButton,
+  CommentCancelButton,
   CommentInfo,
   CommentBodyWrapper,
   CommentInfoHeader,

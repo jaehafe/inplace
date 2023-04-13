@@ -1,9 +1,9 @@
 import { HeartOutlined, HeartTwoTone, MoreOutlined } from '@ant-design/icons';
-import { Button, Collapse, Divider, Input, message } from 'antd';
+import { Button, Collapse, Divider, Input, message, Popover } from 'antd';
 import Image from 'next/image';
-import Link from 'next/link';
+
 import { useRouter } from 'next/router';
-import React, { FormEvent, useMemo, useState } from 'react';
+import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { createCommentAPI, getCommentsAPI } from '../../apis/post';
 import { axiosInstance, baseURL } from '../../configs/axios';
 import P from './Posts.styles';
@@ -13,9 +13,16 @@ import { useQueryClient } from '@tanstack/react-query';
 function PostComment({ identifier, userInfo, commentData }: any) {
   const router = useRouter();
   const [newComment, setNewComment] = useState('');
+
+  const [isEditing, setIsEditing] = useState<Record<string, boolean>>({});
+  const [editedComment, setEditedComment] = useState<Record<string, string>>(
+    {}
+  );
+
   const queryClient = useQueryClient();
 
   const onSuccess = () => {
+    setNewComment('');
     queryClient.invalidateQueries([`${baseURL}/posts/${identifier}/comments`]);
   };
   const { mutate: createCommentMutate } = createCommentAPI(identifier, {
@@ -29,13 +36,23 @@ function PostComment({ identifier, userInfo, commentData }: any) {
     }
 
     createCommentMutate({ body: newComment });
-    setNewComment('');
   };
 
   const isDisabled = useMemo(
     () => Boolean(newComment.trim().length < 5),
     [newComment]
   );
+
+  const handleEditComment = (commentId: string, currentComment: string) => {
+    console.log('수정');
+    console.log('identifier', commentId);
+    setIsEditing((prev) => ({ ...prev, [commentId]: true }));
+    setEditedComment((prev) => ({ ...prev, [commentId]: currentComment }));
+  };
+  const handleDeleteComment = (commentId: string) => {
+    console.log('삭제');
+    console.log('identifier', commentId);
+  };
 
   return (
     <P.DetailCommentWrapper>
@@ -89,6 +106,7 @@ function PostComment({ identifier, userInfo, commentData }: any) {
           username,
           identifier: commentId,
         } = data;
+
         return (
           <P.PostComment key={commentId}>
             <P.CommentBodyWrapper>
@@ -105,18 +123,70 @@ function PostComment({ identifier, userInfo, commentData }: any) {
                     {username} | {formattedDate(createdAt)}
                     {createdAt !== updatedAt ? '(수정됨)' : ''}
                   </span>
-                  <Button
-                    type="text"
-                    shape="circle"
-                    // onClick={() => setOpen(true)}
+
+                  <Popover
+                    placement="rightTop"
+                    trigger={['click']}
+                    content={
+                      <div>
+                        <Button
+                          type="text"
+                          onClick={() => handleEditComment(commentId, body)}
+                        >
+                          수정
+                        </Button>
+                        <Button
+                          type="text"
+                          onClick={() => handleDeleteComment(commentId)}
+                        >
+                          삭제
+                        </Button>
+                      </div>
+                    }
                   >
-                    <MoreOutlined
-                      style={{ fontSize: '16px' }}
-                      className="edit-button"
-                    />
-                  </Button>
+                    <Button type="text" shape="circle">
+                      <MoreOutlined
+                        style={{ fontSize: '16px' }}
+                        className="edit-button"
+                      />
+                    </Button>
+                  </Popover>
                 </P.CommentInfoHeader>
-                <p>{body}</p>
+                {isEditing[commentId] ? (
+                  <form>
+                    <Input.TextArea
+                      placeholder="내용을 수정하세요"
+                      bordered={false}
+                      showCount
+                      maxLength={300}
+                      value={editedComment[commentId] || ''}
+                      onChange={(e) =>
+                        setEditedComment((prev) => ({
+                          ...prev,
+                          [commentId]: e.target.value,
+                        }))
+                      }
+                      style={{ height: 100, resize: 'none' }}
+                    />
+                    <P.CommentEditButton type="dashed" htmlType="submit">
+                      저장
+                    </P.CommentEditButton>
+                    <P.CommentCancelButton
+                      type="dashed"
+                      htmlType="submit"
+                      onClick={() => {
+                        setIsEditing((prev) => ({
+                          ...prev,
+                          [commentId]: false,
+                        }));
+                      }}
+                    >
+                      취소
+                    </P.CommentCancelButton>
+                  </form>
+                ) : (
+                  <pre>{body}</pre>
+                )}
               </P.CommentInfo>
             </P.CommentBodyWrapper>
             <P.LikeWrapper>
