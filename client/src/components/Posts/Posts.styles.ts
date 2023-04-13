@@ -171,6 +171,10 @@ const CommentHeader = styled.div`
   gap: 10px;
   margin-bottom: 20px;
 `;
+const CommentSubmitButton = styled(Button)`
+  background-color: ${({ theme }) => theme.primary};
+  color: ${({ theme }) => theme.white};
+`;
 const CommentBodyWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -224,6 +228,12 @@ const PostDrawer = styled(Drawer)`
   }
 `;
 
+const LoginRouterButton = styled(Button)`
+  & > span {
+    color: ${({ theme }) => theme.gray600};
+  }
+`;
+
 // CreatePost
 
 const P = {
@@ -247,11 +257,13 @@ const P = {
   Comment,
   DetailCommentWrapper,
   CommentHeader,
+  CommentSubmitButton,
   PostComment,
   CommentInfo,
   CommentBodyWrapper,
   CommentInfoHeader,
   LikeWrapper,
+  LoginRouterButton,
 };
 
 export default P;

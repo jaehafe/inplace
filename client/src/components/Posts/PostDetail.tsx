@@ -7,6 +7,8 @@ import {
 import { Button, RadioChangeEvent } from 'antd';
 import Image from 'next/image';
 import React, { useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { authMeAPI } from '../../apis/user';
 import {
   formattedDate,
   postDescEllipsis,
@@ -40,6 +42,9 @@ function PostDetail({ detailPost }: any) {
 
   const [open, setOpen] = useState(false);
   const [vote, setVote] = useState('');
+  const [cookie] = useCookies(['inplace']);
+
+  const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
 
   const handleVoteChange = (e: RadioChangeEvent) => {
     setVote(e.target.value);
@@ -110,7 +115,11 @@ function PostDetail({ detailPost }: any) {
           </P.VoteSelectWrapper>
 
           {/* 게시물 댓글 컴포넌트 */}
-          <PostComment comments={comments} />
+          <PostComment
+            comments={comments}
+            identifier={identifier}
+            userInfo={userInfo}
+          />
         </P.BodyWrapper>
       </P.Wrapper>
     </div>
