@@ -1,25 +1,16 @@
-import { HeartOutlined, HeartTwoTone, MoreOutlined } from '@ant-design/icons';
-import { Button, Collapse, Divider, Input, message, Popover } from 'antd';
-import Image from 'next/image';
-
+import { Collapse, Divider, Input, message } from 'antd';
 import { useRouter } from 'next/router';
-import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { createCommentAPI, getCommentsAPI } from '../../apis/post';
-import { axiosInstance, baseURL } from '../../configs/axios';
+import React, { FormEvent, useMemo, useState } from 'react';
+import { createCommentAPI } from '../../apis/post';
+import { baseURL } from '../../configs/axios';
 import P from './Posts.styles';
-import { formattedDate } from '../../utils';
+
 import { useQueryClient } from '@tanstack/react-query';
 import PostComment from './PostComment';
 
 function PostComments({ identifier, userInfo, commentData }: any) {
   const router = useRouter();
   const [newComment, setNewComment] = useState('');
-
-  const [isEditing, setIsEditing] = useState<Record<string, boolean>>({});
-  const [editedComment, setEditedComment] = useState<Record<string, string>>(
-    {}
-  );
-  console.log('editedComment>>', editedComment);
 
   const queryClient = useQueryClient();
 
@@ -44,30 +35,6 @@ function PostComments({ identifier, userInfo, commentData }: any) {
     () => Boolean(newComment.trim().length < 5),
     [newComment]
   );
-  const isDisabledEditComment = useMemo(
-    () => Boolean(newComment.trim().length < 5),
-    [newComment]
-  );
-
-  const handleEditComment = (commentId: string, currentComment: string) => {
-    console.log('수정');
-    console.log('identifier', commentId);
-    setIsEditing((prev) => ({ ...prev, [commentId]: true }));
-    setEditedComment((prev) => ({ ...prev, [commentId]: currentComment }));
-  };
-  const handleDeleteComment = (commentId: string) => {
-    console.log('삭제');
-    console.log('identifier', commentId);
-  };
-
-  const handleEditCommentSubmit = (e: FormEvent, commentId: string) => {
-    e.preventDefault();
-    const currentEditedComment = editedComment[commentId];
-
-    if (currentEditedComment && currentEditedComment.trim().length < 5) {
-      return message.error('최소 5글자 이상 입력해 주세요');
-    }
-  };
 
   return (
     <P.DetailCommentWrapper>
