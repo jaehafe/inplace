@@ -11,8 +11,11 @@ import { Button, Divider, RadioChangeEvent } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import P from './Posts.styles';
-import dayjs from 'dayjs';
-import { formattedDate } from '../../utils';
+import {
+  formattedDate,
+  postDescEllipsis,
+  postTitleEllipsis,
+} from '../../utils';
 
 const voteOptions = [
   { label: <LikeTwoTone twoToneColor="#2515d5" />, value: 'VoteUp' },
@@ -33,7 +36,7 @@ function AllPosts({ posts }: any) {
     <>
       {posts?.map((post: any) => {
         const {
-          identifer,
+          identifier,
           username,
           createdAt,
           updatedAt,
@@ -47,7 +50,7 @@ function AllPosts({ posts }: any) {
           voteScore,
         } = post;
         return (
-          <P.Wrapper>
+          <P.Wrapper key={identifier}>
             <P.HeaderWrapper>
               <P.HeaderLeft>
                 <Image
@@ -75,8 +78,8 @@ function AllPosts({ posts }: any) {
             </P.HeaderWrapper>
             <P.BodyWrapper>
               {/* 제목, 내용 */}
-              <h3>{title}</h3>
-              <p>{desc}</p>
+              <h3>{postTitleEllipsis(title)}</h3>
+              <p>{postDescEllipsis(desc)}</p>
               {/* O X */}
               <P.VoteResultWrapper>
                 <P.VoteResult>
