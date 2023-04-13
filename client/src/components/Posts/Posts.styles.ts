@@ -103,6 +103,25 @@ const VoteSelect = styled(Radio.Group)`
     color: ${({ theme }) => theme.white} !important;
     background-color: ${({ theme }) => theme.gray400} !important;
   }
+  display: flex;
+
+  & label.ant-radio-button-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const VoteSelectWrapper = styled.div`
+  margin: 30px 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const VoteButton = styled(Radio.Button)`
+  padding: 20px 50px;
 `;
 
 // 댓글
@@ -154,7 +173,9 @@ const P = {
   StaticsWrapper,
   StaticsLeft,
   StaticsRight,
+  VoteSelectWrapper,
   VoteSelect,
+  VoteButton,
   CommentWrapper,
   Comment,
 };

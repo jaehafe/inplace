@@ -42,7 +42,6 @@ export default class Post extends BaseEntity {
   @JoinColumn({ name: 'placeName', referencedColumnName: 'name' })
   place: Place;
 
-  @Exclude()
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 

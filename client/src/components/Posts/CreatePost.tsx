@@ -169,7 +169,7 @@ function CreatePost() {
 
   return (
     <div>
-      <PostHeader />
+      <PostHeader title="OX 질문" />
       <form onSubmit={handleSubmitPost}>
         {/* 제목 */}
         <Input.TextArea

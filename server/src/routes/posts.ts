@@ -97,6 +97,7 @@ const getAllPosts = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'something went wrong' });
   }
 };
+
 router.get('/', getAllPosts);
 router.post(
   '/images',

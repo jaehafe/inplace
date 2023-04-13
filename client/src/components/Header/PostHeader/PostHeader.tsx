@@ -4,7 +4,7 @@ import React from 'react';
 import B from '../../Common/BackButton';
 import P from './PostHeader.styles';
 
-function PostHeader() {
+function PostHeader({ title }: { title?: string }) {
   const router = useRouter();
   return (
     <P.Wrapper>
@@ -17,7 +17,7 @@ function PostHeader() {
         <LeftOutlined />
       </B.BackButton>
 
-      <div>OX 질문</div>
+      {title && <div>{title}</div>}
     </P.Wrapper>
   );
 }
