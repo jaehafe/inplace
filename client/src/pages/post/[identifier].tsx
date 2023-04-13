@@ -1,17 +1,26 @@
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { Spin } from 'antd';
-import axios from 'axios';
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { getDetailPostAPI } from '../../apis/post';
 import PostHeader from '../../components/Header/PostHeader/PostHeader';
 import PostDetail from '../../components/Posts/PostDetail';
-import { baseURL } from '../../configs/axios';
+import { axiosInstance, baseURL } from '../../configs/axios';
+// { identifier: string }
 
-function DetailPostPage() {
-  const router = useRouter();
-  const { identifier } = router.query;
-  const { data: detailPost, isLoading } = getDetailPostAPI(identifier);
+function DetailPostPage({ identifier }: { identifier: string }) {
+  // const router = useRouter();
+  // const { identifier } = router.query;
+
+  console.log('identifier>>', identifier);
+
+  const { data: detailPost, isLoading } = getDetailPostAPI(
+    identifier as string
+  );
+
+  if (isLoading) {
+    <Spin size="large" />;
+  }
 
   return (
     <div>
@@ -23,9 +32,23 @@ function DetailPostPage() {
 
 export default DetailPostPage;
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const res = await axios.get(`${baseURL}/posts/${params?.identifier}`);
-  const data = res.data;
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+//   const res = await axios.get(`${baseURL}/posts/${params?.identifier}`);
+//   const data = res.data;
 
-  return { props: { data: data } };
+//   return { props: { data: data } };
+// };
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const queryClient = new QueryClient();
+  const queryKey = `${baseURL}/posts/${params?.identifier}`;
+  const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
+
+  await queryClient.prefetchQuery([queryKey], queryFn);
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      identifier: params?.identifier,
+    },
+  };
 };
