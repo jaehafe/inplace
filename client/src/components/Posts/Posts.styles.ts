@@ -149,6 +149,10 @@ const Comment = styled.div`
   gap: 10px;
   /* color: ${({ theme }) => theme.gray750}; */
   font-size: 14px;
+
+  & span {
+    color: ${({ theme }) => theme.gray600};
+  }
 `;
 
 // 게시물 상세 댓글

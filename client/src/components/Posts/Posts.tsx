@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import P from './Posts.styles';
 import {
+  commentBodyEllipsis,
   formattedDate,
   postDescEllipsis,
   postTitleEllipsis,
@@ -49,6 +50,7 @@ function AllPosts({ posts }: any) {
           images,
           commentCount,
           voteScore,
+          comments,
         } = post;
         return (
           <P.Wrapper key={identifier}>
@@ -123,27 +125,23 @@ function AllPosts({ posts }: any) {
 
               {/* comment 작업 */}
               <P.CommentWrapper>
-                <P.Comment>
-                  <Image
-                    src="https://www.gravatar.com/avatar?d=mp&f=y"
-                    width={20}
-                    height={20}
-                    style={{ borderRadius: '50px' }}
-                    alt="avatar"
-                  />
-                  <span>이게 나라냐?</span>
-                </P.Comment>
-
-                <P.Comment>
-                  <Image
-                    src="https://www.gravatar.com/avatar?d=mp&f=y"
-                    width={20}
-                    height={20}
-                    style={{ borderRadius: '50px' }}
-                    alt="avatar"
-                  />
-                  <span>돈 푸는 것만이 답은 아닙니다.</span>
-                </P.Comment>
+                {comments?.map((c: any) => {
+                  const { createdAt, identifier, username, body } = c;
+                  return (
+                    <Link href={`/post/${identifier}`}>
+                      <P.Comment key={identifier}>
+                        <Image
+                          src="https://www.gravatar.com/avatar?d=mp&f=y"
+                          width={20}
+                          height={20}
+                          style={{ borderRadius: '50px' }}
+                          alt="avatar"
+                        />
+                        <span>{commentBodyEllipsis(body)}</span>
+                      </P.Comment>
+                    </Link>
+                  );
+                })}
               </P.CommentWrapper>
             </P.BodyWrapper>
             <Divider />

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
-import { createCommentAPI } from '../../apis/post';
+import { createCommentAPI, getCommentsAPI } from '../../apis/post';
 import { axiosInstance } from '../../configs/axios';
 import P from './Posts.styles';
 
