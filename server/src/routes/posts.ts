@@ -103,7 +103,10 @@ const getDetailPost = async (req: Request, res: Response) => {
   console.log('req.params>>>', req.params);
 
   try {
-    const post = await Post.findOneByOrFail({ identifier });
+    const post = await Post.findOneOrFail({
+      where: { identifier },
+      relations: ['votes', 'comments'],
+    });
     return res.json(post);
   } catch (error) {
     console.error(error);
