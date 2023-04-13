@@ -2,7 +2,7 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { Spin } from 'antd';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { getDetailPostAPI } from '../../apis/post';
+import { getCommentsAPI, getDetailPostAPI } from '../../apis/post';
 import PostHeader from '../../components/Header/PostHeader/PostHeader';
 import PostDetail from '../../components/Posts/PostDetail';
 import { axiosInstance, baseURL } from '../../configs/axios';
@@ -14,9 +14,9 @@ function DetailPostPage({ identifier }: { identifier: string }) {
 
   console.log('identifier>>', identifier);
 
-  const { data: detailPost, isLoading } = getDetailPostAPI(
-    identifier as string
-  );
+  const { data: detailPost, isLoading } = getDetailPostAPI(identifier);
+  const { data: commentData } = getCommentsAPI(identifier);
+  console.log('commentData>>', commentData);
 
   if (isLoading) {
     <Spin size="large" />;
@@ -25,7 +25,7 @@ function DetailPostPage({ identifier }: { identifier: string }) {
   return (
     <div>
       <PostHeader />
-      <PostDetail detailPost={detailPost} />
+      <PostDetail detailPost={detailPost} commentData={commentData} />
     </div>
   );
 }

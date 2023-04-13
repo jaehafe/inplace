@@ -100,7 +100,7 @@ const getAllPosts = async (req: Request, res: Response) => {
 };
 
 const getDetailPost = async (req: Request, res: Response) => {
-  const identifier = req.params.identifier;
+  const { identifier } = req.params;
   console.log('req.params>>>', req.params);
 
   try {
@@ -108,6 +108,7 @@ const getDetailPost = async (req: Request, res: Response) => {
       where: { identifier },
       relations: ['votes', 'comments'],
     });
+
     return res.json(post);
   } catch (error) {
     console.error(error);
@@ -152,6 +153,7 @@ const getPostComments = async (req: Request, res: Response) => {
     if (res.locals.user) {
       comments.forEach((c) => c.setUserVote(res.locals.user));
     }
+    return res.json(comments);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: '댓글을 찾을 수 없습니다.' });

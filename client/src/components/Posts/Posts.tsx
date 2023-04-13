@@ -128,8 +128,8 @@ function AllPosts({ posts }: any) {
                 {comments?.map((c: any) => {
                   const { createdAt, identifier, username, body } = c;
                   return (
-                    <Link href={`/post/${identifier}`}>
-                      <P.Comment key={identifier}>
+                    <Link href={`/post/${identifier}`} key={identifier}>
+                      <P.Comment>
                         <Image
                           src="https://www.gravatar.com/avatar?d=mp&f=y"
                           width={20}

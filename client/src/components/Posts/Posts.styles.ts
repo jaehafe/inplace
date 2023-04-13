@@ -194,11 +194,16 @@ const CommentInfoHeader = styled.div`
   justify-content: space-between;
   align-items: center;
 
+  & > span {
+    display: block;
+  }
+
   .edit-button {
     color: ${({ theme }) => theme.gray800};
   }
 `;
 const CommentInfo = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -212,7 +217,9 @@ const CommentInfo = styled.div`
 `;
 const LikeWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 10px;
+  align-items: center;
 
   .heart-icon {
     color: red;

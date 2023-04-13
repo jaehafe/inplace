@@ -23,7 +23,7 @@ const voteOptions = [
   { label: <DislikeTwoTone twoToneColor="#52c41a" />, value: 'VoteDown' },
 ];
 
-function PostDetail({ detailPost }: any) {
+function PostDetail({ detailPost, commentData }: any) {
   const {
     identifier,
     username,
@@ -49,7 +49,7 @@ function PostDetail({ detailPost }: any) {
     setVote(e.target.value);
     console.log(`radio checked:${e.target.value}`);
   };
-  console.log('detailPost', detailPost);
+  // console.log('detailPost', detailPost);
 
   return (
     <div>
@@ -114,7 +114,11 @@ function PostDetail({ detailPost }: any) {
           </P.VoteSelectWrapper>
 
           {/* 게시물 댓글 컴포넌트 */}
-          <PostComment identifier={identifier} userInfo={userInfo} />
+          <PostComment
+            identifier={identifier}
+            userInfo={userInfo}
+            commentData={commentData}
+          />
         </P.BodyWrapper>
       </P.Wrapper>
     </div>
@@ -122,33 +126,3 @@ function PostDetail({ detailPost }: any) {
 }
 
 export default PostDetail;
-
-{
-  /* <P.VoteSelect
-              size="large"
-              optionType="button"
-              buttonStyle="solid"
-              onChange={handleVoteChange}
-            >
-              <Radio.Button value="a">
-                <LikeTwoTone twoToneColor="#2515d5" />
-              </Radio.Button>
-              <Radio.Button value="b">
-                <FrownTwoTone twoToneColor="#eb2f96" />
-              </Radio.Button>
-              <Radio.Button value="c">
-                <DislikeTwoTone twoToneColor="#52c41a" />
-              </Radio.Button>
-            </P.VoteSelect> */
-}
-
-{
-  /* <P.VoteSelect
-              size="large"
-              options={voteOptions}
-              onChange={handleVoteChange}
-              value={vote}
-              optionType="button"
-              buttonStyle="solid"
-            /> */
-}
