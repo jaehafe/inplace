@@ -7,11 +7,11 @@ const StyledButton = styled(Button)`
   align-items: center;
   border-radius: 20px;
 
-  position: absolute;
+  position: fixed;
   width: 50px;
   height: 50px;
-  right: 10px;
-  bottom: 10px;
+  right: 40px;
+  bottom: 20px;
   font-size: 20px;
 
   color: ${({ theme }) => theme.white};
