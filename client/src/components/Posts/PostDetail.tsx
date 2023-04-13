@@ -1,6 +1,8 @@
 import {
   DislikeTwoTone,
   FrownTwoTone,
+  HeartOutlined,
+  HeartTwoTone,
   LikeTwoTone,
   MoreOutlined,
   PieChartOutlined,
@@ -9,6 +11,7 @@ import { Button, Divider, Radio, RadioChangeEvent } from 'antd';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { formattedDate, postTitleEllipsis } from '../../utils';
+import PostComment from './PostComment';
 import P from './Posts.styles';
 
 const voteOptions = [
@@ -88,29 +91,8 @@ function PostDetail() {
             </P.VoteSelect>
           </P.VoteSelectWrapper>
 
-          <P.CommentWrapper>
-            <P.Comment>
-              <Image
-                src="https://www.gravatar.com/avatar?d=mp&f=y"
-                width={20}
-                height={20}
-                style={{ borderRadius: '50px' }}
-                alt="avatar"
-              />
-              <span>이게 나라냐?</span>
-            </P.Comment>
-
-            <P.Comment>
-              <Image
-                src="https://www.gravatar.com/avatar?d=mp&f=y"
-                width={20}
-                height={20}
-                style={{ borderRadius: '50px' }}
-                alt="avatar"
-              />
-              <span>돈 푸는 것만이 답은 아닙니다.</span>
-            </P.Comment>
-          </P.CommentWrapper>
+          {/* 게시물 댓글 컴포넌트 */}
+          <PostComment />
         </P.BodyWrapper>
       </P.Wrapper>
     </div>

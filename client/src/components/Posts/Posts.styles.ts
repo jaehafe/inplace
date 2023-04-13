@@ -5,7 +5,7 @@ const Wrapper = styled.div`
   width: 100%;
 
   & h3 {
-    margin: 24px 0 12px;
+    /* margin: 24px 0 12px; */
     font-size: 16px;
     font-weight: 500;
     color: ${({ theme }) => theme.gray800};
@@ -13,7 +13,6 @@ const Wrapper = styled.div`
   }
 
   & h4 {
-    margin-top: 8px;
     font-size: 14px;
     font-weight: 400;
     color: ${({ theme }) => theme.gray800};
@@ -28,7 +27,6 @@ const Wrapper = styled.div`
   }
 
   & > h4 {
-    margin-top: 12px;
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
@@ -45,6 +43,7 @@ const HeaderWrapper = styled.div`
 `;
 const HeaderLeft = styled.div`
   display: flex;
+  align-items: center;
 `;
 const HeaderRight = styled.div``;
 
@@ -58,11 +57,7 @@ const PostInfo = styled.div`
   }
 `;
 
-const BodyWrapper = styled.div`
-  & h3 {
-    margin-bottom: 20px;
-  }
-`;
+const BodyWrapper = styled.div``;
 
 const VoteResultWrapper = styled.div`
   margin-top: 10px;
@@ -121,7 +116,7 @@ const VoteSelectWrapper = styled.div`
 `;
 
 const VoteButton = styled(Radio.Button)`
-  padding: 20px 50px;
+  padding: 23px 50px;
 `;
 
 // 댓글
@@ -131,12 +126,66 @@ const CommentWrapper = styled.div`
   flex-direction: column;
   gap: 3px;
 `;
-const Comment = styled.span`
+const Comment = styled.div`
+  display: flex;
+  gap: 10px;
+  /* color: ${({ theme }) => theme.gray750}; */
+  font-size: 14px;
+`;
+
+// 게시물 상세 댓글
+const PostComment = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  & span {
+    color: ${({ theme }) => theme.gray600};
+  }
+`;
+const DetailCommentWrapper = styled.div`
+  margin-top: 60px;
+  font-size: 13px;
+`;
+const CommentHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  color: ${({ theme }) => theme.gray650};
-  font-size: 13px;
+  margin-bottom: 20px;
+`;
+const CommentBodyWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+const CommentInfoHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .edit-button {
+    color: ${({ theme }) => theme.gray800};
+  }
+`;
+const CommentInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  & > span {
+    color: ${({ theme }) => theme.gray600};
+  }
+  & > p {
+    font-size: 14px;
+    color: ${({ theme }) => theme.gray800};
+  }
+`;
+const LikeWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  .heart-icon {
+    color: red;
+  }
 `;
 
 const PostDrawer = styled(Drawer)`
@@ -178,6 +227,13 @@ const P = {
   VoteButton,
   CommentWrapper,
   Comment,
+  DetailCommentWrapper,
+  CommentHeader,
+  PostComment,
+  CommentInfo,
+  CommentBodyWrapper,
+  CommentInfoHeader,
+  LikeWrapper,
 };
 
 export default P;
