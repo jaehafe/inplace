@@ -98,7 +98,21 @@ const getAllPosts = async (req: Request, res: Response) => {
   }
 };
 
+const getDetailPost = async (req: Request, res: Response) => {
+  const identifier = req.params.identifier;
+  console.log('req.params>>>', req.params);
+
+  try {
+    const post = await Post.findOneByOrFail({ identifier });
+    return res.json(post);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'something went wrong' });
+  }
+};
+
 router.get('/', getAllPosts);
+router.get('/:identifier', getDetailPost);
 router.post(
   '/images',
   userMiddleware,

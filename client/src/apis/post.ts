@@ -59,11 +59,12 @@ export const getAllPostsAPI = (
 };
 
 export const getDetailPostAPI = (
+  identifier: string,
   options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
   const router = useRouter();
-  const postId = router.query.post;
-  const queryKey = `${baseURL}/posts/${postId}`;
+
+  const queryKey = `${baseURL}/posts/${identifier}`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
 
   const onError = () => {
