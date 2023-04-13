@@ -59,7 +59,7 @@ export const getAllPostsAPI = (
 };
 
 export const getDetailPostAPI = (
-  identifier: string,
+  identifier?: any,
   options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
   const router = useRouter();

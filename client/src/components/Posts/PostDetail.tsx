@@ -20,7 +20,7 @@ const voteOptions = [
   { label: <DislikeTwoTone twoToneColor="#52c41a" />, value: 'VoteDown' },
 ];
 
-function PostDetail() {
+function PostDetail({ detailPost }: any) {
   const [open, setOpen] = useState(false);
   const [vote, setVote] = useState('');
 
@@ -28,6 +28,7 @@ function PostDetail() {
     setVote(e.target.value);
     console.log(`radio checked:${e.target.value}`);
   };
+  console.log('detailPost', detailPost);
 
   return (
     <div>
