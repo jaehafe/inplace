@@ -138,6 +138,26 @@ const createPostComment = async (req: Request, res: Response) => {
   }
 };
 
+const getPostComments = async (req: Request, res: Response) => {
+  const { identifier } = req.params;
+
+  try {
+    const post = await Post.findOneByOrFail({ identifier });
+    const comments = await Comment.find({
+      where: { postId: post.id },
+      order: { createdAt: 'DESC' },
+      relations: ['votes'],
+    });
+
+    if (res.locals.user) {
+      comments.forEach((c) => c.setUserVote(res.locals.user));
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: '댓글을 찾을 수 없습니다.' });
+  }
+};
+
 router.get('/', getAllPosts);
 router.get('/:identifier', getDetailPost);
 router.post(
@@ -152,7 +172,9 @@ router.post(
     return res.json(req.files.map((file) => file.filename));
   }
 );
+
 router.post('/', userMiddleware, authMiddleware, createPost);
+router.get('/:identifier/comments', userMiddleware, getPostComments);
 router.post('/:identifier/comments', userMiddleware, createPostComment);
 
 export default router;
