@@ -1,9 +1,9 @@
 import React from 'react';
-import { getAllPostAPI } from '../../apis/post';
+import { getAllPostsAPI } from '../../apis/post';
 import Posts from './Posts';
 
 function AllPosts() {
-  const { data: allPosts } = getAllPostAPI();
+  const { data: allPosts } = getAllPostsAPI();
   console.log('post data>>>', allPosts);
 
   return (

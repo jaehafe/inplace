@@ -50,10 +50,24 @@ export const uploadPostImagesAPI = (
   return useMutation([queryKey], queryFn, { ...options, onError });
 };
 
-export const getAllPostAPI = (
+export const getAllPostsAPI = (
   options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
   const queryKey = `${baseURL}/posts`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
   return useQuery([queryKey], queryFn, { ...options });
+};
+
+export const getDetailPostAPI = (
+  options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
+) => {
+  const router = useRouter();
+  const postId = router.query.post;
+  const queryKey = `${baseURL}/posts/${postId}`;
+  const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
+
+  const onError = () => {
+    message.error('불러오기 실패');
+  };
+  return useQuery([queryKey], queryFn, { onError, ...options });
 };
