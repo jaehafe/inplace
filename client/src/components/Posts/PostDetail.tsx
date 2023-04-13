@@ -14,7 +14,7 @@ import {
   postDescEllipsis,
   postTitleEllipsis,
 } from '../../utils';
-import PostComment from './PostComment';
+import PostComments from './PostComments';
 import P from './Posts.styles';
 
 const voteOptions = [
@@ -114,7 +114,7 @@ function PostDetail({ detailPost, commentData }: any) {
           </P.VoteSelectWrapper>
 
           {/* 게시물 댓글 컴포넌트 */}
-          <PostComment
+          <PostComments
             identifier={identifier}
             userInfo={userInfo}
             commentData={commentData}
