@@ -9,8 +9,9 @@ import { axiosInstance, baseURL } from '../../configs/axios';
 import P from './Posts.styles';
 import { formattedDate } from '../../utils';
 import { useQueryClient } from '@tanstack/react-query';
+import PostComment from './PostComment';
 
-function PostComment({ identifier, userInfo, commentData }: any) {
+function PostComments({ identifier, userInfo, commentData }: any) {
   const router = useRouter();
   const [newComment, setNewComment] = useState('');
 
@@ -59,9 +60,11 @@ function PostComment({ identifier, userInfo, commentData }: any) {
     console.log('identifier', commentId);
   };
 
-  const handleEditCommentSubmit = (e: FormEvent) => {
+  const handleEditCommentSubmit = (e: FormEvent, commentId: string) => {
     e.preventDefault();
-    if (newComment.trim() === '') {
+    const currentEditedComment = editedComment[commentId];
+
+    if (currentEditedComment && currentEditedComment.trim().length < 5) {
       return message.error('최소 5글자 이상 입력해 주세요');
     }
   };
@@ -109,115 +112,10 @@ function PostComment({ identifier, userInfo, commentData }: any) {
       <Divider style={{ margin: '14px 0' }} />
       {/* 게시물 댓글 컴포넌트 */}
       {commentData?.map((data: any) => {
-        const {
-          body,
-          createdAt,
-          updatedAt,
-          userVote,
-          voteScore,
-          username,
-          identifier: commentId,
-        } = data;
-
-        return (
-          <P.PostComment key={commentId}>
-            <P.CommentBodyWrapper>
-              <Image
-                src="https://www.gravatar.com/avatar?d=mp&f=y"
-                width={36}
-                height={36}
-                style={{ borderRadius: '50px' }}
-                alt="avatar"
-              />
-              <P.CommentInfo>
-                <P.CommentInfoHeader>
-                  <span>
-                    {username} | {formattedDate(createdAt)}
-                    {createdAt !== updatedAt ? '(수정됨)' : ''}
-                  </span>
-
-                  <Popover
-                    placement="rightTop"
-                    trigger={['click']}
-                    content={
-                      <div>
-                        <Button
-                          type="text"
-                          onClick={() => handleEditComment(commentId, body)}
-                        >
-                          수정
-                        </Button>
-                        <Button
-                          type="text"
-                          onClick={() => handleDeleteComment(commentId)}
-                        >
-                          삭제
-                        </Button>
-                      </div>
-                    }
-                  >
-                    <Button type="text" shape="circle">
-                      <MoreOutlined
-                        style={{ fontSize: '16px' }}
-                        className="edit-button"
-                      />
-                    </Button>
-                  </Popover>
-                </P.CommentInfoHeader>
-                {isEditing[commentId] ? (
-                  <form onSubmit={handleEditCommentSubmit}>
-                    <Input.TextArea
-                      placeholder="내용을 수정하세요"
-                      bordered={false}
-                      showCount
-                      maxLength={300}
-                      value={editedComment[commentId] || ''}
-                      onChange={(e) =>
-                        setEditedComment((prev) => ({
-                          ...prev,
-                          [commentId]: e.target.value,
-                        }))
-                      }
-                      style={{ height: 100, resize: 'none' }}
-                    />
-                    <P.CommentEditButton
-                      type="dashed"
-                      htmlType="submit"
-                      // disabled={isDisabledEditComment}
-                    >
-                      저장
-                    </P.CommentEditButton>
-                    <P.CommentCancelButton
-                      type="dashed"
-                      htmlType="submit"
-                      onClick={() => {
-                        setIsEditing((prev) => ({
-                          ...prev,
-                          [commentId]: false,
-                        }));
-                      }}
-                    >
-                      취소
-                    </P.CommentCancelButton>
-                  </form>
-                ) : (
-                  <pre>{body}</pre>
-                )}
-              </P.CommentInfo>
-            </P.CommentBodyWrapper>
-            <P.LikeWrapper>
-              <span>좋아요 {voteScore}</span>
-              <button>
-                <HeartOutlined className="heart-icon" />
-                <HeartTwoTone twoToneColor="#4e062d" />
-              </button>
-            </P.LikeWrapper>
-            <Divider style={{ margin: '14px 0' }} />
-          </P.PostComment>
-        );
+        return <PostComment data={data} key={data.identifier} />;
       })}
     </P.DetailCommentWrapper>
   );
 }
 
-export default PostComment;
+export default PostComments;

@@ -5,22 +5,23 @@ import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { formattedDate } from '../../utils';
 import P from './Posts.styles';
 
-function PostComment({
-  body,
-  createdAt,
-  updatedAt,
-  userVote,
-  voteScore,
-  username,
-  commentId,
-}: any) {
+function PostComment({ data }: any) {
+  const {
+    body,
+    createdAt,
+    updatedAt,
+    userVote,
+    voteScore,
+    username,
+    identifier: commentId,
+  } = data;
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState(body);
-  const editTitleRef = useRef<HTMLInputElement>(null);
+  const editCommentRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isEditing && editTitleRef.current) {
-      editTitleRef.current.focus();
+    if (isEditing && editCommentRef.current) {
+      editCommentRef.current.focus();
     }
   }, [isEditing]);
 
@@ -32,6 +33,8 @@ function PostComment({
   const handleEditComment = (commentId: string) => {
     console.log('수정');
     console.log('identifier', commentId);
+    setIsEditing(true);
+    setEditedComment(editedComment);
   };
   const handleDeleteComment = (commentId: string) => {
     console.log('삭제');
@@ -43,6 +46,7 @@ function PostComment({
     if (editedComment.trim() === '') {
       return message.error('최소 5글자 이상 입력해 주세요');
     }
+    message.success('댓글 수정 성공');
   };
 
   return (
@@ -97,7 +101,8 @@ function PostComment({
                 bordered={false}
                 showCount
                 maxLength={300}
-                value={editedComment[commentId] || ''}
+                value={editedComment}
+                ref={editCommentRef}
                 onChange={(e) => setEditedComment(e.target.value)}
                 style={{ height: 100, resize: 'none' }}
               />
@@ -111,9 +116,7 @@ function PostComment({
               <P.CommentCancelButton
                 type="dashed"
                 htmlType="submit"
-                onClick={() => {
-                  setIsEditing(false);
-                }}
+                onClick={() => setIsEditing(false)}
               >
                 취소
               </P.CommentCancelButton>
