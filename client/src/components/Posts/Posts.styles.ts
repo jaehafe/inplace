@@ -57,7 +57,25 @@ const PostInfo = styled.div`
   }
 `;
 
-const BodyWrapper = styled.div``;
+const BodyWrapper = styled.div`
+  & > h3 {
+    margin-bottom: 10px;
+  }
+
+  & > p {
+    font-size: 16px;
+    color: ${({ theme }) => theme.gray700};
+  }
+
+  & > pre:first-of-type {
+    margin-bottom: 10px;
+  }
+
+  & > pre:nth-of-type(2) {
+    font-size: 16px;
+    color: ${({ theme }) => theme.gray600};
+  }
+`;
 
 const VoteResultWrapper = styled.div`
   margin-top: 10px;

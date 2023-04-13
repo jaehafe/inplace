@@ -16,6 +16,7 @@ import {
   postDescEllipsis,
   postTitleEllipsis,
 } from '../../utils';
+import Link from 'next/link';
 
 const voteOptions = [
   { label: <LikeTwoTone twoToneColor="#2515d5" />, value: 'VoteUp' },
@@ -48,6 +49,7 @@ function AllPosts({ posts }: any) {
           images,
           commentCount,
           voteScore,
+          comments,
         } = post;
         return (
           <P.Wrapper key={identifier}>
@@ -78,8 +80,10 @@ function AllPosts({ posts }: any) {
             </P.HeaderWrapper>
             <P.BodyWrapper>
               {/* 제목, 내용 */}
-              <h3>{postTitleEllipsis(title)}</h3>
-              <p>{postDescEllipsis(desc)}</p>
+              <Link href={`/post/${identifier}`}>
+                <h3>{postTitleEllipsis(title)}</h3>
+                <p>{postDescEllipsis(desc)}</p>
+              </Link>
               {/* O X */}
               <P.VoteResultWrapper>
                 <P.VoteResult>
@@ -118,6 +122,7 @@ function AllPosts({ posts }: any) {
                 </P.StaticsRight>
               </P.StaticsWrapper>
 
+              {/* comment 작업 */}
               <P.CommentWrapper>
                 <P.Comment>
                   <Image
@@ -179,7 +184,3 @@ function AllPosts({ posts }: any) {
 }
 
 export default AllPosts;
-
-{
-  /* 모달 */
-}

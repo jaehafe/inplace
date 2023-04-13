@@ -4,7 +4,9 @@ import Image from 'next/image';
 import React from 'react';
 import P from './Posts.styles';
 
-function PostComment() {
+function PostComment({ comments }: any) {
+  console.log('comments:>>>', comments);
+
   return (
     <P.DetailCommentWrapper>
       <P.CommentHeader>

@@ -1,16 +1,17 @@
 import {
   DislikeTwoTone,
   FrownTwoTone,
-  HeartOutlined,
-  HeartTwoTone,
   LikeTwoTone,
   MoreOutlined,
-  PieChartOutlined,
 } from '@ant-design/icons';
-import { Button, Divider, Radio, RadioChangeEvent } from 'antd';
+import { Button, RadioChangeEvent } from 'antd';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { formattedDate, postTitleEllipsis } from '../../utils';
+import {
+  formattedDate,
+  postDescEllipsis,
+  postTitleEllipsis,
+} from '../../utils';
 import PostComment from './PostComment';
 import P from './Posts.styles';
 
@@ -21,6 +22,22 @@ const voteOptions = [
 ];
 
 function PostDetail({ detailPost }: any) {
+  const {
+    identifier,
+    username,
+    createdAt,
+    updatedAt,
+    title,
+    upVote,
+    neutralVote,
+    downVote,
+    desc,
+    images,
+    commentCount,
+    voteScore,
+    comments,
+  } = detailPost;
+
   const [open, setOpen] = useState(false);
   const [vote, setVote] = useState('');
 
@@ -43,8 +60,8 @@ function PostDetail({ detailPost }: any) {
               alt="avatar"
             />
             <P.PostInfo>
-              <h4>테스트</h4>
-              <span>2023-03-20</span> · <span>조회 234</span>
+              <h4>{username}</h4>
+              <span>{formattedDate(createdAt)}</span> · <span>조회 234</span>
             </P.PostInfo>
           </P.HeaderLeft>
           <P.HeaderRight>
@@ -55,21 +72,21 @@ function PostDetail({ detailPost }: any) {
         </P.HeaderWrapper>
         <P.BodyWrapper>
           {/* 제목, 내용 */}
-          <h3>제목</h3>
-          <p>본문</p>
+          <pre>{title}</pre>
+          <pre>{desc}</pre>
           {/* O X */}
           <P.VoteResultWrapper>
             <P.VoteResult>
               <LikeTwoTone twoToneColor="#2515d5" />
-              <span>좋아요</span>
+              <span>{upVote}</span>
             </P.VoteResult>
             <P.VoteResult>
               <FrownTwoTone twoToneColor="#eb2f96" />
-              <span>중립</span>
+              <span>{neutralVote}</span>
             </P.VoteResult>
             <P.VoteResult>
               <DislikeTwoTone twoToneColor="#52c41a" />
-              <span>싫어요</span>
+              <span>{downVote}</span>
             </P.VoteResult>
           </P.VoteResultWrapper>
 
@@ -93,7 +110,7 @@ function PostDetail({ detailPost }: any) {
           </P.VoteSelectWrapper>
 
           {/* 게시물 댓글 컴포넌트 */}
-          <PostComment />
+          <PostComment comments={comments} />
         </P.BodyWrapper>
       </P.Wrapper>
     </div>
