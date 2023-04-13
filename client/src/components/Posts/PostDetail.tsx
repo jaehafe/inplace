@@ -37,7 +37,6 @@ function PostDetail({ detailPost }: any) {
     images,
     commentCount,
     voteScore,
-    comments,
   } = detailPost;
 
   const [open, setOpen] = useState(false);
@@ -115,11 +114,7 @@ function PostDetail({ detailPost }: any) {
           </P.VoteSelectWrapper>
 
           {/* 게시물 댓글 컴포넌트 */}
-          <PostComment
-            comments={comments}
-            identifier={identifier}
-            userInfo={userInfo}
-          />
+          <PostComment identifier={identifier} userInfo={userInfo} />
         </P.BodyWrapper>
       </P.Wrapper>
     </div>

@@ -8,8 +8,7 @@ import { createCommentAPI } from '../../apis/post';
 import { axiosInstance } from '../../configs/axios';
 import P from './Posts.styles';
 
-function PostComment({ comments, identifier, userInfo }: any) {
-  console.log('comments:>>>', comments);
+function PostComment({ identifier, userInfo }: any) {
   const router = useRouter();
   const [newComment, setNewComment] = useState('');
   const { mutate: createCommentMutate } = createCommentAPI(identifier);

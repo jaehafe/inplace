@@ -49,7 +49,6 @@ function AllPosts({ posts }: any) {
           images,
           commentCount,
           voteScore,
-          comments,
         } = post;
         return (
           <P.Wrapper key={identifier}>
