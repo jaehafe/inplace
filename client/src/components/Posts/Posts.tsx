@@ -22,7 +22,23 @@ import { useCookies } from 'react-cookie';
 import { authMeAPI } from '../../apis/user';
 import { postVoteAPI } from '../../apis/vote';
 
-function AllPosts({ posts }: any) {
+function AllPosts({ post }: any) {
+  const {
+    identifier,
+    username,
+    createdAt,
+    updatedAt,
+    title,
+    agree,
+    neutral,
+    disagree,
+    desc,
+    images,
+    commentCount,
+    voteScore,
+    comments,
+    userVote,
+  } = post;
   const [open, setOpen] = useState(false);
   const [vote, setVote] = useState('');
   const router = useRouter();
@@ -30,6 +46,7 @@ function AllPosts({ posts }: any) {
   const [cookie] = useCookies(['inplace']);
 
   const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
+  const { mutate: postVoteMutate } = postVoteAPI(identifier);
 
   const handleVoteChange = (e: RadioChangeEvent, identifier: string) => {
     if (!userInfo) {
@@ -41,154 +58,131 @@ function AllPosts({ posts }: any) {
     const { value } = e.target;
     console.log(`radio checked:${value}`);
     setVote(value);
-    const { mutate: postVoteMutate } = postVoteAPI(identifier);
 
     switch (value) {
       case 'agree':
         console.log('agree', identifier);
-
-        postVoteMutate(value);
+        postVoteMutate({ value });
         break;
 
       case 'neutral':
         console.log('neutral', identifier);
+        postVoteMutate({ value });
         break;
 
       case 'disagree':
         console.log('disagree', identifier);
+        postVoteMutate({ value });
         break;
 
       default:
+        console.log('123');
+
         break;
     }
   };
 
   return (
     <>
-      {posts?.map((post: any) => {
-        const {
-          identifier,
-          username,
-          createdAt,
-          updatedAt,
-          title,
-          agree,
-          neutral,
-          disagree,
-          desc,
-          images,
-          commentCount,
-          voteScore,
-          comments,
-          userVote,
-        } = post;
-
-        return (
-          <P.Wrapper key={identifier}>
-            <P.HeaderWrapper>
-              <P.HeaderLeft>
-                <Image
-                  src="https://www.gravatar.com/avatar?d=mp&f=y"
-                  width={46}
-                  height={46}
-                  style={{ borderRadius: '50px' }}
-                  alt="avatar"
-                />
-                <P.PostInfo>
-                  <h4>{username}</h4>
-                  <span>{formattedDate(createdAt)}</span> ·{' '}
-                  <span>조회 234</span>
-                </P.PostInfo>
-              </P.HeaderLeft>
-              <P.HeaderRight>
-                <Button
-                  type="text"
-                  shape="circle"
-                  onClick={() => setOpen(true)}
-                >
-                  <MoreOutlined style={{ fontSize: '20px' }} />
-                </Button>
-              </P.HeaderRight>
-            </P.HeaderWrapper>
-            <P.BodyWrapper>
-              {/* 제목, 내용 */}
-              <Link href={`/post/${identifier}`}>
-                <h3>{postTitleEllipsis(title)}</h3>
-                <p>{postDescEllipsis(desc)}</p>
-              </Link>
-              {/* O X */}
-              <P.VoteResultWrapper>
-                <P.VoteResult>
+      <P.Wrapper>
+        <P.HeaderWrapper>
+          <P.HeaderLeft>
+            <Image
+              src="https://www.gravatar.com/avatar?d=mp&f=y"
+              width={46}
+              height={46}
+              style={{ borderRadius: '50px' }}
+              alt="avatar"
+            />
+            <P.PostInfo>
+              <h4>{username}</h4>
+              <span>{formattedDate(updatedAt)}</span> · <span>조회 234</span>
+            </P.PostInfo>
+          </P.HeaderLeft>
+          <P.HeaderRight>
+            <Button type="text" shape="circle" onClick={() => setOpen(true)}>
+              <MoreOutlined style={{ fontSize: '20px' }} />
+            </Button>
+          </P.HeaderRight>
+        </P.HeaderWrapper>
+        <P.BodyWrapper>
+          {/* 제목, 내용 */}
+          <Link href={`/post/${identifier}`}>
+            <h3>{postTitleEllipsis(title)}</h3>
+            <p>{postDescEllipsis(desc)}</p>
+          </Link>
+          {/* O X */}
+          <P.VoteResultWrapper>
+            <P.VoteResult>
+              <LikeTwoTone twoToneColor="#2515d5" />
+              <span>{agree}</span>
+            </P.VoteResult>
+            <P.VoteResult>
+              <FrownTwoTone twoToneColor="#eb2f96" />
+              <span>{neutral}</span>
+            </P.VoteResult>
+            <P.VoteResult>
+              <DislikeTwoTone twoToneColor="#52c41a" />
+              <span>{disagree}</span>
+            </P.VoteResult>
+          </P.VoteResultWrapper>
+          {/* 댓글, 투표 통계 버튼 */}
+          <P.StaticsWrapper>
+            <P.StaticsLeft>
+              <P.StaticsButton type="primary">
+                <PieChartOutlined />
+                {voteScore}
+              </P.StaticsButton>
+              <P.StaticsButton type="primary">
+                <CommentOutlined />
+                {commentCount}
+              </P.StaticsButton>
+            </P.StaticsLeft>
+            {/* O X 투표 */}
+            <P.StaticsRight>
+              <P.VoteSelect
+                size="middle"
+                optionType="button"
+                buttonStyle="solid"
+                onChange={(e) => handleVoteChange(e, identifier)}
+              >
+                <P.VoteButtonSmall value="agree">
                   <LikeTwoTone twoToneColor="#2515d5" />
-                  <span>{agree}</span>
-                </P.VoteResult>
-                <P.VoteResult>
+                </P.VoteButtonSmall>
+                <P.VoteButtonSmall value="neutral">
                   <FrownTwoTone twoToneColor="#eb2f96" />
-                  <span>{neutral}</span>
-                </P.VoteResult>
-                <P.VoteResult>
+                </P.VoteButtonSmall>
+                <P.VoteButtonSmall value="disagree">
                   <DislikeTwoTone twoToneColor="#52c41a" />
-                  <span>{disagree}</span>
-                </P.VoteResult>
-              </P.VoteResultWrapper>
-              {/* 댓글, 투표 통계 버튼 */}
-              <P.StaticsWrapper>
-                <P.StaticsLeft>
-                  <P.StaticsButton type="primary">
-                    <PieChartOutlined />
-                    {voteScore}
-                  </P.StaticsButton>
-                  <P.StaticsButton type="primary">
-                    <CommentOutlined />
-                    {commentCount}
-                  </P.StaticsButton>
-                </P.StaticsLeft>
-                {/* O X 투표 */}
-                <P.StaticsRight>
-                  <P.VoteSelect
-                    size="middle"
-                    optionType="button"
-                    buttonStyle="solid"
-                    onChange={(e) => handleVoteChange(e, identifier)}
-                  >
-                    <P.VoteButtonSmall value="agree">
-                      <LikeTwoTone twoToneColor="#2515d5" />
-                    </P.VoteButtonSmall>
-                    <P.VoteButtonSmall value="neutral">
-                      <FrownTwoTone twoToneColor="#eb2f96" />
-                    </P.VoteButtonSmall>
-                    <P.VoteButtonSmall value="disagree">
-                      <DislikeTwoTone twoToneColor="#52c41a" />
-                    </P.VoteButtonSmall>
-                  </P.VoteSelect>
-                </P.StaticsRight>
-              </P.StaticsWrapper>
+                </P.VoteButtonSmall>
+              </P.VoteSelect>
+            </P.StaticsRight>
+          </P.StaticsWrapper>
 
-              {/* comment 작업 */}
-              <P.CommentWrapper>
-                {comments?.map((c: any) => {
-                  const { identifier: commentId, body } = c;
-                  return (
-                    <Link href={`/post/${identifier}`} key={commentId}>
-                      <P.Comment>
-                        <Image
-                          src="https://www.gravatar.com/avatar?d=mp&f=y"
-                          width={20}
-                          height={20}
-                          style={{ borderRadius: '50px' }}
-                          alt="avatar"
-                        />
-                        <span>{commentBodyEllipsis(body)}</span>
-                      </P.Comment>
-                    </Link>
-                  );
-                })}
-              </P.CommentWrapper>
-            </P.BodyWrapper>
-            <Divider />
-          </P.Wrapper>
-        );
-      })}
+          {/* comment 작업 */}
+          <P.CommentWrapper>
+            {comments?.map((c: any) => {
+              const { identifier: commentId, body } = c;
+              return (
+                <Link href={`/post/${identifier}`} key={commentId}>
+                  <P.Comment>
+                    <Image
+                      src="https://www.gravatar.com/avatar?d=mp&f=y"
+                      width={20}
+                      height={20}
+                      style={{ borderRadius: '50px' }}
+                      alt="avatar"
+                    />
+                    <span>{commentBodyEllipsis(body)}</span>
+                  </P.Comment>
+                </Link>
+              );
+            })}
+          </P.CommentWrapper>
+        </P.BodyWrapper>
+        <Divider />
+      </P.Wrapper>
+
       <P.PostDrawer
         placement="bottom"
         closable={false}

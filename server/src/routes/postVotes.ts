@@ -8,7 +8,10 @@ import { userMiddleware } from '../middlewares/userMiddleware';
 const router = Router();
 
 const handlePostVote = async (req: Request, res: Response) => {
-  const { identifier, value } = req.body;
+  const { value } = req.body;
+  const { identifier } = req.params;
+  console.log('identifier>>>', identifier);
+  console.log('value>>>', value);
 
   if (!['agree', 'neutral', 'disagree'].includes(value)) {
     return res.status(400).json({ value: 'agree, neutral, disagree value만 올 수 있습니다.' });

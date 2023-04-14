@@ -8,8 +8,9 @@ function AllPosts() {
 
   return (
     <div>
-      {/* {allPosts.map((post) => {})} */}
-      <Posts posts={allPosts} />
+      {allPosts?.map((post: any) => {
+        return <Posts post={post} key={post.identifier} />;
+      })}
     </div>
   );
 }
