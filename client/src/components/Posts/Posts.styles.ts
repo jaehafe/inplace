@@ -204,9 +204,14 @@ const CommentInfoHeader = styled.div`
 `;
 const CommentEditButton = styled(Button)`
   margin-right: 10px;
-  /* background-color: ${({ theme }) => theme.white} !important; */
+  background-color: ${({ theme }) => theme.primary};
   & > span {
-    /* color: ${({ theme }) => theme.gray600} !important; */
+    color: ${({ theme }) => theme.white};
+  }
+
+  &:hover,
+  &:active {
+    background-color: ${({ theme }) => theme.gray600} !important;
   }
 `;
 const CommentCancelButton = styled(Button)``;

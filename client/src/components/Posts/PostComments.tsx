@@ -1,7 +1,7 @@
 import { Collapse, Divider, Input, message } from 'antd';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
-import { createCommentAPI } from '../../apis/post';
+import { createCommentAPI } from '../../apis/comment';
 import { baseURL } from '../../configs/axios';
 import P from './Posts.styles';
 
@@ -16,7 +16,7 @@ function PostComments({ identifier, userInfo, commentData }: any) {
 
   const onSuccess = () => {
     setNewComment('');
-    queryClient.invalidateQueries([`${baseURL}/posts/${identifier}/comments`]);
+    queryClient.invalidateQueries([`${baseURL}/posts/${identifier}`]);
   };
   const { mutate: createCommentMutate } = createCommentAPI(identifier, {
     onSuccess,

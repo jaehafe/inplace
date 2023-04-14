@@ -35,18 +35,22 @@ function PostComment({ data }: any) {
     console.log('identifier', commentId);
     setIsEditing(true);
     setEditedComment(editedComment);
+    console.log('editedComment>>', editedComment);
   };
   const handleDeleteComment = (commentId: string) => {
     console.log('삭제');
     console.log('identifier', commentId);
+    setIsEditing(false);
   };
 
   const handleEditCommentSubmit = (e: FormEvent) => {
     e.preventDefault();
+    console.log('editedComment>>!!!!!!!', editedComment);
     if (editedComment.trim() === '') {
       return message.error('최소 5글자 이상 입력해 주세요');
     }
     message.success('댓글 수정 성공');
+    setIsEditing(false);
   };
 
   return (
@@ -107,7 +111,7 @@ function PostComment({ data }: any) {
                 style={{ height: 100, resize: 'none' }}
               />
               <P.CommentEditButton
-                type="dashed"
+                type="primary"
                 htmlType="submit"
                 disabled={isDisabledEditComment}
               >
