@@ -5,6 +5,8 @@ import BaseEntity from './Entity';
 import bcrypt from 'bcryptjs';
 import Post from './Post';
 import Vote from './Vote';
+import PostVote from './PostVote';
+import CommentVote from './CommentVote';
 
 // 명시적으로 매핑할 테이블을 지정
 // 'users'라는 이름을 사용하여 User 엔티티가 users 테이블과 매핑되도록 설정(db에 'users' 이름으로 )
@@ -16,7 +18,7 @@ export default class User extends BaseEntity {
   @Index()
   @IsEmail(undefined, { message: '이메일 주소가 잘못되었습니다.' })
   @Length(1, 255, { message: '이메일 주소는 비워둘 수 없습니다.' })
-  @Column({ unique: true })
+  @Column()
   email: string;
 
   @Index()
@@ -37,8 +39,11 @@ export default class User extends BaseEntity {
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 
-  @OneToMany(() => Vote, (vote) => vote.user)
-  votes: Vote[];
+  @OneToMany(() => PostVote, (postVote) => postVote.user)
+  postVotes: PostVote[];
+
+  @OneToMany(() => CommentVote, (commentVote) => commentVote.user)
+  commentVotes: CommentVote[];
 
   // User 엔티티가 데이터베이스에 삽입되기 전에 해당 엔티티의 password 필드를 bcrypt를 이용하여 해싱하는 작업
   @BeforeInsert()
