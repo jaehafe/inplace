@@ -16,6 +16,7 @@ function PostComments({ identifier, userInfo, commentData }: any) {
   const onSuccess = () => {
     setNewComment('');
     queryClient.invalidateQueries([`${baseURL}/comments`]);
+    message.success('댓글이 추가되었습니다');
   };
   const { mutate: createCommentMutate } = createCommentAPI(identifier, {
     onSuccess,

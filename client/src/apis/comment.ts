@@ -48,8 +48,30 @@ export const updateCommentAPI = (
   const queryFn = (body: { body: string }) =>
     axiosInstance.patch(queryKey, body).then((res) => res.data);
 
+  // const onSuccess = () => {
+  //   message.success('댓글 수정 완료');
+  //   console.log('12312312!!!!!!!!!!!!!');
+  // };
+
   const onError = () => {
     message.error('댓글 수정 실패');
+  };
+  return useMutation([queryKey], queryFn, { onError, ...options });
+};
+
+export const deleteCommentAPI = (
+  commentId?: string,
+  options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
+) => {
+  const queryKey = `${baseURL}/comments/${commentId}`;
+  const queryFn = () => axiosInstance.delete(queryKey).then((res) => res.data);
+
+  // const onSuccess = () => {
+  //   message.success('댓글 삭제 완료');
+  // };
+
+  const onError = () => {
+    message.error('댓글 삭제 실패');
   };
   return useMutation([queryKey], queryFn, { onError, ...options });
 };

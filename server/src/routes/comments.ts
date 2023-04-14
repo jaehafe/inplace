@@ -91,9 +91,29 @@ const updateComment = async (req: Request, res: Response) => {
   }
 };
 
+const deleteComment = async (req: Request, res: Response) => {
+  const { identifier } = req.params;
+  const user = res.locals.user;
+
+  try {
+    const comment = await Comment.findOneOrFail({ where: { identifier }, relations: ['post'] });
+
+    if (comment.username !== user.username) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    await Comment.delete({ identifier });
+    return res.json({ message: '댓글 삭제 완료' });
+  } catch (error) {
+    console.error(error);
+    return res.status(404).json({ error: 'Comment not found' });
+  }
+};
+
 router.get('/:identifier', userMiddleware, getPostComments);
 router.post('/:identifier', userMiddleware, createPostComment);
 router.patch('/:identifier', userMiddleware, authMiddleware, updateComment);
+router.delete('/:identifier', userMiddleware, authMiddleware, deleteComment);
 
 export default router;
 

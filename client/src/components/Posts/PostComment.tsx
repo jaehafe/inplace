@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Button, Divider, Input, message, Popover } from 'antd';
 import Image from 'next/image';
 import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { updateCommentAPI } from '../../apis/comment';
+import { deleteCommentAPI, updateCommentAPI } from '../../apis/comment';
 import { baseURL } from '../../configs/axios';
 import { formattedDate } from '../../utils';
 import P from './Posts.styles';
@@ -34,16 +34,28 @@ function PostComment({ data }: any) {
     [editedComment]
   );
 
-  const onSuccess = () => {
+  // 댓글 수정
+  const onSuccessEditComment = () => {
     // setEditedComment('');
     setIsEditing(false);
-    message.success('댓글 수정 성공');
+
     // queryClient.invalidateQueries([`${baseURL}/comments/${postId}`]);
     queryClient.invalidateQueries([`${baseURL}/comments`]);
+    message.success('댓글 수정 완료');
   };
-
   const { mutate: updateCommentMutate } = updateCommentAPI(commentId, {
-    onSuccess,
+    onSuccess: onSuccessEditComment,
+  });
+
+  // 댓글 삭제
+  const onSuccessDeleteComment = (data: any) => {
+    console.log('data>>>>', data);
+    setIsEditing(false);
+    queryClient.invalidateQueries([`${baseURL}/comments`]);
+    message.success('댓글 삭제 완료');
+  };
+  const { mutate: deleteCommentMutate } = deleteCommentAPI(commentId, {
+    onSuccess: onSuccessDeleteComment,
   });
 
   const handleEditComment = (commentId: string) => {
@@ -56,7 +68,8 @@ function PostComment({ data }: any) {
   const handleDeleteComment = (commentId: string) => {
     console.log('삭제');
     console.log('identifier', commentId);
-    setIsEditing(false);
+
+    deleteCommentMutate(commentId);
   };
 
   const handleEditCommentSubmit = (e: FormEvent) => {
@@ -82,7 +95,7 @@ function PostComment({ data }: any) {
         <P.CommentInfo>
           <P.CommentInfoHeader>
             <span>
-              {username} | {formattedDate(createdAt)}
+              {username} | {formattedDate(updatedAt)}
               {createdAt !== updatedAt ? '(수정됨)' : ''}
             </span>
 
@@ -142,7 +155,7 @@ function PostComment({ data }: any) {
               </P.CommentCancelButton>
             </form>
           ) : (
-            <pre>{body}</pre>
+            <pre style={{ whiteSpace: 'pre-wrap' }}>{body}</pre>
           )}
         </P.CommentInfo>
       </P.CommentBodyWrapper>
