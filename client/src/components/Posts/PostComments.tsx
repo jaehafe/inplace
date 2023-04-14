@@ -1,14 +1,14 @@
 import { Collapse, Divider, Input, message } from 'antd';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
-import { createCommentAPI } from '../../apis/comment';
+import { createCommentAPI, getCommentsAPI } from '../../apis/comment';
 import { baseURL } from '../../configs/axios';
 import P from './Posts.styles';
 
 import { useQueryClient } from '@tanstack/react-query';
 import PostComment from './PostComment';
 
-function PostComments({ identifier, userInfo, commentData }: any) {
+function PostComments({ identifier, userInfo }: any) {
   const router = useRouter();
   const [newComment, setNewComment] = useState('');
   const queryClient = useQueryClient();
@@ -21,6 +21,9 @@ function PostComments({ identifier, userInfo, commentData }: any) {
   const { mutate: createCommentMutate } = createCommentAPI(identifier, {
     onSuccess,
   });
+
+  const { data: commentData } = getCommentsAPI(identifier);
+  console.log('commentData>>>', commentData);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -78,9 +81,11 @@ function PostComments({ identifier, userInfo, commentData }: any) {
 
       <Divider style={{ margin: '14px 0' }} />
       {/* 게시물 댓글 컴포넌트 */}
-      {commentData?.map((data: any) => {
-        return <PostComment data={data} key={data.identifier} />;
-      })}
+      {commentData.length > 0
+        ? commentData?.map((data: any) => {
+            return <PostComment data={data} key={data.identifier} />;
+          })
+        : '댓글이 없습니다.'}
     </P.DetailCommentWrapper>
   );
 }

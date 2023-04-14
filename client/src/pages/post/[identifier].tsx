@@ -16,8 +16,8 @@ function DetailPostPage({ identifier }: { identifier: string }) {
   console.log('identifier>>', identifier);
 
   const { data: detailPost, isLoading } = getDetailPostAPI(identifier);
-  const { data: commentData } = getCommentsAPI(identifier);
-  console.log('commentData>>', commentData);
+  // const { data: commentData } = getCommentsAPI(identifier);
+  // console.log('commentData>>', commentData);
 
   if (isLoading) {
     <Spin size="large" />;
@@ -26,7 +26,8 @@ function DetailPostPage({ identifier }: { identifier: string }) {
   return (
     <div>
       <PostHeader />
-      <PostDetail detailPost={detailPost} commentData={commentData} />
+      {/* commentData={commentData} */}
+      <PostDetail detailPost={detailPost} />
     </div>
   );
 }

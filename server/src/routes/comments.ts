@@ -36,15 +36,25 @@ const getPostComments = async (req: Request, res: Response) => {
 
   try {
     const post = await Post.findOneByOrFail({ identifier });
+
+    // 댓글이 없을 경우 메시지
+    // const totalComments = await Comment.count({ where: { postId: post.id } });
+    // if (totalComments === 0) {
+    //   return res.json({ message: '댓글이 없습니다.' });
+    // }
+    //
+
     const comments = await Comment.find({
       where: { postId: post.id },
       order: { createdAt: 'DESC' },
-      relations: ['votes'],
+      relations: ['commentVotes'],
     });
 
-    if (res.locals.user) {
-      comments.forEach((c) => c.setUserVote(res.locals.user));
-    }
+    // if (res.locals.user) {
+    //   comments.forEach((c) => c.setUserVote(res.locals.user));
+    // }
+    console.log('comments>>', comments);
+
     return res.json(comments);
   } catch (error) {
     console.error(error);

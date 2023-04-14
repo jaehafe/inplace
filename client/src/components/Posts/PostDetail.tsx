@@ -22,8 +22,8 @@ const voteOptions = [
   { label: <FrownTwoTone twoToneColor="#eb2f96" />, value: 'VoteNeutral' },
   { label: <DislikeTwoTone twoToneColor="#52c41a" />, value: 'VoteDown' },
 ];
-
-function PostDetail({ detailPost, commentData }: any) {
+// commentData
+function PostDetail({ detailPost }: any) {
   const {
     identifier,
     username,
@@ -116,7 +116,7 @@ function PostDetail({ detailPost, commentData }: any) {
           <PostComments
             identifier={identifier}
             userInfo={userInfo}
-            commentData={commentData}
+            // commentData={commentData}
           />
         </P.BodyWrapper>
       </P.Wrapper>
