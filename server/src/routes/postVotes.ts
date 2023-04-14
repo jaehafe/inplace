@@ -1,32 +1,52 @@
 import { Request, Response, Router } from 'express';
 import Post from '../entities/Post';
 import PostVote from '../entities/PostVote';
+import User from '../entities/User';
 import { authMiddleware } from '../middlewares/authMiddleware';
+import { userMiddleware } from '../middlewares/userMiddleware';
 
 const router = Router();
 
 const handlePostVote = async (req: Request, res: Response) => {
-  const { identifier } = req.params;
-  const { value } = req.body;
+  const { identifier, value } = req.body;
+
+  if (!['agree', 'neutral', 'disagree'].includes(value)) {
+    return res.status(400).json({ value: 'agree, neutral, disagree value만 올 수 있습니다.' });
+  }
 
   try {
-    const user = res.locals.user;
+    const user: User = res.locals.user;
+    let post: Post = await Post.findOneByOrFail({ identifier });
+    let postVote: PostVote | undefined;
+    let comment: Comment;
 
-    const post = await Post.findOneBy({ identifier });
-    if (!post) throw new Error('Post not found');
+    // 해당 value에 따라 칼럼 값을 증가시킴
+    switch (value) {
+      case 'agree':
+        post.agree += 1;
+        break;
+      case 'neutral':
+        post.neutral += 1;
+        break;
+      case 'disagree':
+        post.disagree += 1;
+        break;
+    }
 
-    const voteValue = 1;
-
-    let postVote = await PostVote.findOne({ where: { postId: post.id, username: user.username } });
+    // 이미 투표한 사용자인지 확인하고 새로운 투표 정보를 생성하거나 업데이트함
+    postVote = await PostVote.findOne({ where: { postId: post.id, username: user.username } });
     if (!postVote) {
-      const postVote = new PostVote();
+      postVote = new PostVote();
       postVote.post = post;
       postVote.user = user;
     }
-
-    postVote.value = voteValue;
+    postVote.value = 1;
     await postVote.save();
 
+    // 투표 정보와 관련된 칼럼 값을 업데이트하고 저장함
+    await post.save();
+
+    // 사용자가 투표한 정보를 업데이트함
     post.setUserVote(user);
 
     const { voteScore } = post;
@@ -38,6 +58,6 @@ const handlePostVote = async (req: Request, res: Response) => {
   }
 };
 
-router.post('/:identifier', authMiddleware, handlePostVote);
+router.post('/:identifier', userMiddleware, authMiddleware, handlePostVote);
 
 export default router;
