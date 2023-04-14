@@ -13,7 +13,6 @@ export const createCommentAPI = (
   identifier: string,
   options?: UseMutationOptions<AxiosResponse<string>, AxiosError, any>
 ): any => {
-  // const queryKey = `${baseURL}/posts/comments`;
   const queryKey = `${baseURL}/comments/${identifier}`;
   const queryFn = (data: any) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
@@ -22,10 +21,7 @@ export const createCommentAPI = (
     message.error('댓글 생성 실패');
   };
 
-  return useMutation([queryKey], queryFn, {
-    onError,
-    ...options,
-  });
+  return useMutation([queryKey], queryFn, { onError, ...options });
 };
 
 export const getCommentsAPI = (
@@ -46,10 +42,12 @@ export const updateCommentAPI = (
   options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
   const queryKey = `${baseURL}/comments/${identifier}`;
-  const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
+  // const queryFn = () => axiosInstance.patch(queryKey).then((res) => res.data);
+  const queryFn = (body: { body: string }) =>
+    axiosInstance.patch(queryKey, body).then((res) => res.data);
 
   const onError = () => {
-    message.error('댓글 불러오기 실패');
+    message.error('댓글 수정 실패');
   };
   return useMutation([queryKey], queryFn, { onError, ...options });
 };

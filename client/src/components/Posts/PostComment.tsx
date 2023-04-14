@@ -1,7 +1,10 @@
 import { HeartOutlined, HeartTwoTone, MoreOutlined } from '@ant-design/icons';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button, Divider, Input, message, Popover } from 'antd';
 import Image from 'next/image';
 import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { updateCommentAPI } from '../../apis/comment';
+import { baseURL } from '../../configs/axios';
 import { formattedDate } from '../../utils';
 import P from './Posts.styles';
 
@@ -18,6 +21,7 @@ function PostComment({ data }: any) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState(body);
   const editCommentRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (isEditing && editCommentRef.current) {
@@ -29,6 +33,18 @@ function PostComment({ data }: any) {
     () => Boolean(editedComment.trim().length < 5),
     [editedComment]
   );
+
+  const onSuccess = () => {
+    // setEditedComment('');
+    setIsEditing(false);
+    message.success('댓글 수정 성공');
+
+    queryClient.invalidateQueries([`${baseURL}/comments/${commentId}`]);
+  };
+
+  const { mutate: updateCommentMutate } = updateCommentAPI(commentId, {
+    onSuccess,
+  });
 
   const handleEditComment = (commentId: string) => {
     console.log('수정');
@@ -49,8 +65,8 @@ function PostComment({ data }: any) {
     if (editedComment.trim() === '') {
       return message.error('최소 5글자 이상 입력해 주세요');
     }
-    message.success('댓글 수정 성공');
-    setIsEditing(false);
+
+    updateCommentMutate({ body: editedComment });
   };
 
   return (

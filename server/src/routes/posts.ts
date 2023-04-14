@@ -64,8 +64,6 @@ const createPost = async (req: Request, res: Response) => {
     // 이미지 업로드 및 게시물에 연결
     console.log('imagePath>>>', imagePath);
 
-    const savedPost = await Post.findOneBy({ id: post.id });
-
     const images = [];
     for (const file of imagePath) {
       const image = new Image();

@@ -11,12 +11,11 @@ import PostComment from './PostComment';
 function PostComments({ identifier, userInfo, commentData }: any) {
   const router = useRouter();
   const [newComment, setNewComment] = useState('');
-
   const queryClient = useQueryClient();
 
   const onSuccess = () => {
     setNewComment('');
-    queryClient.invalidateQueries([`${baseURL}/posts/${identifier}`]);
+    queryClient.invalidateQueries([`${baseURL}/comments/${identifier}`]);
   };
   const { mutate: createCommentMutate } = createCommentAPI(identifier, {
     onSuccess,

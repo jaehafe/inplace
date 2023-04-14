@@ -3,6 +3,8 @@ import { authMiddleware } from '../middlewares/authMiddleware';
 import { userMiddleware } from '../middlewares/userMiddleware';
 import Comment from '../entities/Comment';
 import Post from '../entities/Post';
+import { getConnection } from 'typeorm';
+import { AppDataSource } from '../data-source';
 
 const router = Router();
 
@@ -53,6 +55,12 @@ const getPostComments = async (req: Request, res: Response) => {
 const updateComment = async (req: Request, res: Response) => {
   const { identifier } = req.params;
   const { body } = req.body;
+  console.log('identifier>>>', identifier);
+
+  console.log('req.body>>>', req.body);
+
+  // console.log('commentbody>>>', body);
+
   const user = res.locals.user;
 
   try {
@@ -62,21 +70,32 @@ const updateComment = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    await Comment.update({ identifier }, { body });
+    // await Comment.update({ identifier }, { body });
 
-    comment.body = body;
-    return res.json(comment);
+    // // comment.body = body;
+    // return res.json(comment);
+    /////////////////////
+    await AppDataSource.createQueryBuilder()
+      .update(Comment)
+      .set({ body })
+      .where('identifier = :identifier', { identifier })
+      .execute();
+
+    const updatedComment = await Comment.findOneOrFail({ where: { identifier }, relations: ['post'] });
+    console.log('result>>', updatedComment);
+
+    return res.json(updatedComment);
   } catch (error) {
     console.error(error);
     return res.status(404).json({ error: 'Comment not found' });
   }
 };
 
-// router.get('/:identifier/comments', userMiddleware, getPostComments);
-// router.post('/:identifier/comments', userMiddleware, createPostComment);
-
 router.get('/:identifier', userMiddleware, getPostComments);
 router.post('/:identifier', userMiddleware, createPostComment);
-router.patch('/:identifier', authMiddleware, userMiddleware, updateComment);
+router.patch('/:identifier', userMiddleware, authMiddleware, updateComment);
 
 export default router;
+
+// router.get('/:identifier/comments', userMiddleware, getPostComments);
+// router.post('/:identifier/comments', userMiddleware, createPostComment);

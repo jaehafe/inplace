@@ -9,10 +9,10 @@ export const userMiddleware = async (req: Request, res: Response, next: NextFunc
     if (!token) return next();
 
     // 토큰 검증, email decode
-    const { email }: any = jwt.verify(token, process.env.JWT_SECRET);
+    const userInfo: any = jwt.verify(token, process.env.JWT_SECRET);
 
     // 토큰에서 나온 유저 이메일을 db에서 가져오기
-    const user = await User.findOneBy({ email });
+    const user = await User.findOneBy(userInfo.username);
 
     // 유저 정보를 res.locals에 저장
     res.locals.user = user;
