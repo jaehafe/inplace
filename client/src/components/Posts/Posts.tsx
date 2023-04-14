@@ -50,16 +50,16 @@ function AllPosts({ posts }: any) {
     setVote(value);
 
     switch (value) {
-      case 'upVote':
-        console.log('업업업', identifier);
+      case 'agree':
+        console.log('agree', identifier);
         break;
 
-      case 'neutralVote':
-        console.log('---', identifier);
+      case 'neutral':
+        console.log('neutral', identifier);
         break;
 
-      case 'downVote':
-        console.log('다다다운', identifier);
+      case 'disagree':
+        console.log('disagree', identifier);
         break;
 
       default:
@@ -160,15 +160,15 @@ function AllPosts({ posts }: any) {
                     onChange={(e) => handleVoteChange(e, identifier)}
                   >
                     <P.VoteButtonSmall
-                      value="upVote"
+                      value="agree"
                       // onClick={(e) => handleUpVote(e, identifier)}
                     >
                       <LikeTwoTone twoToneColor="#2515d5" />
                     </P.VoteButtonSmall>
-                    <P.VoteButtonSmall value="neutralVote">
+                    <P.VoteButtonSmall value="neutral">
                       <FrownTwoTone twoToneColor="#eb2f96" />
                     </P.VoteButtonSmall>
-                    <P.VoteButtonSmall value="downVote">
+                    <P.VoteButtonSmall value="disagree">
                       <DislikeTwoTone twoToneColor="#52c41a" />
                     </P.VoteButtonSmall>
                   </P.VoteSelect>

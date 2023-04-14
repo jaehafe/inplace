@@ -16,8 +16,6 @@ function DetailPostPage({ identifier }: { identifier: string }) {
   console.log('identifier>>', identifier);
 
   const { data: detailPost, isLoading } = getDetailPostAPI(identifier);
-  // const { data: commentData } = getCommentsAPI(identifier);
-  // console.log('commentData>>', commentData);
 
   if (isLoading) {
     <Spin size="large" />;
@@ -26,7 +24,6 @@ function DetailPostPage({ identifier }: { identifier: string }) {
   return (
     <div>
       <PostHeader />
-      {/* commentData={commentData} */}
       <PostDetail detailPost={detailPost} />
     </div>
   );
@@ -34,12 +31,6 @@ function DetailPostPage({ identifier }: { identifier: string }) {
 
 export default DetailPostPage;
 
-// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-//   const res = await axios.get(`${baseURL}/posts/${params?.identifier}`);
-//   const data = res.data;
-
-//   return { props: { data: data } };
-// };
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const queryClient = new QueryClient();
   const queryKey = `${baseURL}/posts/${params?.identifier}`;

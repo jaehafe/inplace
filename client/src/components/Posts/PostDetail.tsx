@@ -9,11 +9,7 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { authMeAPI } from '../../apis/user';
-import {
-  formattedDate,
-  postDescEllipsis,
-  postTitleEllipsis,
-} from '../../utils';
+import { formattedDate } from '../../utils';
 import PostComments from './PostComments';
 import P from './Posts.styles';
 
@@ -113,11 +109,7 @@ function PostDetail({ detailPost }: any) {
           </P.VoteSelectWrapper>
 
           {/* 게시물 댓글 컴포넌트 */}
-          <PostComments
-            identifier={identifier}
-            userInfo={userInfo}
-            // commentData={commentData}
-          />
+          <PostComments identifier={identifier} userInfo={userInfo} />
         </P.BodyWrapper>
       </P.Wrapper>
     </div>
