@@ -28,8 +28,10 @@ export const getCommentsAPI = (
   identifier?: string,
   options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
-  const queryKey = `${baseURL}/comments/${identifier}`;
-  const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
+  const queryKey = `${baseURL}/comments`;
+  // const queryKey = `${baseURL}/comments/${identifier}`;
+  const queryFn = () =>
+    axiosInstance.get(`${queryKey}/${identifier}`).then((res) => res.data);
 
   const onError = () => {
     message.error('댓글 불러오기 실패');

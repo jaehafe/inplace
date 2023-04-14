@@ -8,7 +8,7 @@ import { baseURL } from '../../configs/axios';
 import { formattedDate } from '../../utils';
 import P from './Posts.styles';
 
-function PostComment({ data, postId }: any) {
+function PostComment({ data }: any) {
   const {
     body,
     createdAt,
@@ -38,8 +38,8 @@ function PostComment({ data, postId }: any) {
     // setEditedComment('');
     setIsEditing(false);
     message.success('댓글 수정 성공');
-
-    queryClient.invalidateQueries([`${baseURL}/comments/${postId}`]);
+    // queryClient.invalidateQueries([`${baseURL}/comments/${postId}`]);
+    queryClient.invalidateQueries([`${baseURL}/comments`]);
   };
 
   const { mutate: updateCommentMutate } = updateCommentAPI(commentId, {

@@ -15,7 +15,7 @@ function PostComments({ identifier, userInfo, commentData }: any) {
 
   const onSuccess = () => {
     setNewComment('');
-    queryClient.invalidateQueries([`${baseURL}/comments/${identifier}`]);
+    queryClient.invalidateQueries([`${baseURL}/comments`]);
   };
   const { mutate: createCommentMutate } = createCommentAPI(identifier, {
     onSuccess,
@@ -78,9 +78,7 @@ function PostComments({ identifier, userInfo, commentData }: any) {
       <Divider style={{ margin: '14px 0' }} />
       {/* 게시물 댓글 컴포넌트 */}
       {commentData?.map((data: any) => {
-        return (
-          <PostComment data={data} key={data.identifier} postId={identifier} />
-        );
+        return <PostComment data={data} key={data.identifier} />;
       })}
     </P.DetailCommentWrapper>
   );
