@@ -20,16 +20,9 @@ import {
 import Link from 'next/link';
 import { useCookies } from 'react-cookie';
 import { authMeAPI } from '../../apis/user';
-
-const voteOptions = [
-  { label: <LikeTwoTone twoToneColor="#2515d5" />, value: 'VoteUp' },
-  { label: <FrownTwoTone twoToneColor="#eb2f96" />, value: 'VoteNeutral' },
-  { label: <DislikeTwoTone twoToneColor="#52c41a" />, value: 'VoteDown' },
-];
+import { postVoteAPI } from '../../apis/vote';
 
 function AllPosts({ posts }: any) {
-  console.log('posts>>>', posts);
-
   const [open, setOpen] = useState(false);
   const [vote, setVote] = useState('');
   const router = useRouter();
@@ -48,10 +41,13 @@ function AllPosts({ posts }: any) {
     const { value } = e.target;
     console.log(`radio checked:${value}`);
     setVote(value);
+    const { mutate: postVoteMutate } = postVoteAPI(identifier);
 
     switch (value) {
       case 'agree':
         console.log('agree', identifier);
+
+        postVoteMutate(value);
         break;
 
       case 'neutral':
@@ -65,10 +61,6 @@ function AllPosts({ posts }: any) {
       default:
         break;
     }
-  };
-
-  const handleUpVote = (e: any, identifier: string) => {
-    console.log('identifier>>>', identifier);
   };
 
   return (
@@ -159,10 +151,7 @@ function AllPosts({ posts }: any) {
                     buttonStyle="solid"
                     onChange={(e) => handleVoteChange(e, identifier)}
                   >
-                    <P.VoteButtonSmall
-                      value="agree"
-                      // onClick={(e) => handleUpVote(e, identifier)}
-                    >
+                    <P.VoteButtonSmall value="agree">
                       <LikeTwoTone twoToneColor="#2515d5" />
                     </P.VoteButtonSmall>
                     <P.VoteButtonSmall value="neutral">

@@ -8,6 +8,7 @@ function AllPosts() {
 
   return (
     <div>
+      {/* {allPosts.map((post) => {})} */}
       <Posts posts={allPosts} />
     </div>
   );
