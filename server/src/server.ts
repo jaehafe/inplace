@@ -9,6 +9,7 @@ import { AppDataSource } from './data-source';
 
 import authRoutes from './routes/auth';
 import postRoutes from './routes/posts';
+import commentRoutes from './routes/comments';
 
 dotenv.config();
 const app = express();
@@ -28,6 +29,7 @@ app.get('/', (_, res: Response) => {
 });
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/comments', commentRoutes);
 
 let port = 4000;
 
