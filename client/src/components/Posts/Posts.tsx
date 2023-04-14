@@ -126,9 +126,9 @@ function AllPosts({ posts }: any) {
               {/* comment 작업 */}
               <P.CommentWrapper>
                 {comments?.map((c: any) => {
-                  const { createdAt, identifier, username, body } = c;
+                  const { identifier: commentId, body } = c;
                   return (
-                    <Link href={`/post/${identifier}`} key={identifier}>
+                    <Link href={`/post/${identifier}`} key={commentId}>
                       <P.Comment>
                         <Image
                           src="https://www.gravatar.com/avatar?d=mp&f=y"
