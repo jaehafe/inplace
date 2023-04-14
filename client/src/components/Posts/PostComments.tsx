@@ -78,7 +78,9 @@ function PostComments({ identifier, userInfo, commentData }: any) {
       <Divider style={{ margin: '14px 0' }} />
       {/* 게시물 댓글 컴포넌트 */}
       {commentData?.map((data: any) => {
-        return <PostComment data={data} key={data.identifier} />;
+        return (
+          <PostComment data={data} key={data.identifier} postId={identifier} />
+        );
       })}
     </P.DetailCommentWrapper>
   );

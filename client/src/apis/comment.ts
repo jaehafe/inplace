@@ -38,10 +38,10 @@ export const getCommentsAPI = (
 };
 
 export const updateCommentAPI = (
-  identifier?: string,
+  commentId?: string,
   options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
-  const queryKey = `${baseURL}/comments/${identifier}`;
+  const queryKey = `${baseURL}/comments/${commentId}`;
   // const queryFn = () => axiosInstance.patch(queryKey).then((res) => res.data);
   const queryFn = (body: { body: string }) =>
     axiosInstance.patch(queryKey, body).then((res) => res.data);
