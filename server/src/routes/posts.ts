@@ -45,16 +45,16 @@ const upload = multer({
 });
 
 const createPost = async (req: Request, res: Response) => {
-  const { title, upVote, neutralVote, downVote, desc, imagePath } = req.body;
+  const { title, agree, neutral, disagree, desc, imagePath } = req.body;
 
   const user = res.locals.user;
 
   try {
     const post = new Post();
     post.title = title;
-    post.upVote = upVote;
-    post.neutralVote = neutralVote;
-    post.downVote = downVote;
+    post.agree = agree;
+    post.neutral = neutral;
+    post.disagree = disagree;
     post.desc = desc;
     post.images = imagePath;
     post.username = user;

@@ -26,9 +26,9 @@ function PostDetail({ detailPost }: any) {
     createdAt,
     updatedAt,
     title,
-    upVote,
-    neutralVote,
-    downVote,
+    agree,
+    neutral,
+    disagree,
     desc,
     images,
     commentCount,
@@ -77,15 +77,15 @@ function PostDetail({ detailPost }: any) {
           <P.VoteResultWrapper>
             <P.VoteResult>
               <LikeTwoTone twoToneColor="#2515d5" />
-              <span>{upVote}</span>
+              <span>{agree}</span>
             </P.VoteResult>
             <P.VoteResult>
               <FrownTwoTone twoToneColor="#eb2f96" />
-              <span>{neutralVote}</span>
+              <span>{neutral}</span>
             </P.VoteResult>
             <P.VoteResult>
               <DislikeTwoTone twoToneColor="#52c41a" />
-              <span>{downVote}</span>
+              <span>{disagree}</span>
             </P.VoteResult>
           </P.VoteResultWrapper>
 
@@ -96,13 +96,13 @@ function PostDetail({ detailPost }: any) {
               buttonStyle="solid"
               onChange={handleVoteChange}
             >
-              <P.VoteButton value="upVote">
+              <P.VoteButton value="agree">
                 <LikeTwoTone twoToneColor="#2515d5" />
               </P.VoteButton>
-              <P.VoteButton value="neutralVote">
+              <P.VoteButton value="neutral">
                 <FrownTwoTone twoToneColor="#eb2f96" />
               </P.VoteButton>
-              <P.VoteButton value="downVote">
+              <P.VoteButton value="disagree">
                 <DislikeTwoTone twoToneColor="#52c41a" />
               </P.VoteButton>
             </P.VoteSelect>

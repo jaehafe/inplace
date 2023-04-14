@@ -67,9 +67,11 @@ const isUploadable = (fileList: UploadFile[]) => {
 
 function CreatePost() {
   const [title, setTitle] = useState('');
-  const [upVote, setUpVote] = useState('');
-  const [neutralVote, setNeutralVote] = useState('');
-  const [downVote, setDownVote] = useState('');
+  const [agree, setAgree] = useState('');
+  const [neutral, setNeutral] = useState('');
+  const [disagree, setDisagree] = useState('');
+
+  // const [downVote, setDownVote] = useState('');
   const [desc, setDesc] = useState('');
 
   const [loading, setLoading] = useState(false);
@@ -97,12 +99,9 @@ function CreatePost() {
   const isDisabled = useMemo(
     () =>
       Boolean(
-        !title.trim() ||
-          !upVote.trim() ||
-          !neutralVote.trim() ||
-          !downVote.trim()
+        !title.trim() || !agree.trim() || !neutral.trim() || !disagree.trim()
       ),
-    [title, upVote, neutralVote, downVote]
+    [title, agree, neutral, disagree]
   );
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
@@ -164,7 +163,7 @@ function CreatePost() {
     e.preventDefault();
     console.log('12312123');
 
-    createPostMutate({ title, upVote, neutralVote, downVote, desc, imagePath });
+    createPostMutate({ title, agree, neutral, disagree, desc, imagePath });
   };
 
   return (
@@ -187,7 +186,7 @@ function CreatePost() {
           placeholder=":"
           prefix={<LikeTwoTone twoToneColor="#2515d5" />}
           maxLength={30}
-          onChange={(e) => setUpVote(e.target.value)}
+          onChange={(e) => setAgree(e.target.value)}
         />
         <br />
         <br />
@@ -196,7 +195,7 @@ function CreatePost() {
           placeholder=":"
           prefix={<FrownTwoTone twoToneColor="#eb2f96" />}
           maxLength={30}
-          onChange={(e) => setNeutralVote(e.target.value)}
+          onChange={(e) => setNeutral(e.target.value)}
         />
         <br />
         <br />
@@ -205,7 +204,7 @@ function CreatePost() {
           placeholder=":"
           prefix={<DislikeTwoTone twoToneColor="#52c41a" />}
           maxLength={30}
-          onChange={(e) => setDownVote(e.target.value)}
+          onChange={(e) => setDisagree(e.target.value)}
         />
         <br />
         <br />

@@ -49,13 +49,13 @@ export default class Post extends BaseEntity {
   votes: PostVote[];
 
   @Column({ type: 'varchar', length: 30 })
-  upVote: string;
+  agree: string;
 
   @Column({ type: 'varchar', length: 30 })
-  neutralVote: string;
+  neutral: string;
 
   @Column({ type: 'varchar', length: 30 })
-  downVote: string;
+  disagree: string;
 
   @Expose() get url(): string {
     return `/${this.placeName}/${this.identifier}/${this.slug}`;

@@ -80,9 +80,9 @@ function AllPosts({ posts }: any) {
           createdAt,
           updatedAt,
           title,
-          upVote,
-          neutralVote,
-          downVote,
+          agree,
+          neutral,
+          disagree,
           desc,
           images,
           commentCount,
@@ -128,15 +128,15 @@ function AllPosts({ posts }: any) {
               <P.VoteResultWrapper>
                 <P.VoteResult>
                   <LikeTwoTone twoToneColor="#2515d5" />
-                  <span>{upVote}</span>
+                  <span>{agree}</span>
                 </P.VoteResult>
                 <P.VoteResult>
                   <FrownTwoTone twoToneColor="#eb2f96" />
-                  <span>{neutralVote}</span>
+                  <span>{neutral}</span>
                 </P.VoteResult>
                 <P.VoteResult>
                   <DislikeTwoTone twoToneColor="#52c41a" />
-                  <span>{downVote}</span>
+                  <span>{disagree}</span>
                 </P.VoteResult>
               </P.VoteResultWrapper>
               {/* 댓글, 투표 통계 버튼 */}
