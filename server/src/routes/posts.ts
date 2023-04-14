@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { userMiddleware } from '../middlewares/userMiddleware';
 import fs from 'fs';
@@ -160,6 +160,28 @@ const getPostComments = async (req: Request, res: Response) => {
   }
 };
 
+const updateComment = async (req: Request, res: Response) => {
+  const { identifier } = req.params;
+  const { body } = req.body;
+  const user = res.locals.user;
+
+  try {
+    const comment = await Comment.findOneOrFail({ where: { identifier }, relations: ['post'] });
+
+    if (comment.username !== user.username) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    await Comment.update({ identifier }, { body });
+
+    comment.body = body;
+    return res.json(comment);
+  } catch (error) {
+    console.error(error);
+    return res.status(404).json({ error: 'Comment not found' });
+  }
+};
+
 router.get('/', getAllPosts);
 router.get('/:identifier', getDetailPost);
 router.post(
@@ -178,6 +200,7 @@ router.post(
 router.post('/', userMiddleware, authMiddleware, createPost);
 router.get('/:identifier/comments', userMiddleware, getPostComments);
 router.post('/:identifier/comments', userMiddleware, createPostComment);
+router.patch('/comments/:identifier', authMiddleware, userMiddleware, updateComment);
 
 export default router;
 
