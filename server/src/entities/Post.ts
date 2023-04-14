@@ -2,7 +2,6 @@ import { Entity, Index, Column, ManyToOne, JoinColumn, OneToMany, BeforeInsert }
 import BaseEntity from './Entity';
 import User from './User';
 import Place from './Place';
-import Vote from './Vote';
 import Comment from './Comment';
 import { Exclude, Expose } from 'class-transformer';
 import { makeId, slugify } from '../utils/helper';

@@ -23,7 +23,6 @@ function PostComments({ identifier, userInfo }: any) {
   });
 
   const { data: commentData } = getCommentsAPI(identifier);
-  console.log('commentData>>>', commentData);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -81,7 +80,7 @@ function PostComments({ identifier, userInfo }: any) {
 
       <Divider style={{ margin: '14px 0' }} />
       {/* 게시물 댓글 컴포넌트 */}
-      {commentData.length > 0
+      {commentData?.length > 0
         ? commentData?.map((data: any) => {
             return <PostComment data={data} key={data.identifier} />;
           })

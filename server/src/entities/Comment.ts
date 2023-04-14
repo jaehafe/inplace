@@ -5,7 +5,6 @@ import CommentVote from './CommentVote';
 import BaseEntity from './Entity';
 import Post from './Post';
 import User from './User';
-import Vote from './Vote';
 
 @Entity('comments')
 export default class Comment extends BaseEntity {

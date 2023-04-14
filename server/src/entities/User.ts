@@ -4,7 +4,6 @@ import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany, BeforeInsert,
 import BaseEntity from './Entity';
 import bcrypt from 'bcryptjs';
 import Post from './Post';
-import Vote from './Vote';
 import PostVote from './PostVote';
 import CommentVote from './CommentVote';
 
