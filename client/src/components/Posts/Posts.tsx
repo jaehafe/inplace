@@ -7,7 +7,7 @@ import {
   MoreOutlined,
   PieChartOutlined,
 } from '@ant-design/icons';
-import { Button, Divider, RadioChangeEvent } from 'antd';
+import { Button, Divider, message, RadioChangeEvent } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import P from './Posts.styles';
@@ -18,6 +18,8 @@ import {
   postTitleEllipsis,
 } from '../../utils';
 import Link from 'next/link';
+import { useCookies } from 'react-cookie';
+import { authMeAPI } from '../../apis/user';
 
 const voteOptions = [
   { label: <LikeTwoTone twoToneColor="#2515d5" />, value: 'VoteUp' },
@@ -26,12 +28,47 @@ const voteOptions = [
 ];
 
 function AllPosts({ posts }: any) {
+  console.log('posts>>>', posts);
+
   const [open, setOpen] = useState(false);
   const [vote, setVote] = useState('');
   const router = useRouter();
 
-  const handleVoteChange = ({ target: { value } }: RadioChangeEvent) => {
+  const [cookie] = useCookies(['inplace']);
+
+  const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
+
+  const handleVoteChange = (e: RadioChangeEvent, identifier: string) => {
+    if (!userInfo) {
+      message.error('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
+      router.push('/login');
+      return;
+    }
+
+    const { value } = e.target;
+    console.log(`radio checked:${value}`);
     setVote(value);
+
+    switch (value) {
+      case 'upVote':
+        console.log('업업업', identifier);
+        break;
+
+      case 'neutralVote':
+        console.log('---', identifier);
+        break;
+
+      case 'downVote':
+        console.log('다다다운', identifier);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const handleUpVote = (e: any, identifier: string) => {
+    console.log('identifier>>>', identifier);
   };
 
   return (
@@ -51,7 +88,9 @@ function AllPosts({ posts }: any) {
           commentCount,
           voteScore,
           comments,
+          userVote,
         } = post;
+
         return (
           <P.Wrapper key={identifier}>
             <P.HeaderWrapper>
@@ -112,14 +151,27 @@ function AllPosts({ posts }: any) {
                     {commentCount}
                   </P.StaticsButton>
                 </P.StaticsLeft>
+                {/* O X 투표 */}
                 <P.StaticsRight>
                   <P.VoteSelect
-                    options={voteOptions}
-                    onChange={handleVoteChange}
-                    value={vote}
+                    size="middle"
                     optionType="button"
                     buttonStyle="solid"
-                  />
+                    onChange={(e) => handleVoteChange(e, identifier)}
+                  >
+                    <P.VoteButtonSmall
+                      value="upVote"
+                      // onClick={(e) => handleUpVote(e, identifier)}
+                    >
+                      <LikeTwoTone twoToneColor="#2515d5" />
+                    </P.VoteButtonSmall>
+                    <P.VoteButtonSmall value="neutralVote">
+                      <FrownTwoTone twoToneColor="#eb2f96" />
+                    </P.VoteButtonSmall>
+                    <P.VoteButtonSmall value="downVote">
+                      <DislikeTwoTone twoToneColor="#52c41a" />
+                    </P.VoteButtonSmall>
+                  </P.VoteSelect>
                 </P.StaticsRight>
               </P.StaticsWrapper>
 

@@ -49,7 +49,6 @@ function PostDetail({ detailPost, commentData }: any) {
     setVote(e.target.value);
     console.log(`radio checked:${e.target.value}`);
   };
-  // console.log('detailPost', detailPost);
 
   return (
     <div>
@@ -101,13 +100,13 @@ function PostDetail({ detailPost, commentData }: any) {
               buttonStyle="solid"
               onChange={handleVoteChange}
             >
-              <P.VoteButton value="a">
+              <P.VoteButton value="upVote">
                 <LikeTwoTone twoToneColor="#2515d5" />
               </P.VoteButton>
-              <P.VoteButton value="b">
+              <P.VoteButton value="neutralVote">
                 <FrownTwoTone twoToneColor="#eb2f96" />
               </P.VoteButton>
-              <P.VoteButton value="c">
+              <P.VoteButton value="downVote">
                 <DislikeTwoTone twoToneColor="#52c41a" />
               </P.VoteButton>
             </P.VoteSelect>

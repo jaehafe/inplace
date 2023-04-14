@@ -132,7 +132,7 @@ const VoteSelectWrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
+const VoteButtonSmall = styled(Radio.Button)``;
 const VoteButton = styled(Radio.Button)`
   padding: 23px 50px;
 `;
@@ -281,6 +281,7 @@ const P = {
   StaticsRight,
   VoteSelectWrapper,
   VoteSelect,
+  VoteButtonSmall,
   VoteButton,
   CommentWrapper,
   Comment,
