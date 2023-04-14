@@ -26,4 +26,9 @@ export default class PostVote extends BaseEntity {
 
   @Column({ nullable: true })
   commentId: number;
+
+  setValue(user: User, value: number) {
+    this.value = value;
+    this.user = user;
+  }
 }
