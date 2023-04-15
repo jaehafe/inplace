@@ -10,8 +10,6 @@ const router = Router();
 const handlePostVote = async (req: Request, res: Response) => {
   const { value } = req.body;
   const { identifier } = req.params;
-  console.log('identifier>>>', identifier);
-  console.log('value>>>', value);
 
   if (!['agree', 'neutral', 'disagree'].includes(value)) {
     return res.status(400).json({ value: 'agree, neutral, disagree value만 올 수 있습니다.' });
@@ -21,33 +19,24 @@ const handlePostVote = async (req: Request, res: Response) => {
     const user: User = res.locals.user;
     let post: Post = await Post.findOneByOrFail({ identifier });
     let postVote: PostVote | undefined;
-    let comment: Comment;
 
-    // 해당 value에 따라 칼럼 값을 증가시킴
-    switch (value) {
-      case 'agree':
-        post.agree += 1;
-        break;
-      case 'neutral':
-        post.neutral += 1;
-        break;
-      case 'disagree':
-        post.disagree += 1;
-        break;
-    }
-
-    // 이미 투표한 사용자인지 확인하고 새로운 투표 정보를 생성하거나 업데이트함
     postVote = await PostVote.findOne({ where: { postId: post.id, username: user.username } });
+
+    // 투표를 한 사용자가 없으면 새로운 PostVote 인스턴스 생성
     if (!postVote) {
       postVote = new PostVote();
       postVote.post = post;
       postVote.user = user;
+    } else {
+      // 투표를 한 사용자가 있다면 기존에 투표한 값을 0으로 초기화
+      postVote.agree = 0;
+      postVote.neutral = 0;
+      postVote.disagree = 0;
     }
-    postVote.value = 1;
-    await postVote.save();
 
-    // 투표 정보와 관련된 칼럼 값을 업데이트하고 저장함
-    await post.save();
+    // 새로운 투표 값을 설정하고 저장함
+    postVote[value] = 1;
+    await postVote.save();
 
     // 사용자가 투표한 정보를 업데이트함
     post.setUserVote(user);

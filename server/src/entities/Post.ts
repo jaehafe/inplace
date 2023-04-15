@@ -66,14 +66,18 @@ export default class Post extends BaseEntity {
   }
 
   @Expose() get voteScore(): number {
-    return this.votes?.reduce((memo, curt) => memo + (curt.value || 0), 0);
+    return this.votes?.reduce((memo, curt) => memo + (curt.agree + curt.neutral + curt.disagree), 0);
   }
 
-  protected userVote: number;
+  protected userVote: 'agree' | 'neutral' | 'disagree' | null;
 
   setUserVote(user: User) {
-    const index = this.votes?.findIndex((v) => v.username === user.username);
-    this.userVote = index > -1 ? this.votes[index].value : 0;
+    const vote = this.votes?.find((v) => v.username === user.username);
+    if (vote) {
+      this.userVote = vote.agree > 0 ? 'agree' : vote.neutral > 0 ? 'neutral' : 'disagree';
+    } else {
+      this.userVote = null;
+    }
   }
 
   @BeforeInsert()

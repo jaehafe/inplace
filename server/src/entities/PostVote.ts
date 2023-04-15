@@ -5,8 +5,17 @@ import User from './User';
 
 @Entity('post_votes')
 export default class PostVote extends BaseEntity {
-  @Column()
-  value: number;
+  // @Column()
+  // value: number;
+
+  @Column({ default: 0 })
+  agree: number;
+
+  @Column({ default: 0 })
+  neutral: number;
+
+  @Column({ default: 0 })
+  disagree: number;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'username', referencedColumnName: 'username' })
@@ -27,8 +36,8 @@ export default class PostVote extends BaseEntity {
   @Column({ nullable: true })
   commentId: number;
 
-  setValue(user: User, value: number) {
-    this.value = value;
+  setValue(user: User, value: 'agree' | 'neutral' | 'disagree') {
+    this[value] += 1;
     this.user = user;
   }
 }

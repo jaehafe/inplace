@@ -19,7 +19,6 @@ function LogoHeader({ headerIcons }: IProps) {
   const router = useRouter();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [cookie] = useCookies(['inplace']);
-  console.log('cookie>>>', cookie);
 
   const user = useAuthStore((state) => state?.user);
 
@@ -28,7 +27,6 @@ function LogoHeader({ headerIcons }: IProps) {
     logoutMutate();
   };
   const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
-  console.log('userInfo>>', userInfo);
 
   const buttons = [
     { text: '작성 글', onClick: () => router.push('/profile/identifier') },
