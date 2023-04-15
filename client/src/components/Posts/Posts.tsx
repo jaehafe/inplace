@@ -21,6 +21,8 @@ import Link from 'next/link';
 import { useCookies } from 'react-cookie';
 import { authMeAPI } from '../../apis/user';
 import { postVoteAPI } from '../../apis/vote';
+import { baseURL } from '../../configs/axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 function AllPosts({ post }: any) {
   const {
@@ -38,13 +40,22 @@ function AllPosts({ post }: any) {
     voteScore,
     comments,
     userVote,
+    votes,
   } = post;
+  // console.log('votes>>>', votes);
+  const queryClient = useQueryClient();
   const [cookie] = useCookies(['inplace']);
   const [open, setOpen] = useState(false);
   const [vote, setVote] = useState('');
 
   const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
-  const { mutate: postVoteMutate } = postVoteAPI(identifier);
+  const onSuccessVote = () => {
+    message.success('투표 완료');
+    queryClient.invalidateQueries([`${baseURL}/posts`]);
+  };
+  const { mutate: postVoteMutate } = postVoteAPI(identifier, {
+    onSuccess: onSuccessVote,
+  });
 
   const router = useRouter();
 
@@ -56,7 +67,7 @@ function AllPosts({ post }: any) {
     }
 
     const { value } = e.target;
-    console.log(`radio checked:${value}`);
+    // console.log(`radio checked:${value}`);
     setVote(value);
 
     switch (value) {
