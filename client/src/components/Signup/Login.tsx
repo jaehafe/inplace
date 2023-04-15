@@ -16,11 +16,6 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<any>({});
-  const [cookie] = useCookies(['inplace']);
-
-  // useEffect(() => {
-  //   if (cookie) router.push('/');
-  // }, [cookie]);
 
   const { login, logout, stopLoading, loadUser } = useAuthStore();
   const onError = (error: AxiosError) => {

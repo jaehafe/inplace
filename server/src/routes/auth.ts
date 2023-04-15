@@ -167,9 +167,10 @@ router.post('/images', upload.single('image'), (req: RequestWithFile, res: Respo
 
 //
 // authMiddleware
+// me
 router.get('/me', userMiddleware, authMiddleware, me);
 router.post('/signup', signup);
-router.post('/login', login);
+router.post('/login', userMiddleware, login);
 router.post('/logout', logout);
 
 export default router;
