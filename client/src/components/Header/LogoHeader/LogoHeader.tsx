@@ -19,6 +19,7 @@ function LogoHeader({ headerIcons }: IProps) {
   const router = useRouter();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [cookie] = useCookies(['inplace']);
+  console.log('cookie>>>', cookie);
 
   const user = useAuthStore((state) => state?.user);
 

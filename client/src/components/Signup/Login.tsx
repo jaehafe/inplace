@@ -28,7 +28,7 @@ function Login() {
   };
   const onSuccess = (res: any) => {
     login(res.user);
-    router.push('/');
+    // router.push('/');
   };
   const { mutate } = loginAPI({ onSuccess, onError });
 
@@ -38,6 +38,8 @@ function Login() {
   );
 
   const onClickLogin = () => {
+    console.log(email, password);
+
     mutate({ email, password });
   };
 

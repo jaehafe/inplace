@@ -3,7 +3,10 @@ import User from '../entities/User';
 
 export const authMiddleware = (_: Request, res: Response, next: NextFunction) => {
   try {
+    console.log('auth res.locals.user>>>', res.locals.user);
+
     const user: User | undefined = res.locals.user;
+    console.log('authmiddleware>>>', user);
 
     if (!user) throw new Error('Unauthenticated!!!');
 

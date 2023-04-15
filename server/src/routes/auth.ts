@@ -24,7 +24,7 @@ const mapError = (errors: Object[]) => {
 };
 
 const me = async (req: Request, res: Response) => {
-  console.log('res.locals>>', res.locals);
+  console.log('me>>>', res.locals);
 
   return res.json(res.locals.user);
 };
@@ -97,6 +97,8 @@ const signup = async (req: Request, res: Response) => {
 // 로그인
 const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  console.log('email>>', email, password);
+  console.log('<<<<<res.locals>>>', res.locals);
 
   try {
     let errors: any = {};
@@ -109,6 +111,7 @@ const login = async (req: Request, res: Response) => {
 
     // db에서 email로 유저 찾기
     const user = await User.findOneBy({ email });
+    console.log('user>>>>>>>>', user);
 
     // 해당하는 email의 user가 없으면 에러 보내기
     if (!user) return res.status(404).json({ email: '가입한 이메일이 없습니다.' });
@@ -129,7 +132,7 @@ const login = async (req: Request, res: Response) => {
       'Set-Cookie',
       cookie.serialize('inplace', token, {
         httpOnly: false,
-        maxAge: 60 * 60 * 24 * 7,
+        maxAge: 60 * 60 * 24 * 3,
         path: '/',
       })
     );
@@ -161,9 +164,12 @@ router.post('/images', upload.single('image'), (req: RequestWithFile, res: Respo
   console.log('req.file.path>>> ', req.file.path);
   res.json(req.file.path);
 });
+
+//
+// authMiddleware
 router.get('/me', userMiddleware, authMiddleware, me);
 router.post('/signup', signup);
 router.post('/login', login);
-router.post('/logout', userMiddleware, authMiddleware, logout);
+router.post('/logout', logout);
 
 export default router;

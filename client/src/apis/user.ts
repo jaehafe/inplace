@@ -39,7 +39,8 @@ export const logoutAPI = () => {
   const queryFn = () => axiosInstance.post(queryKey).then((res) => res.data);
 
   const onSuccess = () => {
-    message.success('로그아웃 성공').then(() => router.reload());
+    // message.success('로그아웃 성공').then(() => router.reload());
+    router.reload();
   };
   const onError = () => {
     message.error('로그아웃 실패');
