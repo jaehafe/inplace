@@ -42,6 +42,7 @@ function AllPosts({ post }: any) {
     userVote,
     votes,
   } = post;
+  const router = useRouter();
   // console.log('votes>>>', votes);
   const queryClient = useQueryClient();
   const [cookie] = useCookies(['inplace']);
@@ -49,6 +50,7 @@ function AllPosts({ post }: any) {
   const [vote, setVote] = useState('');
 
   const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
+
   const onSuccessVote = () => {
     message.success('투표 완료');
     queryClient.invalidateQueries([`${baseURL}/posts`]);
@@ -57,7 +59,28 @@ function AllPosts({ post }: any) {
     onSuccess: onSuccessVote,
   });
 
-  const router = useRouter();
+  const checkWhetherVoted = (loginUsername: string) => {
+    const alreadyVote = votes.find(
+      (vote: any) => vote.username === loginUsername
+    );
+    if (alreadyVote) {
+      if (alreadyVote.agree) {
+        return 'agree';
+      } else if (alreadyVote.neutral) {
+        return 'neutral';
+      } else if (alreadyVote.disagree) {
+        return 'disagree';
+      }
+    }
+    return false;
+  };
+
+  // const checkWhetherVoted = (username: string, value: string) => {
+  //   const alreadyVote = votes.find((vote: any) => vote.username === username);
+  //   console.log(alreadyVote);
+  //   return alreadyVote;
+  // };
+  // checkWhetherVoted(userInfo?.username, vote);
 
   const handleVoteChange = (e: RadioChangeEvent, identifier: string) => {
     if (!userInfo) {
@@ -122,7 +145,7 @@ function AllPosts({ post }: any) {
             <h3>{postTitleEllipsis(title)}</h3>
             <p>{postDescEllipsis(desc)}</p>
           </Link>
-          {/* O X */}
+          {/* O X 설명 */}
           <P.VoteResultWrapper>
             <P.VoteResult>
               <LikeTwoTone twoToneColor="#2515d5" />
@@ -156,14 +179,27 @@ function AllPosts({ post }: any) {
                 optionType="button"
                 buttonStyle="solid"
                 onChange={(e) => handleVoteChange(e, identifier)}
+                defaultValue={checkWhetherVoted(userInfo?.username)}
+                // defaultValue={checkWhetherVoted(userInfo?.username) === 'agree'}
               >
-                <P.VoteButtonSmall value="agree">
+                <P.VoteButtonSmall
+                  value="agree"
+                  checked={true}
+                  // disabled={true}
+                  // checked={checkWhetherVoted(userInfo?.username) === 'agree'}
+                >
                   <LikeTwoTone twoToneColor="#2515d5" />
                 </P.VoteButtonSmall>
-                <P.VoteButtonSmall value="neutral">
+                <P.VoteButtonSmall
+                  value="neutral"
+                  checked={checkWhetherVoted(userInfo?.username) === 'neutral'}
+                >
                   <FrownTwoTone twoToneColor="#eb2f96" />
                 </P.VoteButtonSmall>
-                <P.VoteButtonSmall value="disagree">
+                <P.VoteButtonSmall
+                  value="disagree"
+                  checked={checkWhetherVoted(userInfo?.username) === 'disagree'}
+                >
                   <DislikeTwoTone twoToneColor="#52c41a" />
                 </P.VoteButtonSmall>
               </P.VoteSelect>
@@ -177,6 +213,7 @@ function AllPosts({ post }: any) {
               >
                 <Radio.Button
                   value="agree"
+                  defaultChecked={true}
                   style={
                     vote === 'agree'
                       ? { backgroundColor: '#2515d5', color: 'white' }

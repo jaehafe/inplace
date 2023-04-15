@@ -4,7 +4,8 @@ import Posts from './Posts';
 function HotPosts() {
   return (
     <div>
-      <Posts />
+      123
+      {/* <Posts /> */}
     </div>
   );
 }
