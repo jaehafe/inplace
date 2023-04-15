@@ -24,7 +24,7 @@ import { postVoteAPI } from '../../apis/vote';
 import { baseURL } from '../../configs/axios';
 import { useQueryClient } from '@tanstack/react-query';
 
-function AllPosts({ post }: any) {
+function Post({ post }: any) {
   const {
     identifier,
     username,
@@ -192,57 +192,17 @@ function AllPosts({ post }: any) {
                 </P.VoteButtonSmall>
                 <P.VoteButtonSmall
                   value="neutral"
-                  checked={checkWhetherVoted(userInfo?.username) === 'neutral'}
+                  // checked={checkWhetherVoted(userInfo?.username) === 'neutral'}
                 >
                   <FrownTwoTone twoToneColor="#eb2f96" />
                 </P.VoteButtonSmall>
                 <P.VoteButtonSmall
                   value="disagree"
-                  checked={checkWhetherVoted(userInfo?.username) === 'disagree'}
+                  // checked={checkWhetherVoted(userInfo?.username) === 'disagree'}
                 >
                   <DislikeTwoTone twoToneColor="#52c41a" />
                 </P.VoteButtonSmall>
               </P.VoteSelect>
-
-              {/* <P.VoteSelect
-                size="middle"
-                optionType="button"
-                buttonStyle="solid"
-                onChange={(e) => handleVoteChange(e, identifier)}
-                defaultValue={userVote}
-              >
-                <Radio.Button
-                  value="agree"
-                  defaultChecked={true}
-                  style={
-                    vote === 'agree'
-                      ? { backgroundColor: '#2515d5', color: 'white' }
-                      : {}
-                  }
-                >
-                  <LikeTwoTone twoToneColor="#2515d5" />
-                </Radio.Button>
-                <Radio.Button
-                  value="neutral"
-                  style={
-                    vote === 'neutral'
-                      ? { backgroundColor: '#eb2f96', color: 'white' }
-                      : {}
-                  }
-                >
-                  <FrownTwoTone twoToneColor="#eb2f96" />
-                </Radio.Button>
-                <Radio.Button
-                  value="disagree"
-                  style={
-                    vote === 'disagree'
-                      ? { backgroundColor: '#52c41a', color: 'white' }
-                      : {}
-                  }
-                >
-                  <DislikeTwoTone twoToneColor="#52c41a" />
-                </Radio.Button>
-              </P.VoteSelect> */}
             </P.StaticsRight>
           </P.StaticsWrapper>
 
@@ -302,4 +262,4 @@ function AllPosts({ post }: any) {
   );
 }
 
-export default AllPosts;
+export default Post;
