@@ -41,6 +41,7 @@ function Post({ post }: any) {
     comments,
     userVote,
     votes,
+    user,
   } = post;
   console.log('post>>>', post);
 
@@ -116,13 +117,19 @@ function Post({ post }: any) {
       <P.Wrapper>
         <P.HeaderWrapper>
           <P.HeaderLeft>
-            <Image
-              src="https://www.gravatar.com/avatar?d=mp&f=y"
+            <img
+              src={'http://localhost:4000/html_1681583490887.png'}
+              alt="123"
+            />
+            {/* <Image
+              // src="https://www.gravatar.com/avatar?d=mp&f=y"
+              // src="http://localhost:4000/data_1681583374875.png"
+              src={'http://localhost:4000/css_1681580443270.png'}
               width={46}
               height={46}
               style={{ borderRadius: '50px' }}
               alt="avatar"
-            />
+            /> */}
             <P.PostInfo>
               <h4>{username}</h4>
               <span>{formattedDate(updatedAt)}</span> · <span>조회 234</span>
