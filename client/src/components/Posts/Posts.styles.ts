@@ -263,6 +263,13 @@ const LoginRouterButton = styled(Button)`
   }
 `;
 
+const LoginRouterButtonForVote = styled(Button)`
+  margin-top: 20px;
+  & > span {
+    color: ${({ theme }) => theme.gray600};
+  }
+`;
+
 // CreatePost
 
 const P = {
@@ -296,6 +303,7 @@ const P = {
   CommentInfoHeader,
   LikeWrapper,
   LoginRouterButton,
+  LoginRouterButtonForVote,
 };
 
 export default P;

@@ -2,23 +2,23 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { Spin } from 'antd';
 import { GetServerSideProps } from 'next';
 import React from 'react';
+import { useCookies } from 'react-cookie';
 import { getDetailPostAPI } from '../../apis/post';
-import { getCommentsAPI } from '../../apis/comment';
+import { authMeAPI } from '../../apis/user';
 import PostHeader from '../../components/Header/PostHeader/PostHeader';
 import PostDetail from '../../components/Posts/PostDetail';
 import { axiosInstance, baseURL } from '../../configs/axios';
-// { identifier: string }
 
 function DetailPostPage({ identifier }: { identifier: string }) {
-  // const router = useRouter();
-  // const { identifier } = router.query;
-
   console.log('identifier>>', identifier);
 
   const { data: detailPost, isLoading } = getDetailPostAPI(identifier);
+  // const [cookie] = useCookies(['inplace']);
+
+  // const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
 
   if (isLoading) {
-    <Spin size="large" />;
+    return <Spin size="large" />;
   }
 
   return (

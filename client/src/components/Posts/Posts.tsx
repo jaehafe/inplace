@@ -50,7 +50,6 @@ function Post({ post }: any) {
   const queryClient = useQueryClient();
   const [cookie] = useCookies(['inplace']);
   const [open, setOpen] = useState(false);
-  const [vote, setVote] = useState('');
 
   const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
 
@@ -86,28 +85,20 @@ function Post({ post }: any) {
     }
 
     const { value } = e.target;
-    // console.log(`radio checked:${value}`);
-    setVote(value);
 
     switch (value) {
       case 'agree':
-        console.log('agree', identifier);
         postVoteMutate({ value });
         break;
-
       case 'neutral':
-        console.log('neutral', identifier);
         postVoteMutate({ value });
         break;
-
       case 'disagree':
-        console.log('disagree', identifier);
         postVoteMutate({ value });
         break;
 
       default:
         console.log('123');
-
         break;
     }
   };
@@ -182,26 +173,14 @@ function Post({ post }: any) {
                 buttonStyle="solid"
                 onChange={(e) => handleVoteChange(e, identifier)}
                 defaultValue={checkWhetherVoted(userInfo?.username)}
-                // defaultValue={checkWhetherVoted(userInfo?.username) === 'agree'}
               >
-                <P.VoteButtonSmall
-                  value="agree"
-                  checked={true}
-                  // disabled={true}
-                  // checked={checkWhetherVoted(userInfo?.username) === 'agree'}
-                >
+                <P.VoteButtonSmall value="agree">
                   <LikeTwoTone twoToneColor="#2515d5" />
                 </P.VoteButtonSmall>
-                <P.VoteButtonSmall
-                  value="neutral"
-                  // checked={checkWhetherVoted(userInfo?.username) === 'neutral'}
-                >
+                <P.VoteButtonSmall value="neutral">
                   <FrownTwoTone twoToneColor="#eb2f96" />
                 </P.VoteButtonSmall>
-                <P.VoteButtonSmall
-                  value="disagree"
-                  // checked={checkWhetherVoted(userInfo?.username) === 'disagree'}
-                >
+                <P.VoteButtonSmall value="disagree">
                   <DislikeTwoTone twoToneColor="#52c41a" />
                 </P.VoteButtonSmall>
               </P.VoteSelect>

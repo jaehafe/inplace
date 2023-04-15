@@ -54,6 +54,7 @@ export const authMeAPI = (
 ) => {
   const queryKey = `${baseURL}/auth/me`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
+
   return useQuery([queryKey], queryFn, { ...options });
 };
 

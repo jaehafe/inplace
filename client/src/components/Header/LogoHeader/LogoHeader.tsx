@@ -21,6 +21,7 @@ function LogoHeader({ headerIcons }: IProps) {
   const [cookie] = useCookies(['inplace']);
 
   const user = useAuthStore((state) => state?.user);
+  console.log('user>>>', user);
 
   const { mutate: logoutMutate } = logoutAPI();
   const handleLogout = () => {
