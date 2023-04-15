@@ -3,7 +3,6 @@ import { authMiddleware } from '../middlewares/authMiddleware';
 import { userMiddleware } from '../middlewares/userMiddleware';
 import Comment from '../entities/Comment';
 import Post from '../entities/Post';
-import { getConnection } from 'typeorm';
 import { AppDataSource } from '../data-source';
 
 const router = Router();

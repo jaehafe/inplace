@@ -87,7 +87,8 @@ const getAllPosts = async (req: Request, res: Response) => {
   try {
     const allPosts = await Post.find({
       order: { createdAt: 'DESC' },
-      relations: ['votes', 'comments', 'images'],
+      // relations: ['votes', 'comments'],
+      relations: ['votes', 'comments', 'comments.user.image'],
     });
 
     return res.json(allPosts);
@@ -104,7 +105,7 @@ const getDetailPost = async (req: Request, res: Response) => {
   try {
     const post = await Post.findOneOrFail({
       where: { identifier },
-      relations: ['votes', 'comments'],
+      relations: ['votes', 'comments', 'comments.user.image'],
     });
 
     return res.json(post);
