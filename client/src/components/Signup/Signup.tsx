@@ -54,6 +54,7 @@ function Signup() {
   const [imageUrl, setImageUrl] = useState<string>();
   const [imageInfo, setImageInfo] = useState<any>(null);
   const [imagePath, setImagePath] = useState<string>('');
+  console.log('imagePath>>>', imagePath);
 
   const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>

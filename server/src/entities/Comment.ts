@@ -3,6 +3,7 @@ import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany }
 import { makeId } from '../utils/helper';
 import CommentVote from './CommentVote';
 import BaseEntity from './Entity';
+import Image from './Image';
 import Post from './Post';
 import User from './User';
 

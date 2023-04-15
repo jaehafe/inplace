@@ -42,6 +42,8 @@ function Post({ post }: any) {
     userVote,
     votes,
   } = post;
+  console.log('post>>>', post);
+
   const router = useRouter();
   // console.log('votes>>>', votes);
   const queryClient = useQueryClient();
@@ -74,13 +76,6 @@ function Post({ post }: any) {
     }
     return false;
   };
-
-  // const checkWhetherVoted = (username: string, value: string) => {
-  //   const alreadyVote = votes.find((vote: any) => vote.username === username);
-  //   console.log(alreadyVote);
-  //   return alreadyVote;
-  // };
-  // checkWhetherVoted(userInfo?.username, vote);
 
   const handleVoteChange = (e: RadioChangeEvent, identifier: string) => {
     if (!userInfo) {
