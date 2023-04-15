@@ -6,6 +6,7 @@ import bcrypt from 'bcryptjs';
 import Post from './Post';
 import PostVote from './PostVote';
 import CommentVote from './CommentVote';
+import Image from './Image';
 
 // 명시적으로 매핑할 테이블을 지정
 // 'users'라는 이름을 사용하여 User 엔티티가 users 테이블과 매핑되도록 설정(db에 'users' 이름으로 )
@@ -27,8 +28,13 @@ export default class User extends BaseEntity {
 
   // @OneToOne(() => UserProfileImage, (userprofile) => userprofile.user)
   // @JoinColumn()
-  @Column({ nullable: true })
-  imagePath: string;
+  // @Column({ nullable: true })
+  // imagePath: string;
+
+  @OneToOne(() => Image, (image) => image.profileImg, { nullable: true })
+  // @JoinColumn({ name: 'imageId', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'imageId' })
+  image: Image;
 
   @Exclude()
   @Column()

@@ -9,6 +9,7 @@ import path from 'path';
 import fs from 'fs';
 import { userMiddleware } from '../middlewares/userMiddleware';
 import { authMiddleware } from '../middlewares/authMiddleware';
+import Image from '../entities/Image';
 
 const router = Router();
 
@@ -57,7 +58,7 @@ const signup = async (req: Request, res: Response) => {
   const { files }: any = req;
   console.log('files>>>', files);
 
-  console.log(email, username, password, files);
+  console.log(email, username, password, imagePath);
 
   try {
     let errors: any = {};
@@ -79,7 +80,13 @@ const signup = async (req: Request, res: Response) => {
     user.email = email;
     user.username = username;
     user.password = password;
-    user.imagePath = imagePath;
+    // user.imagePath = imagePath;
+
+    const image = new Image();
+    image.src = imagePath; // 파일 경로를 이미지의 src로 설정합니다.
+    await image.save();
+
+    user.image = image; // User 엔티티에 이미지를 연결합니다.
 
     errors = await validate(user);
 
