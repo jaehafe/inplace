@@ -15,7 +15,6 @@ import Head from 'next/head';
 import { useCookies } from 'react-cookie';
 import { useUserStore } from '../store/userStore';
 import { useEffect } from 'react';
-import { authMeAPI } from '../apis/user';
 import { axiosInstance, baseURL } from '../configs/axios';
 
 const pretendard = localFont({
