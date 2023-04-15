@@ -17,13 +17,11 @@ function Login() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<any>({});
 
-  const { login, logout, stopLoading, loadUser } = useAuthStore();
   const onError = (error: AxiosError) => {
     setErrors(error.response?.data || {});
   };
   const onSuccess = (res: any) => {
-    login(res.user);
-    // router.push('/');
+    router.push('/').then(() => router.reload());
   };
   const { mutate } = loginAPI({ onSuccess, onError });
 

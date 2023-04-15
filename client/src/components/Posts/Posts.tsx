@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   CommentOutlined,
   DislikeTwoTone,
@@ -7,7 +7,7 @@ import {
   MoreOutlined,
   PieChartOutlined,
 } from '@ant-design/icons';
-import { Button, Divider, message, Radio, RadioChangeEvent } from 'antd';
+import { Button, Divider, message, RadioChangeEvent } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import P from './Posts.styles';
@@ -18,11 +18,10 @@ import {
   postTitleEllipsis,
 } from '../../utils';
 import Link from 'next/link';
-import { useCookies } from 'react-cookie';
-import { authMeAPI } from '../../apis/user';
 import { postVoteAPI } from '../../apis/vote';
 import { baseURL } from '../../configs/axios';
 import { useQueryClient } from '@tanstack/react-query';
+import { useUserStore } from '../../store/userStore';
 
 function Post({ post }: any) {
   const {
@@ -43,15 +42,10 @@ function Post({ post }: any) {
     votes,
     user,
   } = post;
-  console.log('post>>>', post);
-
   const router = useRouter();
-  // console.log('votes>>>', votes);
   const queryClient = useQueryClient();
-  const [cookie] = useCookies(['inplace']);
   const [open, setOpen] = useState(false);
-
-  const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
+  const userInfo = useUserStore((state) => state.userInfo);
 
   const onSuccessVote = () => {
     message.success('투표 완료');

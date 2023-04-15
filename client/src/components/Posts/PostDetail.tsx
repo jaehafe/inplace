@@ -9,11 +9,8 @@ import { Button, message, RadioChangeEvent } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { useCookies } from 'react-cookie';
-import { authMeAPI } from '../../apis/user';
 import { postVoteAPI } from '../../apis/vote';
 import { baseURL } from '../../configs/axios';
-import useAuthStore from '../../store/authStore';
 import { useUserStore } from '../../store/userStore';
 import { formattedDate } from '../../utils';
 import PostComments from './PostComments';
@@ -41,8 +38,6 @@ function PostDetail({ detailPost }: any) {
   console.log('detailPost>>>', detailPost);
   console.log('votes>>>', votes);
   const [open, setOpen] = useState(false);
-  const [cookie] = useCookies(['inplace']);
-  // const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
 
   const userInfo = useUserStore((state) => state.userInfo);
   console.log('userInfo>>>', userInfo);

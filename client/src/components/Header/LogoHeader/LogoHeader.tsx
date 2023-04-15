@@ -5,11 +5,10 @@ import L from './LogoHeader.styles';
 import { AppImages } from '../../../configs/AppImages';
 import { Button, Divider } from 'antd';
 import { useRouter } from 'next/router';
-import useAuthStore from '../../../store/authStore';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import B from '../../Common/BackButton';
-import { authMeAPI, logoutAPI } from '../../../apis/user';
-import { useCookies } from 'react-cookie';
+import { logoutAPI } from '../../../apis/user';
+import { useUserStore } from '../../../store/userStore';
 
 interface IProps {
   headerIcons?: boolean;
@@ -18,16 +17,13 @@ interface IProps {
 function LogoHeader({ headerIcons }: IProps) {
   const router = useRouter();
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [cookie] = useCookies(['inplace']);
 
-  const user = useAuthStore((state) => state?.user);
-  console.log('user>>>', user);
+  const userInfo = useUserStore((state) => state.userInfo);
 
   const { mutate: logoutMutate } = logoutAPI();
   const handleLogout = () => {
     logoutMutate();
   };
-  const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
 
   const buttons = [
     { text: '작성 글', onClick: () => router.push('/profile/identifier') },
