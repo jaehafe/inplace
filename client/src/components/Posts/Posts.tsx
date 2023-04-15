@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   CommentOutlined,
   DislikeTwoTone,
@@ -7,7 +7,7 @@ import {
   MoreOutlined,
   PieChartOutlined,
 } from '@ant-design/icons';
-import { Button, Divider, message, RadioChangeEvent } from 'antd';
+import { Button, Divider, message, Radio, RadioChangeEvent } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import P from './Posts.styles';
@@ -39,14 +39,14 @@ function AllPosts({ post }: any) {
     comments,
     userVote,
   } = post;
+  const [cookie] = useCookies(['inplace']);
   const [open, setOpen] = useState(false);
   const [vote, setVote] = useState('');
-  const router = useRouter();
-
-  const [cookie] = useCookies(['inplace']);
 
   const { data: userInfo } = authMeAPI({ enabled: Boolean(cookie?.inplace) });
   const { mutate: postVoteMutate } = postVoteAPI(identifier);
+
+  const router = useRouter();
 
   const handleVoteChange = (e: RadioChangeEvent, identifier: string) => {
     if (!userInfo) {
@@ -156,6 +156,45 @@ function AllPosts({ post }: any) {
                   <DislikeTwoTone twoToneColor="#52c41a" />
                 </P.VoteButtonSmall>
               </P.VoteSelect>
+
+              {/* <P.VoteSelect
+                size="middle"
+                optionType="button"
+                buttonStyle="solid"
+                onChange={(e) => handleVoteChange(e, identifier)}
+                defaultValue={userVote}
+              >
+                <Radio.Button
+                  value="agree"
+                  style={
+                    vote === 'agree'
+                      ? { backgroundColor: '#2515d5', color: 'white' }
+                      : {}
+                  }
+                >
+                  <LikeTwoTone twoToneColor="#2515d5" />
+                </Radio.Button>
+                <Radio.Button
+                  value="neutral"
+                  style={
+                    vote === 'neutral'
+                      ? { backgroundColor: '#eb2f96', color: 'white' }
+                      : {}
+                  }
+                >
+                  <FrownTwoTone twoToneColor="#eb2f96" />
+                </Radio.Button>
+                <Radio.Button
+                  value="disagree"
+                  style={
+                    vote === 'disagree'
+                      ? { backgroundColor: '#52c41a', color: 'white' }
+                      : {}
+                  }
+                >
+                  <DislikeTwoTone twoToneColor="#52c41a" />
+                </Radio.Button>
+              </P.VoteSelect> */}
             </P.StaticsRight>
           </P.StaticsWrapper>
 

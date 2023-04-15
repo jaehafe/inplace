@@ -71,6 +71,11 @@ export default class Post extends BaseEntity {
 
   protected userVote: 'agree' | 'neutral' | 'disagree' | null;
 
+  @Expose()
+  get getUserVote(): 'agree' | 'neutral' | 'disagree' | null {
+    return this.userVote;
+  }
+
   setUserVote(user: User) {
     const vote = this.votes?.find((v) => v.username === user.username);
     if (vote) {
