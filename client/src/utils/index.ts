@@ -21,3 +21,5 @@ export const commentBodyEllipsis = (title: string) => {
     ? title.substring(0, 20).concat(' ...' + '더보기')
     : title;
 };
+
+export const defaultImg = 'https://www.gravatar.com/avatar?d=mp&f=y';

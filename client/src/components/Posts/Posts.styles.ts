@@ -137,6 +137,16 @@ const VoteButton = styled(Radio.Button)`
   padding: 23px 50px;
 `;
 
+// 이미지 게시물
+const PostImageWrapper = styled.div`
+  /* border: 1px solid; */
+  margin: 20px 0 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 // 댓글
 const CommentWrapper = styled.div`
   margin-top: 16px;
@@ -304,6 +314,7 @@ const P = {
   LikeWrapper,
   LoginRouterButton,
   LoginRouterButtonForVote,
+  PostImageWrapper,
 };
 
 export default P;

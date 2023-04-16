@@ -1,18 +1,29 @@
 import React, { useState } from 'react';
 import {
+  AntDesignOutlined,
   CommentOutlined,
   DislikeTwoTone,
   FrownTwoTone,
   LikeTwoTone,
   MoreOutlined,
   PieChartOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
-import { Button, Divider, message, RadioChangeEvent } from 'antd';
+import {
+  Button,
+  Divider,
+  message,
+  RadioChangeEvent,
+  Avatar,
+  Tooltip,
+  Image as AntdImage,
+} from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import P from './Posts.styles';
 import {
   commentBodyEllipsis,
+  defaultImg,
   formattedDate,
   postDescEllipsis,
   postTitleEllipsis,
@@ -42,6 +53,8 @@ function Post({ post }: any) {
     votes,
     user,
   } = post;
+  // console.log('post>>>>>>>', post);
+
   const router = useRouter();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -97,8 +110,13 @@ function Post({ post }: any) {
     }
   };
 
-  console.log('images>>>', images);
-  console.log('images[0].src>>>', images[0].src);
+  const contentStyle: React.CSSProperties = {
+    // height: '160px',
+    color: '#fff',
+    // lineHeight: '160px',
+    textAlign: 'center',
+    background: '#fff',
+  };
 
   return (
     <>
@@ -106,9 +124,11 @@ function Post({ post }: any) {
         <P.HeaderWrapper>
           <P.HeaderLeft>
             <Image
-              // src="https://www.gravatar.com/avatar?d=mp&f=y"
-              // src="http://localhost:4000/data_1681583374875.png"
-              src={`http://localhost:4000/${images[0].src}`}
+              src={
+                user.image.src
+                  ? `http://localhost:4000/${user.image.src}`
+                  : defaultImg
+              }
               width={46}
               height={46}
               style={{ borderRadius: '50px' }}
@@ -131,7 +151,7 @@ function Post({ post }: any) {
             <h3>{postTitleEllipsis(title)}</h3>
             <p>{postDescEllipsis(desc)}</p>
           </Link>
-          {/* O X 설명 */}
+          {/* O X 질문 */}
           <P.VoteResultWrapper>
             <P.VoteResult>
               <LikeTwoTone twoToneColor="#2515d5" />
@@ -179,6 +199,63 @@ function Post({ post }: any) {
               </P.VoteSelect>
             </P.StaticsRight>
           </P.StaticsWrapper>
+
+          {/* 게시물 사진 */}
+          {/* <P.PostImageWrapper>
+            <Avatar.Group
+              maxCount={1}
+              maxPopoverTrigger="click"
+              size="large"
+              maxStyle={{
+                color: '#f56a00',
+                backgroundColor: '#fde3cf',
+                cursor: 'pointer',
+              }}
+            >
+              {images.map((img: any) => {
+                return (
+                  <Image
+                    key={img.src}
+                    src={`http://localhost:4000/${img.src}`}
+                    width={80}
+                    height={80}
+                    alt="alt"
+                  />
+                );
+              })}
+
+              <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar>
+
+              <Tooltip title="Ant User" placement="top">
+                <Avatar
+                  style={{ backgroundColor: '#87d068' }}
+                  icon={<UserOutlined />}
+                />
+              </Tooltip>
+            </Avatar.Group>
+          </P.PostImageWrapper> */}
+
+          {/* 게시물 사진 */}
+          <P.PostImageWrapper>
+            <AntdImage.PreviewGroup
+              preview={{
+                onChange: (current, prev) =>
+                  console.log(`current index: ${current}, prev index: ${prev}`),
+              }}
+            >
+              {images.map((img: any) => {
+                return (
+                  <AntdImage
+                    key={img.src}
+                    src={`http://localhost:4000/${img.src}`}
+                    width={80}
+                    height={80}
+                    alt="alt"
+                  />
+                );
+              })}
+            </AntdImage.PreviewGroup>
+          </P.PostImageWrapper>
 
           {/* comment 작업 */}
           <P.CommentWrapper>
