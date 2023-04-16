@@ -7,13 +7,13 @@ import {
 import { message } from 'antd';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
-import { axiosInstance, baseURL } from '../configs/axios';
+import { axiosInstance } from '../configs/axios';
 
 export const createCommentAPI = (
   identifier: string,
   options?: UseMutationOptions<AxiosResponse<string>, AxiosError, any>
 ): any => {
-  const queryKey = `${baseURL}/comments/${identifier}`;
+  const queryKey = `/comments/${identifier}`;
   const queryFn = (data: any) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
 
@@ -28,8 +28,8 @@ export const getCommentsAPI = (
   identifier?: string,
   options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
-  const queryKey = `${baseURL}/comments`;
-  // const queryKey = `${baseURL}/comments/${identifier}`;
+  const queryKey = `/comments`;
+
   const queryFn = () =>
     axiosInstance.get(`${queryKey}/${identifier}`).then((res) => res.data);
 
@@ -43,7 +43,7 @@ export const updateCommentAPI = (
   commentId?: string,
   options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
-  const queryKey = `${baseURL}/comments/${commentId}`;
+  const queryKey = `/comments/${commentId}`;
   // const queryFn = () => axiosInstance.patch(queryKey).then((res) => res.data);
   const queryFn = (body: { body: string }) =>
     axiosInstance.patch(queryKey, body).then((res) => res.data);
@@ -63,7 +63,7 @@ export const deleteCommentAPI = (
   commentId?: string,
   options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
-  const queryKey = `${baseURL}/comments/${commentId}`;
+  const queryKey = `/comments/${commentId}`;
   const queryFn = () => axiosInstance.delete(queryKey).then((res) => res.data);
 
   // const onSuccess = () => {

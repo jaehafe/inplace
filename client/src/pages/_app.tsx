@@ -15,7 +15,7 @@ import Head from 'next/head';
 import { useCookies } from 'react-cookie';
 import { useUserStore } from '../store/userStore';
 import { useEffect } from 'react';
-import { axiosInstance, baseURL } from '../configs/axios';
+import { axiosInstance } from '../configs/axios';
 
 const pretendard = localFont({
   src: [
@@ -64,7 +64,7 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     if (cookie?.inplace) {
       const fetchUserInfo = async () => {
-        const { data } = await axiosInstance.get(`${baseURL}/auth/me`);
+        const { data } = await axiosInstance.get(`/auth/me`);
         // console.log('data>>>', data);
         setUserInfo(data);
       };

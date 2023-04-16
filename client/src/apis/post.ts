@@ -7,12 +7,12 @@ import {
 import { message } from 'antd';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
-import { axiosInstance, baseURL } from '../configs/axios';
+import { axiosInstance } from '../configs/axios';
 
 export const createPostAPI = (
   options?: UseMutationOptions<AxiosResponse<string>, AxiosError, any>
 ): any => {
-  const queryKey = `${baseURL}/posts`;
+  const queryKey = `/posts`;
   const queryFn = (data: any) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
 
@@ -35,7 +35,7 @@ export const createPostAPI = (
 export const uploadPostImagesAPI = (
   options?: UseMutationOptions<AxiosResponse<string>, AxiosError, any>
 ): any => {
-  const queryKey = `${baseURL}/posts/images`;
+  const queryKey = `/posts/images`;
   const queryFn = (data: any) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
 
@@ -51,7 +51,7 @@ export const uploadPostImagesAPI = (
 export const getAllPostsAPI = (
   options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
-  const queryKey = `${baseURL}/posts`;
+  const queryKey = `/posts`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
   return useQuery([queryKey], queryFn, { ...options });
 };
@@ -60,7 +60,7 @@ export const getDetailPostAPI = (
   identifier?: string,
   options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
-  const queryKey = `${baseURL}/posts/${identifier}`;
+  const queryKey = `/posts/${identifier}`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
 
   const onError = () => {

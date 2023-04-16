@@ -7,14 +7,14 @@ import {
 import { message } from 'antd';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
-import { axiosInstance, baseURL } from '../configs/axios';
+import { axiosInstance } from '../configs/axios';
 import { ILogin, ISignup } from '../types';
 
 export const signupAPI = (
   options?: UseMutationOptions<AxiosResponse<string>, AxiosError, ISignup>
 ) => {
   const router = useRouter();
-  const queryKey = `${baseURL}/auth/signup`;
+  const queryKey = `/auth/signup`;
   const queryFn = (data: ISignup) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
 
@@ -26,7 +26,7 @@ export const signupAPI = (
 export const loginAPI = (
   options?: UseMutationOptions<AxiosResponse<string>, AxiosError, ILogin>
 ) => {
-  const queryKey = `${baseURL}/auth/login`;
+  const queryKey = `/auth/login`;
   const queryFn = (data: ILogin) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
 
@@ -35,7 +35,7 @@ export const loginAPI = (
 
 export const logoutAPI = () => {
   const router = useRouter();
-  const queryKey = `${baseURL}/auth/logout`;
+  const queryKey = `/auth/logout`;
   const queryFn = () => axiosInstance.post(queryKey).then((res) => res.data);
 
   const onSuccess = () => {
@@ -52,12 +52,12 @@ export const logoutAPI = () => {
 export const authMeAPI = (
   options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
-  const queryKey = `${baseURL}/auth/me`;
+  const queryKey = `/auth/me`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
 
   return useQuery([queryKey], queryFn, { ...options });
 };
 
 export const uploadImageAPI = <T>(data: FormData) => {
-  return axiosInstance.post<T>(`${baseURL}/auth/images`, data);
+  return axiosInstance.post<T>(`/auth/images`, data);
 };

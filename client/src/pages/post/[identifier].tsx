@@ -5,7 +5,7 @@ import React from 'react';
 import { getDetailPostAPI } from '../../apis/post';
 import PostHeader from '../../components/Header/PostHeader/PostHeader';
 import PostDetail from '../../components/Posts/PostDetail';
-import { axiosInstance, baseURL } from '../../configs/axios';
+import { axiosInstance } from '../../configs/axios';
 
 function DetailPostPage({ identifier }: { identifier: string }) {
   console.log('identifier>>', identifier);
@@ -28,7 +28,7 @@ export default DetailPostPage;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const queryClient = new QueryClient();
-  const queryKey = `${baseURL}/posts/${params?.identifier}`;
+  const queryKey = `/posts/${params?.identifier}`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
 
   await queryClient.prefetchQuery([queryKey], queryFn);

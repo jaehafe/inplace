@@ -30,7 +30,6 @@ import {
 } from '../../utils';
 import Link from 'next/link';
 import { postVoteAPI } from '../../apis/vote';
-import { baseURL } from '../../configs/axios';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '../../store/userStore';
 
@@ -61,7 +60,7 @@ function Post({ post }: any) {
 
   const onSuccessVote = () => {
     message.success('투표 완료');
-    queryClient.invalidateQueries([`${baseURL}/posts`]);
+    queryClient.invalidateQueries([`/posts`]);
   };
   const { mutate: postVoteMutate } = postVoteAPI(identifier, {
     onSuccess: onSuccessVote,

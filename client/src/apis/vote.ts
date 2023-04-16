@@ -7,13 +7,13 @@ import {
 import { message } from 'antd';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
-import { axiosInstance, baseURL } from '../configs/axios';
+import { axiosInstance } from '../configs/axios';
 
 export const postVoteAPI = (
   identifier: string,
   options?: UseMutationOptions<AxiosResponse<string>, AxiosError, any>
 ): any => {
-  const queryKey = `${baseURL}/postVotes/${identifier}`;
+  const queryKey = `/postVotes/${identifier}`;
   const queryFn = (data: any) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
 
@@ -28,13 +28,9 @@ export const voteCommentAPI = (
   commentId?: string,
   options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
-  const queryKey = `${baseURL}/commentVotes/${commentId}`;
+  const queryKey = `/commentVotes/${commentId}`;
   const queryFn = (data: any) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
-
-  // const onSuccess = () => {
-  //   message.success('댓글 삭제 완료');
-  // };
 
   const onError = () => {
     message.error('댓글 좋아요 실패');

@@ -14,7 +14,6 @@ import React, {
 } from 'react';
 import { deleteCommentAPI, updateCommentAPI } from '../../apis/comment';
 import { voteCommentAPI } from '../../apis/vote';
-import { baseURL } from '../../configs/axios';
 import { useUserStore } from '../../store/userStore';
 import { defaultImg, formattedDate } from '../../utils';
 import P from './Posts.styles';
@@ -53,8 +52,7 @@ function PostComment({ data }: any) {
 
   const onSuccessVoteComment = () => {
     message.success('댓글 좋아요 완료');
-    queryClient.invalidateQueries([`${baseURL}/comments`]);
-    // queryClient.invalidateQueries([`${baseURL}/commentVotes/${commentId}`]);
+    queryClient.invalidateQueries([`/comments`]);
   };
 
   const { mutate: voteCommentMutate } = voteCommentAPI(commentId, {
@@ -65,8 +63,7 @@ function PostComment({ data }: any) {
   const onSuccessEditComment = () => {
     setIsEditing(false);
 
-    // queryClient.invalidateQueries([`${baseURL}/comments/${postId}`]);
-    queryClient.invalidateQueries([`${baseURL}/comments`]);
+    queryClient.invalidateQueries([`/comments`]);
     message.success('댓글 수정 완료');
   };
   const { mutate: updateCommentMutate } = updateCommentAPI(commentId, {
@@ -76,7 +73,7 @@ function PostComment({ data }: any) {
   // 댓글 삭제 api mutation
   const onSuccessDeleteComment = () => {
     setIsEditing(false);
-    queryClient.invalidateQueries([`${baseURL}/comments`]);
+    queryClient.invalidateQueries([`/comments`]);
     message.success('댓글 삭제 완료');
   };
   const { mutate: deleteCommentMutate } = deleteCommentAPI(commentId, {

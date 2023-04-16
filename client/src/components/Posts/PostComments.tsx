@@ -2,7 +2,6 @@ import { Collapse, Divider, Input, message } from 'antd';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
 import { createCommentAPI, getCommentsAPI } from '../../apis/comment';
-import { baseURL } from '../../configs/axios';
 import P from './Posts.styles';
 
 import { useQueryClient } from '@tanstack/react-query';
@@ -15,7 +14,7 @@ function PostComments({ identifier, currentLoginUser }: any) {
 
   const onSuccess = () => {
     setNewComment('');
-    queryClient.invalidateQueries([`${baseURL}/comments`]);
+    queryClient.invalidateQueries([`/comments`]);
     message.success('댓글이 추가되었습니다');
   };
   const { mutate: createCommentMutate } = createCommentAPI(identifier, {
