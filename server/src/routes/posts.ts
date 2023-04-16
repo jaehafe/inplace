@@ -88,13 +88,10 @@ const createPost = async (req: Request, res: Response) => {
 };
 
 const getAllPosts = async (req: Request, res: Response) => {
-  console.log('req.query>>>', req.query.page);
-
   const currentPage: number = (req.query.page || 0) as number;
   const perPage: number = (req.query.count || 3) as number;
-  console.log('currentPage>>>', currentPage);
-  // const currentPage: number = parseInt(req.query.page as string) || 0;
-  // const perPage: number = parseInt(req.query.count as string) || 5;
+
+  console.log('req.query.page...', req.query.page);
 
   try {
     const allPosts = await Post.find({
