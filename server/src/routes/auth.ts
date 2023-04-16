@@ -25,8 +25,6 @@ const mapError = (errors: Object[]) => {
 };
 
 const me = async (req: Request, res: Response) => {
-  console.log('me>>>', res.locals);
-
   return res.json(res.locals.user);
 };
 
