@@ -45,7 +45,8 @@ const upload = multer({
 });
 
 const createPost = async (req: Request, res: Response) => {
-  const { title, agree, neutral, disagree, desc, imageName } = req.body;
+  const { title, agree, neutral, disagree, desc = '', imageName = [] } = req.body;
+  console.log('createPost>>>', createPost);
 
   const user = res.locals.user;
 
@@ -64,17 +65,19 @@ const createPost = async (req: Request, res: Response) => {
     // 이미지 업로드 및 게시물에 연결
     console.log('imagePath>>>', imageName);
 
-    const images = [];
-    for (const file of imageName) {
-      const image = new Image();
-      image.src = file;
-      image.post = post;
-      await image.save();
-      images.push(image);
-    }
+    if (imageName.length > 0) {
+      const images = [];
+      for (const file of imageName) {
+        const image = new Image();
+        image.src = file;
+        image.post = post;
+        await image.save();
+        images.push(image);
+      }
 
-    for (const image of images) {
-      post.images = image.id;
+      for (const image of images) {
+        post.images = image.id;
+      }
     }
 
     return res.json(post);
@@ -83,6 +86,7 @@ const createPost = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'something went wrong' });
   }
 };
+
 const getAllPosts = async (req: Request, res: Response) => {
   try {
     const allPosts = await Post.find({
@@ -105,7 +109,10 @@ const getDetailPost = async (req: Request, res: Response) => {
   try {
     const post = await Post.findOneOrFail({
       where: { identifier },
-      relations: ['votes', 'comments', 'comments.user.image', 'images', 'user.image'],
+      relations: ['votes', 'images', 'user.image'],
+      // 'comments.user.image',
+      // 'comments',
+      // 'images',
     });
 
     return res.json(post);
