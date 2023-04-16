@@ -75,13 +75,13 @@ function CreatePost() {
   const [desc, setDesc] = useState('');
 
   const [loading, setLoading] = useState(false);
-  const [imagePath, setImagePath] = useState<string>('');
+  const [imageName, setImageName] = useState<string>('');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const router = useRouter();
 
   const onSuccess = (data: any) => {
-    setImagePath(data);
+    setImageName(data);
     // message.success('이미지 업로드 완료');
     // router.push('/');
   };
@@ -93,8 +93,6 @@ function CreatePost() {
   const { mutate: createPostMutate } = createPostAPI({
     onSuccess: onSuccessCreatePost,
   });
-
-  console.log('imagePath>>', imagePath);
 
   const isDisabled = useMemo(
     () =>
@@ -163,7 +161,7 @@ function CreatePost() {
     e.preventDefault();
     console.log('12312123');
 
-    createPostMutate({ title, agree, neutral, disagree, desc, imagePath });
+    createPostMutate({ title, agree, neutral, disagree, desc, imageName });
   };
 
   return (
@@ -222,19 +220,7 @@ function CreatePost() {
         </Collapse>
         <br />
         <br />
-        {/* <Upload
-          name="postImages"
-          multiple={true}
-          listType="picture-card"
-          className="avatar-uploader"
-          showUploadList={true}
-          beforeUpload={beforeUpload}
-          onChange={handleImageChange}
-          maxCount={5}
-          // disabled={Boolean(imagePath.length === 5)}
-        >
-          {uploadButton}
-        </Upload> */}
+
         <Upload
           listType="picture-card"
           fileList={fileList}

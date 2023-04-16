@@ -45,7 +45,7 @@ const upload = multer({
 });
 
 const createPost = async (req: Request, res: Response) => {
-  const { title, agree, neutral, disagree, desc, imagePath } = req.body;
+  const { title, agree, neutral, disagree, desc, imageName } = req.body;
 
   const user = res.locals.user;
 
@@ -56,16 +56,16 @@ const createPost = async (req: Request, res: Response) => {
     post.neutral = neutral;
     post.disagree = disagree;
     post.desc = desc;
-    post.images = imagePath;
+    post.images = imageName;
     post.username = user;
 
     await post.save();
 
     // 이미지 업로드 및 게시물에 연결
-    console.log('imagePath>>>', imagePath);
+    console.log('imagePath>>>', imageName);
 
     const images = [];
-    for (const file of imagePath) {
+    for (const file of imageName) {
       const image = new Image();
       image.src = file;
       image.post = post;
