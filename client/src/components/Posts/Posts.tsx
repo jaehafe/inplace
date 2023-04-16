@@ -178,26 +178,28 @@ function Post({ post }: any) {
                 {commentCount}
               </P.StaticsButton>
             </P.StaticsLeft>
-            {/* O X 투표 */}
-            <P.StaticsRight>
-              <P.VoteSelect
-                size="middle"
-                optionType="button"
-                buttonStyle="solid"
-                onChange={(e) => handleVoteChange(e, identifier)}
-                defaultValue={checkWhetherVoted(userInfo?.username)}
-              >
-                <P.VoteButtonSmall value="agree">
-                  <LikeTwoTone twoToneColor="#2515d5" />
-                </P.VoteButtonSmall>
-                <P.VoteButtonSmall value="neutral">
-                  <FrownTwoTone twoToneColor="#eb2f96" />
-                </P.VoteButtonSmall>
-                <P.VoteButtonSmall value="disagree">
-                  <DislikeTwoTone twoToneColor="#52c41a" />
-                </P.VoteButtonSmall>
-              </P.VoteSelect>
-            </P.StaticsRight>
+            {/* O X 투표 기능 */}
+            {userInfo && (
+              <P.StaticsRight>
+                <P.VoteSelect
+                  size="middle"
+                  optionType="button"
+                  buttonStyle="solid"
+                  onChange={(e) => handleVoteChange(e, identifier)}
+                  defaultValue={checkWhetherVoted(userInfo?.username)}
+                >
+                  <P.VoteButtonSmall value="agree">
+                    <LikeTwoTone twoToneColor="#2515d5" />
+                  </P.VoteButtonSmall>
+                  <P.VoteButtonSmall value="neutral">
+                    <FrownTwoTone twoToneColor="#eb2f96" />
+                  </P.VoteButtonSmall>
+                  <P.VoteButtonSmall value="disagree">
+                    <DislikeTwoTone twoToneColor="#52c41a" />
+                  </P.VoteButtonSmall>
+                </P.VoteSelect>
+              </P.StaticsRight>
+            )}
           </P.StaticsWrapper>
 
           {/* 게시물 사진 */}
@@ -236,26 +238,32 @@ function Post({ post }: any) {
           </P.PostImageWrapper> */}
 
           {/* 게시물 사진 */}
-          <P.PostImageWrapper>
-            <AntdImage.PreviewGroup
-              preview={{
-                onChange: (current, prev) =>
-                  console.log(`current index: ${current}, prev index: ${prev}`),
-              }}
-            >
-              {images.map((img: any) => {
-                return (
-                  <AntdImage
-                    key={img.src}
-                    src={`http://localhost:4000/${img.src}`}
-                    width={80}
-                    height={80}
-                    alt="alt"
-                  />
-                );
-              })}
-            </AntdImage.PreviewGroup>
-          </P.PostImageWrapper>
+          {images.length > 0 ? (
+            <P.PostImageWrapper>
+              <AntdImage.PreviewGroup
+                preview={{
+                  onChange: (current, prev) =>
+                    console.log(
+                      `current index: ${current}, prev index: ${prev}`
+                    ),
+                }}
+              >
+                {images?.map((img: any) => {
+                  return (
+                    <AntdImage
+                      key={img.src}
+                      src={`http://localhost:4000/${img.src}`}
+                      width={80}
+                      height={80}
+                      alt="alt"
+                    />
+                  );
+                })}
+              </AntdImage.PreviewGroup>
+            </P.PostImageWrapper>
+          ) : (
+            ''
+          )}
 
           {/* comment 작업 */}
           <P.CommentWrapper>
