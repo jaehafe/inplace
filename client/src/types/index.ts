@@ -9,7 +9,7 @@ export interface ISignup {
   email: string;
   password: string;
   username: string;
-  imagePath: string;
+  imageName: string;
 }
 
 export interface ILogin {

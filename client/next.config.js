@@ -5,7 +5,7 @@ const nextConfig = {
     styledComponents: true,
   },
   images: {
-    domains: ['www.gravatar.com', 'localhost', 'http://localhost:4000'],
+    domains: ['www.gravatar.com', 'localhost'],
   },
 };
 

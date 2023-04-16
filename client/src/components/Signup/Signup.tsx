@@ -54,7 +54,9 @@ function Signup() {
   const [imageUrl, setImageUrl] = useState<string>();
   const [imageInfo, setImageInfo] = useState<any>(null);
   const [imagePath, setImagePath] = useState<string>('');
-  console.log('imagePath>>>', imagePath);
+  const [imageName, setImageName] = useState('');
+
+  console.log('imageName>>>>>>>>', imageName);
 
   const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
@@ -77,7 +79,7 @@ function Signup() {
       uploadImageAPI<any>(imageFormData).then((res) => {
         console.log('imageData>>>>>>', res.data);
 
-        return setImagePath(res.data);
+        return setImageName(res.data);
       });
       setImageInfo(info.file.originFileObj);
       getBase64(info.file.originFileObj as RcFile, (url) => {
@@ -104,7 +106,7 @@ function Signup() {
     e.preventDefault();
     console.log('imageInfo', imageInfo);
 
-    mutate({ email, password, username, imagePath } as ISignup);
+    mutate({ email, password, username, imageName } as ISignup);
   };
 
   return (

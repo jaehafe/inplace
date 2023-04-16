@@ -97,24 +97,23 @@ function Post({ post }: any) {
     }
   };
 
+  console.log('images>>>', images);
+  console.log('images[0].src>>>', images[0].src);
+
   return (
     <>
       <P.Wrapper>
         <P.HeaderWrapper>
           <P.HeaderLeft>
-            <img
-              src={'http://localhost:4000/html_1681583490887.png'}
-              alt="123"
-            />
-            {/* <Image
+            <Image
               // src="https://www.gravatar.com/avatar?d=mp&f=y"
               // src="http://localhost:4000/data_1681583374875.png"
-              src={'http://localhost:4000/css_1681580443270.png'}
+              src={`http://localhost:4000/${images[0].src}`}
               width={46}
               height={46}
               style={{ borderRadius: '50px' }}
               alt="avatar"
-            /> */}
+            />
             <P.PostInfo>
               <h4>{username}</h4>
               <span>{formattedDate(updatedAt)}</span> · <span>조회 234</span>
@@ -216,19 +215,19 @@ function Post({ post }: any) {
         <Button type="text" shape="round">
           공유
         </Button>
-        <Divider />
+        <Divider style={{ margin: '10px 0' }} />
         <Button type="text" shape="round">
           스크랩
         </Button>
-        <Divider />
+        <Divider style={{ margin: '10px 0' }} />
         <Button type="text" shape="round">
           팔로우
         </Button>
-        <Divider />
+        <Divider style={{ margin: '10px 0' }} />
         <Button type="text" shape="round">
           수정
         </Button>
-        <Divider />
+        <Divider style={{ margin: '10px 0' }} />
         <Button type="text" shape="round">
           삭제
         </Button>
