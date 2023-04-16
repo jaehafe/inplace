@@ -105,7 +105,7 @@ const getDetailPost = async (req: Request, res: Response) => {
   try {
     const post = await Post.findOneOrFail({
       where: { identifier },
-      relations: ['votes', 'comments', 'comments.user.image', 'images'],
+      relations: ['votes', 'comments', 'comments.user.image', 'images', 'user.image'],
     });
 
     return res.json(post);

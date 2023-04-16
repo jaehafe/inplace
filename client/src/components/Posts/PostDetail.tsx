@@ -5,14 +5,14 @@ import {
   MoreOutlined,
 } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
-import { Button, message, RadioChangeEvent } from 'antd';
+import { Button, message, RadioChangeEvent, Image as AntdImage } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { postVoteAPI } from '../../apis/vote';
 import { baseURL } from '../../configs/axios';
 import { useUserStore } from '../../store/userStore';
-import { formattedDate } from '../../utils';
+import { defaultImg, formattedDate } from '../../utils';
 import PostComments from './PostComments';
 import P from './Posts.styles';
 
@@ -35,12 +35,10 @@ function PostDetail({ detailPost }: any) {
   } = detailPost;
   const queryClient = useQueryClient();
   const router = useRouter();
-  console.log('detailPost>>>', detailPost);
-  console.log('votes>>>', votes);
   const [open, setOpen] = useState(false);
 
   const userInfo = useUserStore((state) => state.userInfo);
-  console.log('userInfo>>>', userInfo);
+  console.log('user>>>', user);
 
   const onSuccessVote = () => {
     message.success('투표 완료');
@@ -102,7 +100,11 @@ function PostDetail({ detailPost }: any) {
       <P.HeaderWrapper>
         <P.HeaderLeft>
           <Image
-            src="https://www.gravatar.com/avatar?d=mp&f=y"
+            src={
+              user?.image
+                ? `http://localhost:4000/${user.image.src}`
+                : defaultImg
+            }
             width={46}
             height={46}
             style={{ borderRadius: '50px' }}
@@ -169,25 +171,32 @@ function PostDetail({ detailPost }: any) {
           >
             로그인 후 투표를 해보세요
           </P.LoginRouterButtonForVote>
-          // <P.VoteSelectWrapper>
-          //   <P.VoteSelect
-          //     size="large"
-          //     optionType="button"
-          //     buttonStyle="solid"
-          //     // onChange={(e) => handleVoteChange(e)}
-          //     // disabled={true}
-          //   >
-          //     <P.VoteButton value="agree">
-          //       <LikeTwoTone twoToneColor="#2515d5" />
-          //     </P.VoteButton>
-          //     <P.VoteButton value="neutral">
-          //       <FrownTwoTone twoToneColor="#eb2f96" />
-          //     </P.VoteButton>
-          //     <P.VoteButton value="disagree">
-          //       <DislikeTwoTone twoToneColor="#52c41a" />
-          //     </P.VoteButton>
-          //   </P.VoteSelect>
-          // </P.VoteSelectWrapper>
+        )}
+
+        {/* 게시물 사진 */}
+        {images.length > 0 ? (
+          <P.PostImageWrapper>
+            <AntdImage.PreviewGroup
+              preview={{
+                onChange: (current, prev) =>
+                  console.log(`current index: ${current}, prev index: ${prev}`),
+              }}
+            >
+              {images?.map((img: any) => {
+                return (
+                  <AntdImage
+                    key={img.src}
+                    src={`http://localhost:4000/${img.src}`}
+                    width={80}
+                    height={80}
+                    alt="alt"
+                  />
+                );
+              })}
+            </AntdImage.PreviewGroup>
+          </P.PostImageWrapper>
+        ) : (
+          ''
         )}
 
         {/* 게시물 댓글 컴포넌트 */}

@@ -110,14 +110,6 @@ function Post({ post }: any) {
     }
   };
 
-  const contentStyle: React.CSSProperties = {
-    // height: '160px',
-    color: '#fff',
-    // lineHeight: '160px',
-    textAlign: 'center',
-    background: '#fff',
-  };
-
   return (
     <>
       <P.Wrapper>
@@ -125,7 +117,7 @@ function Post({ post }: any) {
           <P.HeaderLeft>
             <Image
               src={
-                user.image.src
+                user.image
                   ? `http://localhost:4000/${user.image.src}`
                   : defaultImg
               }

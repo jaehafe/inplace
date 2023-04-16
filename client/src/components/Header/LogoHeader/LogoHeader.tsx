@@ -9,6 +9,7 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import B from '../../Common/BackButton';
 import { logoutAPI } from '../../../apis/user';
 import { useUserStore } from '../../../store/userStore';
+import { defaultImg } from '../../../utils';
 
 interface IProps {
   headerIcons?: boolean;
@@ -87,7 +88,11 @@ function LogoHeader({ headerIcons }: IProps) {
             <L.DrawerBodyWrapper>
               <L.ProfileWrapper>
                 <Image
-                  src="https://www.gravatar.com/avatar?d=mp&f=y"
+                  src={
+                    userInfo.image
+                      ? `http://localhost:4000/${userInfo.image.src}`
+                      : defaultImg
+                  }
                   width={100}
                   height={100}
                   style={{ borderRadius: '50px' }}
