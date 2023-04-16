@@ -4,6 +4,7 @@ import { userMiddleware } from '../middlewares/userMiddleware';
 import Comment from '../entities/Comment';
 import Post from '../entities/Post';
 import { AppDataSource } from '../data-source';
+import CommentVote from '../entities/CommentVote';
 
 const router = Router();
 
@@ -80,16 +81,40 @@ const updateComment = async (req: Request, res: Response) => {
   }
 };
 
+// const deleteComment = async (req: Request, res: Response) => {
+//   const { identifier } = req.params;
+//   const user = res.locals.user;
+
+//   try {
+//     const comment = await Comment.findOneOrFail({ where: { identifier }, relations: ['post'] });
+
+//     if (comment.username !== user.username) {
+//       return res.status(401).json({ error: 'Unauthorized' });
+//     }
+
+//     await Comment.delete({ identifier });
+//     return res.json({ message: '댓글 삭제 완료' });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(404).json({ error: 'Comment not found' });
+//   }
+// };
+
+// 좋아요가 표시된 댓글은 먼저 해당 댓글의 좋아요 기록을 지우고 해당 댓글을 삭제
 const deleteComment = async (req: Request, res: Response) => {
   const { identifier } = req.params;
   const user = res.locals.user;
 
   try {
-    const comment = await Comment.findOneOrFail({ where: { identifier }, relations: ['post'] });
+    const comment = await Comment.findOneOrFail({ where: { identifier }, relations: ['post', 'commentVotes'] });
 
     if (comment.username !== user.username) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
+
+    // 댓글과 관련된 comment_votes 레코드를 먼저 삭제
+    const promises = comment.commentVotes.map((commentVote) => CommentVote.delete(commentVote.id));
+    await Promise.all(promises);
 
     await Comment.delete({ identifier });
     return res.json({ message: '댓글 삭제 완료' });
