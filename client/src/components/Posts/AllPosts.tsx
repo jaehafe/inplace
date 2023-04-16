@@ -26,27 +26,34 @@ function AllPosts() {
   } = useInfiniteQuery(
     [queryKey],
     async ({ pageParam = 2 }) => {
-      const res = await axiosInstance.get(`/posts?page=${pageParam}`);
-      return res.data;
+      const { data } = await axiosInstance.get(`/posts?page=${pageParam}`);
+      return {
+        result: data,
+        nextPage: pageParam + 1,
+        isLast: data.isLast,
+      };
     },
+    // {
+    //   getNextPageParam: (lastPage, allPages) => {
+    //     console.log('lastPage>>>', lastPage);
+    //     console.log('allPages>>>', allPages);
+
+    //     if (!lastPage) {
+    //       return lastPage + 1;
+    //     } else {
+    //       return undefined;
+    //     }
+    //   },
+    // }
     {
       getNextPageParam: (lastPage, allPages) => {
-        console.log('lastPage>>>', lastPage);
-        console.log('allPages>>>', allPages);
-
-        if (!lastPage) {
-          return allPages.length + 1;
+        if (!lastPage.isLast) {
+          return lastPage.nextPage;
         } else {
           return undefined;
         }
       },
     }
-    // {
-    //   getNextPageParam: (lastPage, allPages) => {
-    //     const nextPage = allPages.length + 1;
-    //     return nextPage;
-    //   },
-    // }
   );
   console.log('무한 스크롤 data>>>', infiniteData);
 
@@ -64,14 +71,14 @@ function AllPosts() {
 
   return (
     <div>
-      {infiniteData?.pages.map((page) => {
-        return page.map((post: any, pageIndex: number) => {
-          return <Posts post={post} key={post.identifier} />;
+      {/* {infiniteData?.pages.map((page) => {
+        return page.result.map((post: any, pageIndex: number) => {
+          return <Posts post={post} key={post.identifier} ref={ref} />;
         });
-      })}
+      })} */}
 
-      {/* {infiniteData?.pages.map((page, pageIndex) => {
-        return page.map((post: any, postIndex: number) => {
+      {infiniteData?.pages.map((page, pageIndex) => {
+        return page.result.map((post: any, postIndex: number) => {
           const isLastPost =
             infiniteData.pages.length === pageIndex + 1 &&
             page.length === postIndex + 1;
@@ -81,7 +88,7 @@ function AllPosts() {
             </div>
           );
         });
-      })} */}
+      })}
     </div>
   );
 }
