@@ -170,7 +170,7 @@ function PostDetail({ detailPost }: any) {
         )}
 
         {/* 게시물 사진 */}
-        {images.length > 0 ? (
+        {images?.length > 0 ? (
           <P.PostImageWrapper>
             <AntdImage.PreviewGroup
               preview={{
