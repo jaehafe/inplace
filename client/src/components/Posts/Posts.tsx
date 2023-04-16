@@ -53,12 +53,11 @@ function Post({ post }: any) {
     votes,
     user,
   } = post;
-  // console.log('post>>>>>>>', post);
 
   const router = useRouter();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
-  const userInfo = useUserStore((state) => state.userInfo);
+  const currentLoginUser = useUserStore((state) => state.userInfo);
 
   const onSuccessVote = () => {
     message.success('투표 완료');
@@ -85,7 +84,7 @@ function Post({ post }: any) {
   };
 
   const handleVoteChange = (e: RadioChangeEvent, identifier: string) => {
-    if (!userInfo) {
+    if (!currentLoginUser) {
       message.error('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
       router.push('/login');
       return;
@@ -171,14 +170,14 @@ function Post({ post }: any) {
               </P.StaticsButton>
             </P.StaticsLeft>
             {/* O X 투표 기능 */}
-            {userInfo && (
+            {currentLoginUser && (
               <P.StaticsRight>
                 <P.VoteSelect
                   size="middle"
                   optionType="button"
                   buttonStyle="solid"
                   onChange={(e) => handleVoteChange(e, identifier)}
-                  defaultValue={checkWhetherVoted(userInfo?.username)}
+                  defaultValue={checkWhetherVoted(currentLoginUser?.username)}
                 >
                   <P.VoteButtonSmall value="agree">
                     <LikeTwoTone twoToneColor="#2515d5" />
@@ -265,7 +264,11 @@ function Post({ post }: any) {
                 <Link href={`/post/${identifier}`} key={commentId}>
                   <P.Comment>
                     <Image
-                      src="https://www.gravatar.com/avatar?d=mp&f=y"
+                      src={
+                        c.user
+                          ? `http://localhost:4000/${c.user.image.src}`
+                          : defaultImg
+                      }
                       width={20}
                       height={20}
                       style={{ borderRadius: '50px' }}
