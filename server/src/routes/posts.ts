@@ -88,47 +88,23 @@ const createPost = async (req: Request, res: Response) => {
 };
 
 const getAllPosts = async (req: Request, res: Response) => {
+  console.log('req.query>>>', req.query.page);
+
+  const currentPage: number = (req.query.page || 0) as number;
+  const perPage: number = (req.query.count || 3) as number;
+  console.log('currentPage>>>', currentPage);
+  // const currentPage: number = parseInt(req.query.page as string) || 0;
+  // const perPage: number = parseInt(req.query.count as string) || 5;
+
   try {
     const allPosts = await Post.find({
       order: { createdAt: 'DESC' },
       // relations: ['votes', 'comments'],
       relations: ['votes', 'comments', 'images', 'user.image'],
       // 'comments.user.image',
+      skip: currentPage * perPage,
+      take: perPage,
     });
-
-    // const allPosts = await Post.createQueryBuilder('post')
-    //   .leftJoinAndSelect('post.votes', 'votes')
-    //   .leftJoinAndSelect('post.images', 'images')
-    //   .leftJoinAndSelect('post.user', 'user')
-    //   .leftJoinAndSelect('user.image', 'userImage')
-    //   .leftJoin('post.comments', 'comments')
-    //   .addSelect((subQuery) => {
-    //     return subQuery
-    //       .select('*')
-    //       .from('comments', 'sub_comments')
-    //       .where('post.id = sub_comments.postId')
-    //       .orderBy('sub_comments.createdAt', 'DESC')
-    //       .limit(5);
-    //   }, 'comments')
-    //   .orderBy('post.createdAt', 'DESC')
-    //   .getMany();
-
-    // const allPosts = await Post.createQueryBuilder('post')
-    //   .leftJoinAndSelect('post.votes', 'votes')
-    //   .leftJoinAndSelect('post.images', 'images')
-    //   .leftJoinAndSelect('post.user', 'user')
-    //   .leftJoinAndSelect('user.image', 'userImage')
-    //   .leftJoinAndSelect('post.comments', 'comments')
-    //   .orderBy('post.createdAt', 'DESC')
-    //   .addOrderBy('comments.createdAt', 'DESC')
-    //   .getMany();
-
-    // // 각 게시물에 대해 댓글을 최대 5개로 제한합니다.
-    // allPosts.forEach((post) => {
-    //   if (post.comments.length > 5) {
-    //     post.comments.length = 5;
-    //   }
-    // });
 
     return res.json(allPosts);
   } catch (error) {
@@ -188,3 +164,39 @@ export default router;
 //     return res.status(500).json({ error: 'something went wrong' });
 //   }
 // };
+
+//////////////////////
+
+// const allPosts = await Post.createQueryBuilder('post')
+//   .leftJoinAndSelect('post.votes', 'votes')
+//   .leftJoinAndSelect('post.images', 'images')
+//   .leftJoinAndSelect('post.user', 'user')
+//   .leftJoinAndSelect('user.image', 'userImage')
+//   .leftJoin('post.comments', 'comments')
+//   .addSelect((subQuery) => {
+//     return subQuery
+//       .select('*')
+//       .from('comments', 'sub_comments')
+//       .where('post.id = sub_comments.postId')
+//       .orderBy('sub_comments.createdAt', 'DESC')
+//       .limit(5);
+//   }, 'comments')
+//   .orderBy('post.createdAt', 'DESC')
+//   .getMany();
+
+// const allPosts = await Post.createQueryBuilder('post')
+//   .leftJoinAndSelect('post.votes', 'votes')
+//   .leftJoinAndSelect('post.images', 'images')
+//   .leftJoinAndSelect('post.user', 'user')
+//   .leftJoinAndSelect('user.image', 'userImage')
+//   .leftJoinAndSelect('post.comments', 'comments')
+//   .orderBy('post.createdAt', 'DESC')
+//   .addOrderBy('comments.createdAt', 'DESC')
+//   .getMany();
+
+// // 각 게시물에 대해 댓글을 최대 5개로 제한합니다.
+// allPosts.forEach((post) => {
+//   if (post.comments.length > 5) {
+//     post.comments.length = 5;
+//   }
+// });

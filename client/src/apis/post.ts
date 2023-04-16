@@ -5,14 +5,13 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { message } from 'antd';
-import { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { axiosInstance, baseURL } from '../configs/axios';
 
 export const createPostAPI = (
   options?: UseMutationOptions<AxiosResponse<string>, AxiosError, any>
 ): any => {
-  const router = useRouter();
   const queryKey = `${baseURL}/posts`;
   const queryFn = (data: any) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
@@ -36,7 +35,6 @@ export const createPostAPI = (
 export const uploadPostImagesAPI = (
   options?: UseMutationOptions<AxiosResponse<string>, AxiosError, any>
 ): any => {
-  const router = useRouter();
   const queryKey = `${baseURL}/posts/images`;
   const queryFn = (data: any) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
@@ -62,8 +60,6 @@ export const getDetailPostAPI = (
   identifier?: string,
   options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
-  const router = useRouter();
-
   const queryKey = `${baseURL}/posts/${identifier}`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
 
