@@ -38,7 +38,6 @@ function PostDetail({ detailPost }: any) {
   const [open, setOpen] = useState(false);
 
   const currentLoginUser = useUserStore((state) => state.userInfo);
-  console.log('user>>>', user);
 
   const onSuccessVote = () => {
     message.success('투표 완료');
@@ -49,12 +48,9 @@ function PostDetail({ detailPost }: any) {
   });
 
   const checkWhetherVoted = (loginUsername: string) => {
-    console.log('loginUsername>>>', loginUsername);
-
     const alreadyVote = votes.find(
       (vote: any) => vote.username === loginUsername
     );
-    console.log('alreadyVote>>>', alreadyVote);
 
     if (alreadyVote) {
       if (alreadyVote.agree) {

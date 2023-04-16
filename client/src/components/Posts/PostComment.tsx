@@ -2,11 +2,21 @@ import { HeartOutlined, HeartTwoTone, MoreOutlined } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Divider, Input, message, Popover } from 'antd';
 import Image from 'next/image';
-import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, {
+  FormEvent,
+  MouseEvent,
+  MouseEventHandler,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { deleteCommentAPI, updateCommentAPI } from '../../apis/comment';
+import { voteCommentAPI } from '../../apis/vote';
 import { baseURL } from '../../configs/axios';
 import { useUserStore } from '../../store/userStore';
-import { formattedDate } from '../../utils';
+import { defaultImg, formattedDate } from '../../utils';
 import P from './Posts.styles';
 
 function PostComment({ data }: any) {
@@ -18,9 +28,11 @@ function PostComment({ data }: any) {
     voteScore,
     username,
     identifier: commentId,
+    commentVotes,
+    user,
   } = data;
-  console.log('PostComment>>>', data);
 
+  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState(body);
   const editCommentRef = useRef<HTMLInputElement>(null);
@@ -39,9 +51,18 @@ function PostComment({ data }: any) {
     [editedComment]
   );
 
-  // 댓글 수정
+  const onSuccessVoteComment = () => {
+    message.success('댓글 좋아요 완료');
+    queryClient.invalidateQueries([`${baseURL}/comments`]);
+    // queryClient.invalidateQueries([`${baseURL}/commentVotes/${commentId}`]);
+  };
+
+  const { mutate: voteCommentMutate } = voteCommentAPI(commentId, {
+    onSuccess: onSuccessVoteComment,
+  });
+
+  // 댓글 수정 api mutation
   const onSuccessEditComment = () => {
-    // setEditedComment('');
     setIsEditing(false);
 
     // queryClient.invalidateQueries([`${baseURL}/comments/${postId}`]);
@@ -52,9 +73,8 @@ function PostComment({ data }: any) {
     onSuccess: onSuccessEditComment,
   });
 
-  // 댓글 삭제
-  const onSuccessDeleteComment = (data: any) => {
-    console.log('data>>>>', data);
+  // 댓글 삭제 api mutation
+  const onSuccessDeleteComment = () => {
     setIsEditing(false);
     queryClient.invalidateQueries([`${baseURL}/comments`]);
     message.success('댓글 삭제 완료');
@@ -63,32 +83,29 @@ function PostComment({ data }: any) {
     onSuccess: onSuccessDeleteComment,
   });
 
+  // 댓글 수정
   const handleEditComment = (commentId: string) => {
-    console.log('수정');
-    console.log('identifier', commentId);
     setIsEditing(true);
     setEditedComment(editedComment);
-    console.log('editedComment>>', editedComment);
   };
   const handleDeleteComment = (commentId: string) => {
-    console.log('삭제');
-    console.log('identifier', commentId);
-
     deleteCommentMutate(commentId);
   };
 
+  // 수정한 댓글 submit
   const handleEditCommentSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log('editedComment>>!!!!!!!', editedComment);
+
     if (editedComment.trim() === '') {
-      return message.error('최소 5글자 이상 입력해 주세요');
+      message.error('최소 5글자 이상 입력해 주세요');
+      return;
     }
 
     updateCommentMutate({ body: editedComment });
   };
 
   const checkUser = () => {
-    if (username !== currentLoginUser.username) {
+    if (username !== currentLoginUser?.username) {
       return (
         <Button type="text" onClick={() => handleEditComment(commentId)}>
           신고
@@ -108,11 +125,34 @@ function PostComment({ data }: any) {
     }
   };
 
+  const checkWhetherVoted = (currentLoginUser: string) => {
+    const alreadyVote = commentVotes.find(
+      (vote: any) => vote.username === currentLoginUser
+    );
+
+    if (alreadyVote) {
+      return <HeartTwoTone twoToneColor="#4e062d" />;
+    } else {
+      return <HeartOutlined className="heart-icon" />;
+    }
+  };
+
+  const handleCommentVote = (value: number, commentId: string) => {
+    voteCommentMutate({ value });
+    if (!currentLoginUser) {
+      message.error('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
+      router.push('/login');
+      return;
+    }
+  };
+
   return (
     <P.PostComment key={commentId}>
       <P.CommentBodyWrapper>
         <Image
-          src="https://www.gravatar.com/avatar?d=mp&f=y"
+          src={
+            user?.image ? `http://localhost:4000/${user.image.src}` : defaultImg
+          }
           width={36}
           height={36}
           style={{ borderRadius: '50px' }}
@@ -172,9 +212,10 @@ function PostComment({ data }: any) {
       </P.CommentBodyWrapper>
       <P.LikeWrapper>
         <span>좋아요 {voteScore}</span>
-        <button>
-          <HeartOutlined className="heart-icon" />
-          <HeartTwoTone twoToneColor="#4e062d" />
+        <button onClick={() => handleCommentVote(1, commentId)}>
+          {/* <HeartOutlined className="heart-icon" />
+          <HeartTwoTone twoToneColor="#4e062d" /> */}
+          {checkWhetherVoted(currentLoginUser?.username)}
         </button>
       </P.LikeWrapper>
       <Divider style={{ margin: '14px 0' }} />

@@ -65,7 +65,7 @@ export default function App({ Component, pageProps }: AppProps) {
     if (cookie?.inplace) {
       const fetchUserInfo = async () => {
         const { data } = await axiosInstance.get(`${baseURL}/auth/me`);
-        console.log('data>>>', data);
+        // console.log('data>>>', data);
         setUserInfo(data);
       };
 

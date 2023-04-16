@@ -23,3 +23,21 @@ export const postVoteAPI = (
 
   return useMutation([queryKey], queryFn, { onError, ...options });
 };
+
+export const voteCommentAPI = (
+  commentId?: string,
+  options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
+) => {
+  const queryKey = `${baseURL}/commentVotes/${commentId}`;
+  const queryFn = (data: any) =>
+    axiosInstance.post(queryKey, data).then((res) => res.data);
+
+  // const onSuccess = () => {
+  //   message.success('댓글 삭제 완료');
+  // };
+
+  const onError = () => {
+    message.error('댓글 좋아요 실패');
+  };
+  return useMutation([queryKey], queryFn, { onError, ...options });
+};
