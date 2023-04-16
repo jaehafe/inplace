@@ -8,7 +8,7 @@ import P from './Posts.styles';
 import { useQueryClient } from '@tanstack/react-query';
 import PostComment from './PostComment';
 
-function PostComments({ identifier, userInfo }: any) {
+function PostComments({ identifier, currentLoginUser }: any) {
   const router = useRouter();
   const [newComment, setNewComment] = useState('');
   const queryClient = useQueryClient();
@@ -45,7 +45,7 @@ function PostComments({ identifier, userInfo }: any) {
         <span>{commentData?.length}</span>
       </P.CommentHeader>
 
-      {userInfo ? (
+      {currentLoginUser ? (
         <Collapse>
           <Collapse.Panel header="댓글을 추가해 주세요!" key="1">
             <form onSubmit={handleSubmit}>

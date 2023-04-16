@@ -37,7 +37,7 @@ function PostDetail({ detailPost }: any) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  const userInfo = useUserStore((state) => state.userInfo);
+  const currentLoginUser = useUserStore((state) => state.userInfo);
   console.log('user>>>', user);
 
   const onSuccessVote = () => {
@@ -69,7 +69,7 @@ function PostDetail({ detailPost }: any) {
   };
 
   const handleVoteChange = (e: RadioChangeEvent) => {
-    if (!userInfo) {
+    if (!currentLoginUser) {
       message.error('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
       router.push('/login');
       return;
@@ -142,14 +142,14 @@ function PostDetail({ detailPost }: any) {
         </P.VoteResultWrapper>
 
         {/* OX 투표기능 */}
-        {userInfo ? (
+        {currentLoginUser ? (
           <P.VoteSelectWrapper>
             <P.VoteSelect
               size="large"
               optionType="button"
               buttonStyle="solid"
               onChange={(e) => handleVoteChange(e)}
-              defaultValue={checkWhetherVoted(userInfo?.username)}
+              defaultValue={checkWhetherVoted(currentLoginUser?.username)}
               // defaultValue="disagree"
             >
               <P.VoteButton value="agree">
@@ -200,7 +200,10 @@ function PostDetail({ detailPost }: any) {
         )}
 
         {/* 게시물 댓글 컴포넌트 */}
-        <PostComments identifier={identifier} userInfo={userInfo} />
+        <PostComments
+          identifier={identifier}
+          currentLoginUser={currentLoginUser}
+        />
       </P.BodyWrapper>
     </P.Wrapper>
   );

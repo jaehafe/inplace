@@ -5,6 +5,7 @@ import Image from 'next/image';
 import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { deleteCommentAPI, updateCommentAPI } from '../../apis/comment';
 import { baseURL } from '../../configs/axios';
+import { useUserStore } from '../../store/userStore';
 import { formattedDate } from '../../utils';
 import P from './Posts.styles';
 
@@ -18,10 +19,14 @@ function PostComment({ data }: any) {
     username,
     identifier: commentId,
   } = data;
+  console.log('PostComment>>>', data);
+
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState(body);
   const editCommentRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
+
+  const currentLoginUser = useUserStore((state) => state.userInfo);
 
   useEffect(() => {
     if (isEditing && editCommentRef.current) {
@@ -82,6 +87,27 @@ function PostComment({ data }: any) {
     updateCommentMutate({ body: editedComment });
   };
 
+  const checkUser = () => {
+    if (username !== currentLoginUser.username) {
+      return (
+        <Button type="text" onClick={() => handleEditComment(commentId)}>
+          신고
+        </Button>
+      );
+    } else if (username === currentLoginUser.username) {
+      return (
+        <>
+          <Button type="text" onClick={() => handleEditComment(commentId)}>
+            수정
+          </Button>
+          <Button type="text" onClick={() => handleDeleteComment(commentId)}>
+            삭제
+          </Button>
+        </>
+      );
+    }
+  };
+
   return (
     <P.PostComment key={commentId}>
       <P.CommentBodyWrapper>
@@ -102,22 +128,7 @@ function PostComment({ data }: any) {
             <Popover
               placement="rightTop"
               trigger={['click']}
-              content={
-                <div>
-                  <Button
-                    type="text"
-                    onClick={() => handleEditComment(commentId)}
-                  >
-                    수정
-                  </Button>
-                  <Button
-                    type="text"
-                    onClick={() => handleDeleteComment(commentId)}
-                  >
-                    삭제
-                  </Button>
-                </div>
-              }
+              content={checkUser()}
             >
               <Button type="text" shape="circle">
                 <MoreOutlined
