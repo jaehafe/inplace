@@ -54,11 +54,9 @@ const upload = multer({
 
 // 회원가입
 const signup = async (req: Request, res: Response) => {
-  const { email, username, password, imagePath } = req.body;
-  const { files }: any = req;
-  console.log('files>>>', files);
+  const { email, username, password, imageName } = req.body;
 
-  console.log(email, username, password, imagePath);
+  console.log(email, username, password, imageName);
 
   try {
     let errors: any = {};
@@ -83,7 +81,7 @@ const signup = async (req: Request, res: Response) => {
     // user.imagePath = imagePath;
 
     const image = new Image();
-    image.src = imagePath; // 파일 경로를 이미지의 src로 설정합니다.
+    image.src = imageName; // 파일 경로를 이미지의 src로 설정합니다.
     await image.save();
 
     user.image = image; // User 엔티티에 이미지를 연결합니다.
@@ -117,7 +115,9 @@ const login = async (req: Request, res: Response) => {
     }
 
     // db에서 email로 유저 찾기
-    const user = await User.findOneBy({ email });
+    const user = await User.findOneByOrFail({ email });
+    // const user = await User.findOne({ where: { email }, relations: ['images', 'user.image'] });
+
     console.log('user>>>>>>>>', user);
 
     // 해당하는 email의 user가 없으면 에러 보내기
@@ -169,7 +169,9 @@ const logout = async (_: Request, res: Response) => {
 
 router.post('/images', upload.single('image'), (req: RequestWithFile, res: Response) => {
   console.log('req.file.path>>> ', req.file.path);
-  res.json(req.file.path);
+  console.log('req.file>>>>', req.file);
+
+  res.json(req.file.filename);
 });
 
 //

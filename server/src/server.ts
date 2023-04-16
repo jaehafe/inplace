@@ -17,11 +17,12 @@ const app = express();
 const origin = process.env.ORIGIN;
 
 app.use(cors({ origin, credentials: true }));
-app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(cookieParser());
+// app.use('/', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static('uploads'));
 
 dotenv.config();
 

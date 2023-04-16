@@ -16,7 +16,8 @@ export const userMiddleware = async (req: Request, res: Response, next: NextFunc
     console.log('userInfo // usermiddleware>>', userInfo);
 
     // 토큰에서 나온 유저 이메일을 db에서 가져오기
-    const user = await User.findOneBy({ email: userInfo.email });
+    // const user = await User.findOneBy({ email: userInfo.email });
+    const user = await User.findOne({ where: { email: userInfo.email }, relations: ['image'] });
     console.log('토큰에서 나온 유저 이메일을 db에서 가져오기>>>', user);
 
     // 유저 정보를 res.locals에 저장
