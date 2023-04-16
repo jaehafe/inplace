@@ -89,7 +89,7 @@ function LogoHeader({ headerIcons }: IProps) {
               <L.ProfileWrapper>
                 <Image
                   src={
-                    userInfo.image
+                    userInfo
                       ? `http://localhost:4000/${userInfo.image.src}`
                       : defaultImg
                   }
