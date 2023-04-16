@@ -92,8 +92,43 @@ const getAllPosts = async (req: Request, res: Response) => {
     const allPosts = await Post.find({
       order: { createdAt: 'DESC' },
       // relations: ['votes', 'comments'],
-      relations: ['votes', 'comments', 'comments.user.image', 'images', 'user.image'],
+      relations: ['votes', 'comments', 'images', 'user.image'],
+      // 'comments.user.image',
     });
+
+    // const allPosts = await Post.createQueryBuilder('post')
+    //   .leftJoinAndSelect('post.votes', 'votes')
+    //   .leftJoinAndSelect('post.images', 'images')
+    //   .leftJoinAndSelect('post.user', 'user')
+    //   .leftJoinAndSelect('user.image', 'userImage')
+    //   .leftJoin('post.comments', 'comments')
+    //   .addSelect((subQuery) => {
+    //     return subQuery
+    //       .select('*')
+    //       .from('comments', 'sub_comments')
+    //       .where('post.id = sub_comments.postId')
+    //       .orderBy('sub_comments.createdAt', 'DESC')
+    //       .limit(5);
+    //   }, 'comments')
+    //   .orderBy('post.createdAt', 'DESC')
+    //   .getMany();
+
+    // const allPosts = await Post.createQueryBuilder('post')
+    //   .leftJoinAndSelect('post.votes', 'votes')
+    //   .leftJoinAndSelect('post.images', 'images')
+    //   .leftJoinAndSelect('post.user', 'user')
+    //   .leftJoinAndSelect('user.image', 'userImage')
+    //   .leftJoinAndSelect('post.comments', 'comments')
+    //   .orderBy('post.createdAt', 'DESC')
+    //   .addOrderBy('comments.createdAt', 'DESC')
+    //   .getMany();
+
+    // // 각 게시물에 대해 댓글을 최대 5개로 제한합니다.
+    // allPosts.forEach((post) => {
+    //   if (post.comments.length > 5) {
+    //     post.comments.length = 5;
+    //   }
+    // });
 
     return res.json(allPosts);
   } catch (error) {
@@ -109,7 +144,8 @@ const getDetailPost = async (req: Request, res: Response) => {
   try {
     const post = await Post.findOneOrFail({
       where: { identifier },
-      relations: ['votes', 'images', 'user.image'],
+      relations: ['votes', 'images'],
+      // , 'user.image'
       // 'comments.user.image',
       // 'comments',
       // 'images',

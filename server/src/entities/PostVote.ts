@@ -5,9 +5,6 @@ import User from './User';
 
 @Entity('post_votes')
 export default class PostVote extends BaseEntity {
-  // @Column()
-  // value: number;
-
   @Column({ default: 0 })
   agree: number;
 
