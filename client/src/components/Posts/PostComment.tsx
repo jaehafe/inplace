@@ -85,6 +85,7 @@ function PostComment({ data }: any) {
     setIsEditing(true);
     setEditedComment(editedComment);
   };
+  // 댓글 삭제
   const handleDeleteComment = (commentId: string) => {
     deleteCommentMutate(commentId);
   };

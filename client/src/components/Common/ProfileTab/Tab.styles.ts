@@ -60,6 +60,40 @@ const VoteWrapper = styled(StaticWrapper)``;
 const CommentWrapper = styled(StaticWrapper)``;
 const ViewWrapper = styled(StaticWrapper)``;
 
+const CommentBodyWrapper = styled(BodyWrapper)`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const PostWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: ${({ theme }) => theme.positiveLight};
+  padding: 6px 10px;
+  border-radius: 14px;
+`;
+
+const MyCommentWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: ${({ theme }) => theme.negativeLight};
+  padding: 19px 10px;
+  border-radius: 14px;
+`;
+const MyCommentBodyWrapper = styled.div`
+  width: 100%;
+`;
+const MyCommentHeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const T = {
   Wrapper,
   BodyWrapper,
@@ -68,6 +102,11 @@ const T = {
   VoteWrapper,
   CommentWrapper,
   ViewWrapper,
+  CommentBodyWrapper,
+  PostWrapper,
+  MyCommentWrapper,
+  MyCommentHeaderWrapper,
+  MyCommentBodyWrapper,
 };
 
 export default T;

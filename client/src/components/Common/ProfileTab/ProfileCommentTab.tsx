@@ -1,12 +1,14 @@
 import React from 'react';
+import CommentTab from './CommentTab';
 import ProfileTab from './ProfileTab';
 import T from './Tab.styles';
 
-function ProfileCommentTab() {
+function ProfileCommentTab({ identifier }: { identifier: string }) {
+  console.log('identifier>>>', identifier);
+
   return (
     <T.Wrapper>
-      123
-      {/* <ProfileTab /> */}
+      <CommentTab />
     </T.Wrapper>
   );
 }
