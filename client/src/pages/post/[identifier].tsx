@@ -8,8 +8,6 @@ import PostDetail from '../../components/Posts/PostDetail';
 import { axiosInstance } from '../../configs/axios';
 
 function DetailPostPage({ identifier }: { identifier: string }) {
-  console.log('identifier>>', identifier);
-
   const { data: detailPost, isLoading } = getDetailPostAPI(identifier);
 
   if (isLoading) {
@@ -19,7 +17,11 @@ function DetailPostPage({ identifier }: { identifier: string }) {
   return (
     <div>
       <PostHeader />
-      <PostDetail detailPost={detailPost} />
+      {detailPost ? (
+        <PostDetail detailPost={detailPost} />
+      ) : (
+        <h1>해당 게시물이 존재하지 않습니다.</h1>
+      )}
     </div>
   );
 }

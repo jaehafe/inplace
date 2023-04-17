@@ -57,10 +57,10 @@ export const getAllPostsAPI = (
 };
 
 export const getOwnPostsAPI = (
-  username?: string,
+  identifier?: string,
   options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
-  const queryKey = `/posts/owned/${username}`;
+  const queryKey = `/posts/owned/${identifier}`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
   return useQuery([queryKey], queryFn, { ...options });
 };

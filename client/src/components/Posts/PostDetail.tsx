@@ -48,7 +48,7 @@ function PostDetail({ detailPost }: any) {
   });
 
   const checkWhetherVoted = (loginUsername: string) => {
-    const alreadyVote = votes.find(
+    const alreadyVote = votes?.find(
       (vote: any) => vote.username === loginUsername
     );
 
@@ -72,7 +72,6 @@ function PostDetail({ detailPost }: any) {
     }
 
     const { value } = e.target;
-    console.log(`radio checked:${value}`);
 
     switch (value) {
       case 'agree':

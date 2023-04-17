@@ -40,7 +40,7 @@ function Post(
   ref: React.LegacyRef<HTMLDivElement> | undefined
 ) {
   const {
-    identifier,
+    identifier: postId,
     username,
     createdAt,
     updatedAt,
@@ -57,6 +57,7 @@ function Post(
     votes,
     user,
   } = post;
+
   const router = useRouter();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -66,7 +67,7 @@ function Post(
     message.success('투표 완료');
     queryClient.invalidateQueries([`/posts`]);
   };
-  const { mutate: postVoteMutate } = postVoteAPI(identifier, {
+  const { mutate: postVoteMutate } = postVoteAPI(postId, {
     onSuccess: onSuccessVote,
   });
 
@@ -139,7 +140,7 @@ function Post(
         </P.HeaderWrapper>
         <P.BodyWrapper>
           {/* 제목, 내용 */}
-          <Link href={`/post/${identifier}`}>
+          <Link href={`/post/${postId}`}>
             <h3>{postTitleEllipsis(title)}</h3>
             <p>{postDescEllipsis(desc)}</p>
           </Link>
@@ -178,7 +179,7 @@ function Post(
                   size="middle"
                   optionType="button"
                   buttonStyle="solid"
-                  onChange={(e) => handleVoteChange(e, identifier)}
+                  onChange={(e) => handleVoteChange(e, postId)}
                   defaultValue={checkWhetherVoted(currentLoginUser?.username)}
                 >
                   <P.VoteButtonSmall value="agree">
@@ -228,7 +229,7 @@ function Post(
             {comments?.map((c: any) => {
               const { identifier: commentId, body } = c;
               return (
-                <Link href={`/post/${identifier}`} key={commentId}>
+                <Link href={`/post/${postId}`} key={commentId}>
                   <P.Comment>
                     <Image
                       src={
