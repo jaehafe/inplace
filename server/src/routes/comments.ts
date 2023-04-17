@@ -43,8 +43,6 @@ const getPostComments = async (req: Request, res: Response) => {
       relations: ['commentVotes', 'user.image'],
     });
 
-    console.log('comments>>', comments);
-
     return res.json(comments);
   } catch (error) {
     console.error(error);
@@ -66,8 +64,6 @@ const getOwnComments = async (req: Request, res: Response) => {
       skip: currentPage * perPage,
       take: perPage,
     });
-
-    console.log('comments>>', comments);
 
     return res.json(comments);
   } catch (error) {
@@ -96,7 +92,6 @@ const updateComment = async (req: Request, res: Response) => {
       .execute();
 
     const updatedComment = await Comment.findOneOrFail({ where: { identifier }, relations: ['post'] });
-    console.log('result>>', updatedComment);
 
     return res.json(updatedComment);
   } catch (error) {
