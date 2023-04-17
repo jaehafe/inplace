@@ -137,16 +137,22 @@ const getDetailPost = async (req: Request, res: Response) => {
 };
 
 const getOwnPosts = async (req: Request, res: Response) => {
+  const currentPage: number = (req.query.page || 0) as number;
+  const perPage: number = (req.query.count || 4) as number;
   const { identifier } = req.params;
 
   try {
-    const ownPosts = await Post.find({
-      where: { username: identifier },
-      order: { createdAt: 'DESC' },
-      relations: ['votes', 'comments', 'images'],
-    });
+    const [ownPosts, total] = await Post.createQueryBuilder('post')
+      .where('post.username = :identifier', { identifier })
+      .orderBy('post.createdAt', 'DESC')
+      .leftJoinAndSelect('post.votes', 'votes')
+      .leftJoinAndSelect('post.comments', 'comments')
+      .leftJoinAndSelect('post.images', 'images')
+      .skip(currentPage * perPage)
+      .take(perPage)
+      .getManyAndCount();
 
-    return res.json(ownPosts);
+    return res.json({ data: ownPosts, total });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'something went wrong' });
@@ -154,7 +160,9 @@ const getOwnPosts = async (req: Request, res: Response) => {
 };
 
 router.get('/', getAllPosts);
+
 router.get('/owned/:identifier', userMiddleware, authMiddleware, getOwnPosts);
+router.get('/:identifier', getDetailPost);
 router.post(
   '/images',
   userMiddleware,
@@ -167,7 +175,6 @@ router.post(
     return res.json(req.files.map((file) => file.filename));
   }
 );
-router.get('/:identifier', getDetailPost);
 
 router.post('/', userMiddleware, authMiddleware, createPost);
 

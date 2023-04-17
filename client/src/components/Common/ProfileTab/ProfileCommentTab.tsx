@@ -8,7 +8,6 @@ import ProfileTab from './ProfileTab';
 import T from './Tab.styles';
 
 function ProfileCommentTab({ identifier }: { identifier: string }) {
-  console.log('identifier>>>', identifier);
   const [page, setPage] = useState(1);
 
   const onChange: PaginationProps['onChange'] = (page) => {
@@ -16,7 +15,7 @@ function ProfileCommentTab({ identifier }: { identifier: string }) {
     setPage(page);
   };
 
-  const queryKey = `/comments/owned/${identifier}?page=${page}`;
+  const queryKey = `/comments/owned/${identifier}?page=${page - 1}`;
 
   const fetchOwnComments = async (page = 0) => {
     const { data } = await axiosInstance.get(`${queryKey}`);
@@ -46,7 +45,7 @@ function ProfileCommentTab({ identifier }: { identifier: string }) {
       </P.LoadingWrapper>
       {commentData ? (
         <>
-          {commentData.map((data: any) => {
+          {commentData?.data?.map((data: any) => {
             return (
               <CommentTab
                 data={data}
@@ -58,8 +57,8 @@ function ProfileCommentTab({ identifier }: { identifier: string }) {
           <T.AntdPagination
             current={page}
             onChange={onChange}
-            total={5}
-            pageSize={commentData.length}
+            total={commentData?.data?.length}
+            pageSize={commentData?.total}
           />
         </>
       ) : (
