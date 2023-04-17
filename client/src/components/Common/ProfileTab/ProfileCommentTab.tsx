@@ -5,7 +5,8 @@ import T from './Tab.styles';
 function ProfileCommentTab() {
   return (
     <T.Wrapper>
-      <ProfileTab />
+      123
+      {/* <ProfileTab /> */}
     </T.Wrapper>
   );
 }
