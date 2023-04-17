@@ -138,7 +138,8 @@ function PostDetail({ detailPost }: any) {
         </P.VoteResultWrapper>
 
         {/* OX 투표기능 */}
-        {currentLoginUser ? (
+        {/* currentLoginUser ? */}
+        {
           <P.VoteSelectWrapper>
             <P.VoteSelect
               size="large"
@@ -159,7 +160,8 @@ function PostDetail({ detailPost }: any) {
               </P.VoteButton>
             </P.VoteSelect>
           </P.VoteSelectWrapper>
-        ) : (
+        }
+        {/* : (
           <P.LoginRouterButtonForVote
             type="dashed"
             block
@@ -167,7 +169,7 @@ function PostDetail({ detailPost }: any) {
           >
             로그인 후 투표를 해보세요
           </P.LoginRouterButtonForVote>
-        )}
+        ) */}
 
         {/* 게시물 사진 */}
         {images?.length > 0 ? (
