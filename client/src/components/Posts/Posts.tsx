@@ -33,6 +33,7 @@ import Link from 'next/link';
 import { postVoteAPI } from '../../apis/vote';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '../../store/userStore';
+import ProfileImage from '../Common/ProfileImage';
 
 function Post(
   { post, isFetchingNextPage }: any,
@@ -116,17 +117,15 @@ function Post(
       <P.Wrapper>
         <P.HeaderWrapper>
           <P.HeaderLeft>
-            <Image
-              src={
-                user.image
-                  ? `http://localhost:4000/${user.image.src}`
-                  : defaultImg
-              }
-              width={46}
-              height={46}
-              style={{ borderRadius: '50px' }}
-              alt="avatar"
-            />
+            <Link href={`/profile/${user.username}`}>
+              <ProfileImage
+                src={user.image && `${user.image.src}`}
+                width={46}
+                height={46}
+                style={{ borderRadius: '50px' }}
+                alt="avatar"
+              />
+            </Link>
             <P.PostInfo>
               <h4>{username}</h4>
               <span>{formattedDate(updatedAt)}</span> · <span>조회 234</span>
@@ -172,7 +171,8 @@ function Post(
               </P.StaticsButton>
             </P.StaticsLeft>
             {/* O X 투표 기능 */}
-            {currentLoginUser && (
+            {/* currentLoginUser && */}
+            {
               <P.StaticsRight>
                 <P.VoteSelect
                   size="middle"
@@ -192,7 +192,7 @@ function Post(
                   </P.VoteButtonSmall>
                 </P.VoteSelect>
               </P.StaticsRight>
-            )}
+            }
           </P.StaticsWrapper>
 
           {/* 게시물 사진 */}
@@ -267,7 +267,7 @@ function Post(
         <Button type="text" shape="round">
           스크랩
         </Button>
-        {currentLoginUser.username === user.username ? (
+        {currentLoginUser?.username === user.username ? (
           <>
             <Divider style={{ margin: '10px 0' }} />
             <Button type="text" shape="round">
