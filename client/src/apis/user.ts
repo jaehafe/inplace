@@ -5,7 +5,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { message } from 'antd';
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { axiosInstance } from '../configs/axios';
 import { ILogin, ISignup } from '../types';
@@ -56,6 +56,20 @@ export const authMeAPI = (
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
 
   return useQuery([queryKey], queryFn, { ...options });
+};
+
+export const getUserInfoAPI = (
+  identifier?: string,
+  options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
+) => {
+  const queryKey = `/auth/userinfo/${identifier}`;
+  const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
+
+  const onError = () => {
+    message.error('유저 정보를 가져오는데 실패했습니다.');
+  };
+
+  return useQuery([queryKey], queryFn, { onError, ...options });
 };
 
 export const uploadImageAPI = <T>(data: FormData) => {
