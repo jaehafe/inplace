@@ -100,8 +100,8 @@ const signup = async (req: Request, res: Response) => {
 // 로그인
 const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  console.log('email>>', email, password);
-  console.log('<<<<<res.locals>>>', res.locals);
+  // console.log('email>>', email, password);
+  // console.log('<<<<<res.locals>>>', res.locals);
 
   try {
     let errors: any = {};
@@ -165,6 +165,28 @@ const logout = async (_: Request, res: Response) => {
   res.status(200).json({ success: true });
 };
 
+// 개별 유저 정보
+const getUserInfo = async (req: Request, res: Response) => {
+  console.log('req.params>>>', req.params);
+
+  const { identifier } = req.params;
+
+  try {
+    const userInfo = await User.findOne({
+      where: { username: identifier },
+      relations: ['image'],
+    });
+    if (!userInfo) {
+      return res.status(404).json({ error: '유저를 찾을 수 없습니다.' });
+    }
+
+    return res.json(userInfo);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'something went wrong' });
+  }
+};
+
 router.post('/images', upload.single('image'), (req: RequestWithFile, res: Response) => {
   console.log('req.file.path>>> ', req.file.path);
   console.log('req.file>>>>', req.file);
@@ -176,6 +198,7 @@ router.post('/images', upload.single('image'), (req: RequestWithFile, res: Respo
 // authMiddleware
 // me
 router.get('/me', userMiddleware, authMiddleware, me);
+router.get('/userinfo/:identifier', getUserInfo);
 router.post('/signup', signup);
 router.post('/login', userMiddleware, login);
 router.post('/logout', logout);
