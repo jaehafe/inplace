@@ -4,6 +4,7 @@ import { Button, Divider, Input, message, Popover } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { deleteCommentAPI, updateCommentAPI } from '../../../apis/comment';
 import { useUserStore } from '../../../store/userStore';
 import {
   commentBodyEllipsis,
@@ -14,9 +15,16 @@ import P from '../../Posts/Posts.styles';
 import ProfileImage from '../ProfileImage';
 import T from './Tab.styles';
 
-function CommentTab({ data }: any) {
+function CommentTab({ data, queryKey }: any) {
   console.log('comment Data>>>', data);
-  const { body: commentBody, updatedAt, createdAt, post, user } = data;
+  const {
+    identifier: commentId,
+    body: commentBody,
+    updatedAt,
+    createdAt,
+    post,
+    user,
+  } = data;
   const { identifier: postId, title: postTitle } = post;
   const { image: postAuthorProfile, username: postAuthor } = post.user;
   const {
@@ -24,12 +32,11 @@ function CommentTab({ data }: any) {
     username: commentAuthor,
   } = user;
 
-  const queryClient = useQueryClient();
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState(commentBody);
-  // body
   const editCommentRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
 
   const currentLoginUser = useUserStore((state) => state.userInfo);
 
@@ -44,17 +51,39 @@ function CommentTab({ data }: any) {
     [editedComment]
   );
 
+  // 댓글 수정 api mutation
+  const onSuccessEditComment = () => {
+    setIsEditing(false);
+
+    queryClient.invalidateQueries([queryKey]);
+    message.success('댓글 수정 완료');
+  };
+  const { mutate: updateCommentMutate } = updateCommentAPI(commentId, {
+    onSuccess: onSuccessEditComment,
+  });
+
+  // 댓글 삭제 api mutation
+  const onSuccessDeleteComment = () => {
+    setIsEditing(false);
+    queryClient.invalidateQueries([queryKey]);
+    message.success('댓글 삭제 완료');
+  };
+  const { mutate: deleteCommentMutate } = deleteCommentAPI(commentId, {
+    onSuccess: onSuccessDeleteComment,
+  });
+
   // 댓글 수정
-  const handleEditComment = () => {
+  const handleEditComment = (commentId: string) => {
     // commentId: string
     setIsEditing(true);
     setEditedComment(editedComment);
   };
   // 댓글 삭제
   const handleDeleteComment = (commentId: string) => {
-    // deleteCommentMutate(commentId);
+    deleteCommentMutate(commentId);
   };
 
+  // 수정한 댓글 submit
   const handleEditCommentSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -63,7 +92,28 @@ function CommentTab({ data }: any) {
       return;
     }
 
-    // updateCommentMutate({ body: editedComment });
+    updateCommentMutate({ body: editedComment });
+  };
+
+  const checkUser = () => {
+    if (commentAuthor !== currentLoginUser?.username) {
+      return (
+        <Button type="text" onClick={() => handleEditComment(commentId)}>
+          신고
+        </Button>
+      );
+    } else if (commentAuthor === currentLoginUser.username) {
+      return (
+        <>
+          <Button type="text" onClick={() => handleEditComment(commentId)}>
+            수정
+          </Button>
+          <Button type="text" onClick={() => handleDeleteComment(commentId)}>
+            삭제
+          </Button>
+        </>
+      );
+    }
   };
 
   return (
@@ -91,18 +141,11 @@ function CommentTab({ data }: any) {
               <Popover
                 placement="rightTop"
                 trigger={['click']}
-                content={
-                  <>
-                    <Button type="text" onClick={() => handleEditComment()}>
-                      수정
-                    </Button>
-                    <Button type="text">삭제</Button>
-                  </>
-                }
+                content={checkUser()}
               >
                 <Button type="text" shape="circle">
                   <MoreOutlined
-                    style={{ fontSize: '16px', color: 'black' }}
+                    style={{ fontSize: '16px' }}
                     className="edit-button"
                   />
                 </Button>
@@ -136,9 +179,7 @@ function CommentTab({ data }: any) {
                 </P.CommentCancelButton>
               </form>
             ) : (
-              <pre style={{ whiteSpace: 'pre-wrap' }}>
-                {commentBodyEllipsis(commentBody)}
-              </pre>
+              <pre style={{ whiteSpace: 'pre-wrap' }}>{commentBody}</pre>
             )}
           </T.MyCommentBodyWrapper>
         </T.MyCommentWrapper>

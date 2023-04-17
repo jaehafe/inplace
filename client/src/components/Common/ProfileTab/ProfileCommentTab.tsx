@@ -47,7 +47,13 @@ function ProfileCommentTab({ identifier }: { identifier: string }) {
       {commentData ? (
         <>
           {commentData.map((data: any) => {
-            return <CommentTab data={data} key={data.identifier} />;
+            return (
+              <CommentTab
+                data={data}
+                key={data.identifier}
+                queryKey={queryKey}
+              />
+            );
           })}
           <T.AntdPagination
             current={page}
