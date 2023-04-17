@@ -53,7 +53,7 @@ export const getAllPostsAPI = (
 ) => {
   const queryKey = `/posts`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
-  return useQuery([queryKey], queryFn, { ...options });
+  return useQuery([queryKey], queryFn, { keepPreviousData: true, ...options });
 };
 
 export const getOwnPostsAPI = (
