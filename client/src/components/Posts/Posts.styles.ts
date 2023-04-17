@@ -216,7 +216,7 @@ const CommentEditButton = styled(Button)`
   margin-right: 10px;
   background-color: ${({ theme }) => theme.primary};
   & > span {
-    color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.white} !important;
   }
 
   &:hover,

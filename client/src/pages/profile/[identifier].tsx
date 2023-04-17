@@ -22,7 +22,7 @@ function Profile({ identifier }: { identifier: string }) {
     {
       key: '작성 댓글',
       label: `작성 댓글`,
-      children: <ProfileCommentTab />,
+      children: <ProfileCommentTab identifier={identifier} />,
     },
     {
       key: '응답한 글',
