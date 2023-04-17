@@ -57,15 +57,28 @@ const getOwnComments = async (req: Request, res: Response) => {
   const { identifier } = req.params;
 
   try {
-    const comments = await Comment.find({
-      where: { username: identifier },
-      order: { createdAt: 'DESC' },
-      relations: ['post', 'post.user', 'post.user.image', 'user.image'],
-      skip: currentPage * perPage,
-      take: perPage,
-    });
+    // const comments = await Comment.find({
+    //   where: { username: identifier },
+    //   order: { createdAt: 'DESC' },
+    //   relations: ['post', 'post.user', 'post.user.image', 'user.image'],
+    //   skip: currentPage * perPage,
+    //   take: perPage,
+    // });
 
-    return res.json(comments);
+    // return res.json(comments);
+    const [comments, total] = await Comment.createQueryBuilder('comment')
+      .where('comment.username = :identifier', { identifier })
+      .orderBy('comment.createdAt', 'DESC')
+      .leftJoinAndSelect('comment.post', 'post')
+      .leftJoinAndSelect('post.user', 'postUser')
+      .leftJoinAndSelect('postUser.image', 'postUserImage')
+      .leftJoinAndSelect('comment.user', 'user')
+      .leftJoinAndSelect('user.image', 'userImage')
+      .skip(currentPage * perPage)
+      .take(perPage)
+      .getManyAndCount();
+
+    return res.json({ data: comments, total });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: '댓글을 찾을 수 없습니다.' });
