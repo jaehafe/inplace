@@ -75,7 +75,7 @@ function CreatePost() {
   const [desc, setDesc] = useState('');
 
   const [loading, setLoading] = useState(false);
-  const [imageName, setImageName] = useState<string>('');
+  const [imageName, setImageName] = useState<string[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const router = useRouter();
