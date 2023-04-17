@@ -53,15 +53,18 @@ const getPostComments = async (req: Request, res: Response) => {
 };
 
 const getOwnComments = async (req: Request, res: Response) => {
+  const currentPage: number = (req.query.page || 0) as number;
+  const perPage: number = (req.query.count || 3) as number;
+
   const { identifier } = req.params;
 
   try {
-    const post = await Post.findOneByOrFail({ identifier });
-
     const comments = await Comment.find({
-      where: { postId: post.id },
+      where: { username: identifier },
       order: { createdAt: 'DESC' },
-      relations: ['commentVotes', 'user.image'],
+      relations: ['post', 'post.user', 'post.user.image', 'user.image'],
+      skip: currentPage * perPage,
+      take: perPage,
     });
 
     console.log('comments>>', comments);

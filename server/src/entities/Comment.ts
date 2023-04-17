@@ -32,10 +32,6 @@ export default class Comment extends BaseEntity {
   @OneToMany(() => CommentVote, (commentVote) => commentVote.comment)
   commentVotes: CommentVote[];
 
-  // @Exclude()
-  // @OneToMany(() => Vote, (Vote) => Vote.comment)
-  // votes: Vote[];
-
   protected userVote: number;
 
   setUserVote(user: User) {

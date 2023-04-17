@@ -140,15 +140,11 @@ const getOwnPosts = async (req: Request, res: Response) => {
   const { identifier } = req.params;
 
   try {
-    const user: User = res.locals.user;
-    console.log('user>>>', user);
-
     const ownPosts = await Post.find({
       where: { username: identifier },
       order: { createdAt: 'DESC' },
       relations: ['votes', 'comments', 'images'],
     });
-    console.log('ownPosts>>>', ownPosts);
 
     return res.json(ownPosts);
   } catch (error) {
