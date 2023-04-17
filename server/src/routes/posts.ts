@@ -103,6 +103,10 @@ const getAllPosts = async (req: Request, res: Response) => {
       take: perPage,
     });
 
+    // if (res.locals.user) {
+    //   allPosts.forEach((p) => p.setUserVote(res.locals.user));
+    // }
+
     return res.json(allPosts);
   } catch (error) {
     console.error(error);
@@ -117,8 +121,8 @@ const getDetailPost = async (req: Request, res: Response) => {
   try {
     const post = await Post.findOneOrFail({
       where: { identifier },
-      relations: ['votes', 'images'],
-      // , 'user.image'
+      relations: ['votes', 'images', 'user.image'],
+
       // 'comments.user.image',
       // 'comments',
       // 'images',

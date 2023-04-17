@@ -32,6 +32,7 @@ function PostDetail({ detailPost }: any) {
     votes,
     user,
   } = detailPost;
+
   const queryClient = useQueryClient();
   const router = useRouter();
   const [open, setOpen] = useState(false);

@@ -5,12 +5,14 @@ import { getAllPostsAPI } from '../../apis/post';
 import { axiosInstance, baseURL } from '../../configs/axios';
 import { useInView } from 'react-intersection-observer';
 import Posts from './Posts';
+import { Spin } from 'antd';
+import P from './Posts.styles';
 
 function AllPosts() {
-  const { ref, inView } = useInView();
-  const { data: allPosts } = getAllPostsAPI();
+  const { ref: observeRef, inView } = useInView();
+  // const { data: allPosts } = getAllPostsAPI();
 
-  const queryKey = `${baseURL}/posts`;
+  const queryKey = `/posts`;
 
   const {
     status,
@@ -25,28 +27,19 @@ function AllPosts() {
     hasPreviousPage,
   } = useInfiniteQuery(
     [queryKey],
-    async ({ pageParam = 2 }) => {
-      const { data } = await axiosInstance.get(`/posts?page=${pageParam}`);
+    async ({ pageParam = 0 }) => {
+      const { data } = await axiosInstance.get(`${queryKey}?page=${pageParam}`);
+      console.log(`>>>${pageParam}<<< 의 새로운 데이터>>`, data);
+      const isLast = data.length === 0;
+
       return {
         result: data,
         nextPage: pageParam + 1,
-        isLast: data.isLast,
+        isLast,
       };
     },
-    // {
-    //   getNextPageParam: (lastPage, allPages) => {
-    //     console.log('lastPage>>>', lastPage);
-    //     console.log('allPages>>>', allPages);
-
-    //     if (!lastPage) {
-    //       return lastPage + 1;
-    //     } else {
-    //       return undefined;
-    //     }
-    //   },
-    // }
     {
-      getNextPageParam: (lastPage, allPages) => {
+      getNextPageParam: (lastPage) => {
         if (!lastPage.isLast) {
           return lastPage.nextPage;
         } else {
@@ -61,42 +54,37 @@ function AllPosts() {
     if (inView && hasNextPage) {
       fetchNextPage();
     }
-  }, [inView, hasNextPage]);
-
-  if (status === 'loading') {
-    <p>Loading...</p>;
-  } else if (status === 'error') {
-    <span>에러입니다.</span>;
-  }
+  }, [inView, hasNextPage, observeRef]);
 
   return (
     <div>
-      {/* {infiniteData?.pages.map((page) => {
-        return page.result.map((post: any, pageIndex: number) => {
-          return <Posts post={post} key={post.identifier} ref={ref} />;
-        });
+      {/* {allPosts?.map((post: any) => {
+        return <Posts post={post} key={post.identifier} />;
       })} */}
-
       {infiniteData?.pages.map((page, pageIndex) => {
         return page.result.map((post: any, postIndex: number) => {
-          const isLastPost =
-            infiniteData.pages.length === pageIndex + 1 &&
-            page.length === postIndex + 1;
+          // const isLastPost = page.result.length === postIndex + 1;
+          // const shouldObserve =
+          //   infiniteData.pages.length === pageIndex + 1 && isLastPost;
+
+          // ref={shouldObserve ? ref : null}
           return (
-            <div ref={isLastPost ? ref : undefined} key={post.identifier}>
-              <Posts post={post} />
+            <div key={post.identifier}>
+              <Posts
+                post={post}
+                // isFetchingNextPage={isFetchingNextPage}
+                ref={observeRef}
+              />
             </div>
           );
         });
       })}
+
+      <P.LoadingWrapper>
+        {isFetchingNextPage ? <Spin size="large" /> : ''}
+      </P.LoadingWrapper>
     </div>
   );
 }
 
 export default AllPosts;
-
-{
-  /* {allPosts?.map((post: any) => {
-        return <Posts post={post} key={post.identifier} />;
-      })} */
-}

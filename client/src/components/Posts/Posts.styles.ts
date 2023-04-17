@@ -249,6 +249,18 @@ const LikeWrapper = styled.div`
   }
 `;
 
+const LoadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+`;
+
+// const LoadingWrapper = styled.div.withConfig({
+//   shouldForwardProp: (prop) => prop !== 'innerRef',
+// })`
+//   border: 1px solid;
+// `;
+
 const PostDrawer = styled(Drawer)`
   position: sticky;
   left: 0;
@@ -315,6 +327,7 @@ const P = {
   LoginRouterButton,
   LoginRouterButtonForVote,
   PostImageWrapper,
+  LoadingWrapper,
 };
 
 export default P;

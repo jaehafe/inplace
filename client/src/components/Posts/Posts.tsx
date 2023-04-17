@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { forwardRef, Fragment, useState } from 'react';
 import {
   AntDesignOutlined,
   CommentOutlined,
@@ -17,6 +17,7 @@ import {
   Avatar,
   Tooltip,
   Image as AntdImage,
+  Spin,
 } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -33,7 +34,10 @@ import { postVoteAPI } from '../../apis/vote';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '../../store/userStore';
 
-function Post({ post }: any) {
+function Post(
+  { post, isFetchingNextPage }: any,
+  ref: React.LegacyRef<HTMLDivElement> | undefined
+) {
   const {
     identifier,
     username,
@@ -281,6 +285,7 @@ function Post({ post }: any) {
           </P.CommentWrapper>
         </P.BodyWrapper>
         <Divider />
+        <div ref={ref}></div>
       </P.Wrapper>
 
       <P.PostDrawer
@@ -315,4 +320,4 @@ function Post({ post }: any) {
   );
 }
 
-export default Post;
+export default forwardRef(Post);
