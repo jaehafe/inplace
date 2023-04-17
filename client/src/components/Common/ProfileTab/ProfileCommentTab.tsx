@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { Pagination, PaginationProps } from 'antd';
+import { Pagination, PaginationProps, Spin } from 'antd';
 import React, { useState } from 'react';
 import { axiosInstance } from '../../../configs/axios';
+import P from '../../Posts/Posts.styles';
 import CommentTab from './CommentTab';
 import ProfileTab from './ProfileTab';
 import T from './Tab.styles';
@@ -23,24 +24,26 @@ function ProfileCommentTab({ identifier }: { identifier: string }) {
 
     return data;
   };
-  // fetchOwnComments();
 
   const {
     status,
     data: commentData,
     error,
+    isLoading,
     isFetching,
     isPreviousData,
   } = useQuery({
     queryKey: [queryKey],
     queryFn: () => fetchOwnComments(page),
     keepPreviousData: true,
-    staleTime: 5000,
+    staleTime: 10000,
   });
-  console.log('commentData>>>', commentData);
 
   return (
     <T.Wrapper>
+      <P.LoadingWrapper>
+        {isLoading || isFetching ? <Spin size="large" /> : ''}
+      </P.LoadingWrapper>
       {commentData ? (
         <>
           {commentData.map((data: any) => {
