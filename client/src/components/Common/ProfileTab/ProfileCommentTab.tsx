@@ -19,7 +19,7 @@ function ProfileCommentTab({ identifier }: { identifier: string }) {
 
   const fetchOwnComments = async (page = 0) => {
     const { data } = await axiosInstance.get(`${queryKey}`);
-    console.log('댓글>>>', data);
+    // console.log('댓글>>>', data);
 
     return data;
   };
@@ -37,6 +37,8 @@ function ProfileCommentTab({ identifier }: { identifier: string }) {
     keepPreviousData: true,
     staleTime: 10000,
   });
+
+  console.log('commentData>>>>', commentData);
 
   return (
     <T.Wrapper>
@@ -57,7 +59,7 @@ function ProfileCommentTab({ identifier }: { identifier: string }) {
           <T.AntdPagination
             current={page}
             onChange={onChange}
-            total={commentData?.data?.length}
+            total={commentData?.data.length}
             pageSize={commentData?.total}
           />
         </>

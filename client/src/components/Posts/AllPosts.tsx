@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getAllPostsAPI } from '../../apis/post';
 import { axiosInstance, baseURL } from '../../configs/axios';
 import { useInView } from 'react-intersection-observer';
@@ -10,9 +10,9 @@ import P from './Posts.styles';
 
 function AllPosts() {
   const { ref: observeRef, inView } = useInView();
-  // const { data: allPosts } = getAllPostsAPI();
+  // const [queryKey, setQueryKey] = useState(`/posts?page=0`);
 
-  const queryKey = `/posts`;
+  const queryKey = `/posts?page=`;
 
   const {
     status,
@@ -28,8 +28,7 @@ function AllPosts() {
   } = useInfiniteQuery(
     [queryKey],
     async ({ pageParam = 0 }) => {
-      const { data } = await axiosInstance.get(`${queryKey}?page=${pageParam}`);
-      // console.log(`>>>${pageParam}<<< 의 새로운 데이터>>`, data);
+      const { data } = await axiosInstance.get(`${queryKey}${pageParam}`);
       const isLast = data.length === 0;
 
       return {
@@ -58,30 +57,18 @@ function AllPosts() {
 
   return (
     <div>
-      {/* {allPosts?.map((post: any) => {
-        return <Posts post={post} key={post.identifier} />;
-      })} */}
       {infiniteData?.pages.map((page, pageIndex) => {
         return page.result.map((post: any, postIndex: number) => {
-          // const isLastPost = page.result.length === postIndex + 1;
-          // const shouldObserve =
-          //   infiniteData.pages.length === pageIndex + 1 && isLastPost;
-
-          // ref={shouldObserve ? ref : null}
           return (
             <div key={post.identifier}>
-              <Posts
-                post={post}
-                // isFetchingNextPage={isFetchingNextPage}
-                ref={observeRef}
-              />
+              <Posts post={post} ref={observeRef} />
             </div>
           );
         });
       })}
 
       <P.LoadingWrapper>
-        {isFetchingNextPage ? <Spin size="large" /> : ''}
+        {isFetchingNextPage || isFetching ? <Spin size="large" /> : ''}
       </P.LoadingWrapper>
     </div>
   );
