@@ -8,6 +8,7 @@ import Post from '../entities/Post';
 import Image from '../entities/Image';
 import { AppDataSource } from '../data-source';
 import Comment from '../entities/Comment';
+import User from '../entities/User';
 
 const router = Router();
 
@@ -135,8 +136,29 @@ const getDetailPost = async (req: Request, res: Response) => {
   }
 };
 
+const getOwnPosts = async (req: Request, res: Response) => {
+  const { identifier } = req.params;
+
+  try {
+    const user: User = res.locals.user;
+    console.log('user>>>', user);
+
+    const ownPosts = await Post.find({
+      where: { username: identifier },
+      order: { createdAt: 'DESC' },
+      relations: ['votes', 'comments', 'images'],
+    });
+    console.log('ownPosts>>>', ownPosts);
+
+    return res.json(ownPosts);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'something went wrong' });
+  }
+};
+
 router.get('/', getAllPosts);
-router.get('/:identifier', getDetailPost);
+router.get('/owned/:identifier', userMiddleware, authMiddleware, getOwnPosts);
 router.post(
   '/images',
   userMiddleware,
@@ -149,6 +171,7 @@ router.post(
     return res.json(req.files.map((file) => file.filename));
   }
 );
+router.get('/:identifier', getDetailPost);
 
 router.post('/', userMiddleware, authMiddleware, createPost);
 
