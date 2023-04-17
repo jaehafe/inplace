@@ -15,8 +15,6 @@ import Link from 'next/link';
 import { formattedDate } from '../../../utils';
 
 function ProfileTab({ post }: any) {
-  const router = useRouter();
-  console.log('ownPosts>>', post);
   const {
     identifier,
     commentCount,
@@ -32,7 +30,7 @@ function ProfileTab({ post }: any) {
       <T.BodyWrapper>
         <ProfileImage src={images[0]?.src} style={{ marginRight: '14px' }} />
         <T.Body>
-          <h4>12312</h4>
+          <h4>{title}</h4>
           <span>
             by {username} · {formattedDate(updatedAt)}
           </span>
