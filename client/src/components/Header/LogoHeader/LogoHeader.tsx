@@ -19,7 +19,7 @@ function LogoHeader({ headerIcons }: IProps) {
   const router = useRouter();
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const userInfo = useUserStore((state) => state.userInfo);
+  const currentLoginUser = useUserStore((state) => state.userInfo);
 
   const { mutate: logoutMutate } = logoutAPI();
   const handleLogout = () => {
@@ -27,7 +27,10 @@ function LogoHeader({ headerIcons }: IProps) {
   };
 
   const buttons = [
-    { text: '작성 글', onClick: () => router.push('/profile/identifier') },
+    {
+      text: '작성 글',
+      onClick: () => router.push(`/profile/${currentLoginUser?.username}`),
+    },
     { text: '작성 댓글', onClick: () => console.log('작성 댓글 버튼 클릭') },
     {
       text: '프로필 편집',
@@ -89,8 +92,8 @@ function LogoHeader({ headerIcons }: IProps) {
               <L.ProfileWrapper>
                 <Image
                   src={
-                    userInfo
-                      ? `http://localhost:4000/${userInfo.image.src}`
+                    currentLoginUser
+                      ? `http://localhost:4000/${currentLoginUser.image.src}`
                       : defaultImg
                   }
                   width={100}
@@ -98,30 +101,36 @@ function LogoHeader({ headerIcons }: IProps) {
                   style={{ borderRadius: '50px' }}
                   alt="avatar"
                 />
-                {userInfo && (
+                {currentLoginUser && (
                   <>
                     <span>안녕하세요</span>
-                    <h3>{userInfo?.username}님</h3>
+                    <h3>{currentLoginUser?.username}님</h3>
                   </>
                 )}
               </L.ProfileWrapper>
               <Divider />
 
-              {buttons.map((button) => (
-                <L.StyledButton
-                  type="text"
-                  shape="round"
-                  key={button.text}
-                  onClick={button.onClick}
-                >
-                  {button.text}
-                  <RightOutlined />
-                </L.StyledButton>
-              ))}
+              {currentLoginUser ? (
+                <>
+                  {buttons.map((button) => (
+                    <L.StyledButton
+                      type="text"
+                      shape="round"
+                      key={button.text}
+                      onClick={button.onClick}
+                    >
+                      {button.text}
+                      <RightOutlined />
+                    </L.StyledButton>
+                  ))}
+                  <Divider />
+                </>
+              ) : (
+                ''
+              )}
 
-              <Divider />
               <L.LoginOutWrapper>
-                {userInfo ? (
+                {currentLoginUser ? (
                   <L.StyledButton
                     type="text"
                     shape="round"
