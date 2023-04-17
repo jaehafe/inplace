@@ -52,6 +52,27 @@ const getPostComments = async (req: Request, res: Response) => {
   }
 };
 
+const getOwnComments = async (req: Request, res: Response) => {
+  const { identifier } = req.params;
+
+  try {
+    const post = await Post.findOneByOrFail({ identifier });
+
+    const comments = await Comment.find({
+      where: { postId: post.id },
+      order: { createdAt: 'DESC' },
+      relations: ['commentVotes', 'user.image'],
+    });
+
+    console.log('comments>>', comments);
+
+    return res.json(comments);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: '댓글을 찾을 수 없습니다.' });
+  }
+};
+
 const updateComment = async (req: Request, res: Response) => {
   const { identifier } = req.params;
   const { body } = req.body;
@@ -124,6 +145,7 @@ const deleteComment = async (req: Request, res: Response) => {
   }
 };
 
+router.get('/owned/:identifier', getOwnComments);
 router.get('/:identifier', userMiddleware, getPostComments);
 router.post('/:identifier', userMiddleware, createPostComment);
 router.patch('/:identifier', userMiddleware, authMiddleware, updateComment);
