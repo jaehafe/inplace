@@ -56,7 +56,6 @@ function Post(
     votes,
     user,
   } = post;
-
   const router = useRouter();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -197,41 +196,6 @@ function Post(
           </P.StaticsWrapper>
 
           {/* 게시물 사진 */}
-          {/* <P.PostImageWrapper>
-            <Avatar.Group
-              maxCount={1}
-              maxPopoverTrigger="click"
-              size="large"
-              maxStyle={{
-                color: '#f56a00',
-                backgroundColor: '#fde3cf',
-                cursor: 'pointer',
-              }}
-            >
-              {images.map((img: any) => {
-                return (
-                  <Image
-                    key={img.src}
-                    src={`http://localhost:4000/${img.src}`}
-                    width={80}
-                    height={80}
-                    alt="alt"
-                  />
-                );
-              })}
-
-              <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar>
-
-              <Tooltip title="Ant User" placement="top">
-                <Avatar
-                  style={{ backgroundColor: '#87d068' }}
-                  icon={<UserOutlined />}
-                />
-              </Tooltip>
-            </Avatar.Group>
-          </P.PostImageWrapper> */}
-
-          {/* 게시물 사진 */}
           {images.length > 0 ? (
             <P.PostImageWrapper>
               <AntdImage.PreviewGroup
@@ -303,18 +267,24 @@ function Post(
         <Button type="text" shape="round">
           스크랩
         </Button>
-        <Divider style={{ margin: '10px 0' }} />
-        <Button type="text" shape="round">
-          팔로우
-        </Button>
-        <Divider style={{ margin: '10px 0' }} />
-        <Button type="text" shape="round">
-          수정
-        </Button>
-        <Divider style={{ margin: '10px 0' }} />
-        <Button type="text" shape="round">
-          삭제
-        </Button>
+        {currentLoginUser.username === user.username ? (
+          <>
+            <Divider style={{ margin: '10px 0' }} />
+            <Button type="text" shape="round">
+              팔로우
+            </Button>
+            <Divider style={{ margin: '10px 0' }} />
+            <Button type="text" shape="round">
+              수정
+            </Button>
+            <Divider style={{ margin: '10px 0' }} />
+            <Button type="text" shape="round">
+              삭제
+            </Button>
+          </>
+        ) : (
+          ''
+        )}
       </P.PostDrawer>
     </>
   );

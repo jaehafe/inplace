@@ -29,7 +29,7 @@ function AllPosts() {
     [queryKey],
     async ({ pageParam = 0 }) => {
       const { data } = await axiosInstance.get(`${queryKey}?page=${pageParam}`);
-      console.log(`>>>${pageParam}<<< 의 새로운 데이터>>`, data);
+      // console.log(`>>>${pageParam}<<< 의 새로운 데이터>>`, data);
       const isLast = data.length === 0;
 
       return {
@@ -48,7 +48,7 @@ function AllPosts() {
       },
     }
   );
-  console.log('무한 스크롤 data>>>', infiniteData);
+  // console.log('무한 스크롤 data>>>', infiniteData);
 
   useEffect(() => {
     if (inView && hasNextPage) {
