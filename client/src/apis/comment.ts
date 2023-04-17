@@ -39,6 +39,21 @@ export const getCommentsAPI = (
   return useQuery([queryKey], queryFn, { onError, ...options });
 };
 
+export const getOwnCommentsAPI = (
+  identifier?: string,
+  options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
+) => {
+  const queryKey = `/comments/owned/${identifier}`;
+
+  const queryFn = () =>
+    axiosInstance.get(`${queryKey}/${identifier}`).then((res) => res.data);
+
+  const onError = () => {
+    message.error('댓글 불러오기 실패');
+  };
+  return useQuery([queryKey], queryFn, { onError, ...options });
+};
+
 export const updateCommentAPI = (
   commentId?: string,
   options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
