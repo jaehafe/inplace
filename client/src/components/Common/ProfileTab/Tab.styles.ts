@@ -1,3 +1,4 @@
+import { Pagination } from 'antd';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -94,6 +95,13 @@ const MyCommentHeaderWrapper = styled.div`
   align-items: center;
 `;
 
+const AntdPagination = styled(Pagination)`
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const T = {
   Wrapper,
   BodyWrapper,
@@ -107,6 +115,7 @@ const T = {
   MyCommentWrapper,
   MyCommentHeaderWrapper,
   MyCommentBodyWrapper,
+  AntdPagination,
 };
 
 export default T;

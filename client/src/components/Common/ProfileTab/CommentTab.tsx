@@ -1,18 +1,33 @@
 import { MoreOutlined } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Divider, Input, message, Popover } from 'antd';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useUserStore } from '../../../store/userStore';
+import {
+  commentBodyEllipsis,
+  formattedDate,
+  postTitleEllipsis,
+} from '../../../utils';
 import P from '../../Posts/Posts.styles';
 import ProfileImage from '../ProfileImage';
 import T from './Tab.styles';
 
-function CommentTab() {
+function CommentTab({ data }: any) {
+  console.log('comment Data>>>', data);
+  const { body: commentBody, updatedAt, createdAt, post, user } = data;
+  const { identifier: postId, title: postTitle } = post;
+  const { image: postAuthorProfile, username: postAuthor } = post.user;
+  const {
+    image: { src: commentAuthorProfile },
+    username: commentAuthor,
+  } = user;
+
   const queryClient = useQueryClient();
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
-  const [editedComment, setEditedComment] = useState('');
+  const [editedComment, setEditedComment] = useState(commentBody);
   // body
   const editCommentRef = useRef<HTMLInputElement>(null);
 
@@ -55,19 +70,24 @@ function CommentTab() {
     <T.CommentBodyWrapper>
       <>
         <T.PostWrapper>
-          <ProfileImage width={40} height={40} />
-          <div>
+          <ProfileImage src={postAuthorProfile.src} width={40} height={40} />
+          <Link href={`/post/${postId}`}>
             <div>
-              <span>(게시물 작성한 유저의 이름)</span>
+              <div>
+                <span>{postAuthor}</span>
+              </div>
+              <pre>{postTitleEllipsis(postTitle)}</pre>
             </div>
-            <h4>posttile</h4>
-          </div>
+          </Link>
         </T.PostWrapper>
         <T.MyCommentWrapper>
-          <ProfileImage width={40} height={40} />
+          <ProfileImage src={commentAuthorProfile} width={40} height={40} />
           <T.MyCommentBodyWrapper>
             <T.MyCommentHeaderWrapper>
-              <span>댓글 단 (내 댓글)입니다.</span>
+              <span>
+                {commentAuthor} | {formattedDate(updatedAt)}
+                {createdAt !== updatedAt ? '수정됨' : ''}
+              </span>
               <Popover
                 placement="rightTop"
                 trigger={['click']}
@@ -116,7 +136,9 @@ function CommentTab() {
                 </P.CommentCancelButton>
               </form>
             ) : (
-              <pre style={{ whiteSpace: 'pre-wrap' }}>123</pre>
+              <pre style={{ whiteSpace: 'pre-wrap' }}>
+                {commentBodyEllipsis(commentBody)}
+              </pre>
             )}
           </T.MyCommentBodyWrapper>
         </T.MyCommentWrapper>

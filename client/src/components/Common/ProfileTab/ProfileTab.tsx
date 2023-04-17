@@ -12,6 +12,7 @@ import {
 import { Divider } from 'antd';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { formattedDate } from '../../../utils';
 
 function ProfileTab({ post }: any) {
   const router = useRouter();
@@ -25,7 +26,6 @@ function ProfileTab({ post }: any) {
     username,
     images,
   } = post;
-  console.log(images);
 
   return (
     <Link href={`/post/${identifier}`}>
@@ -34,7 +34,7 @@ function ProfileTab({ post }: any) {
         <T.Body>
           <h4>12312</h4>
           <span>
-            by {username} · {updatedAt}
+            by {username} · {formattedDate(updatedAt)}
           </span>
         </T.Body>
       </T.BodyWrapper>
