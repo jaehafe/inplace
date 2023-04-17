@@ -12,14 +12,18 @@ interface IProfileImageProps {
 function ProfileImage({
   width = 80,
   height = 80,
-  src = 'https://www.gravatar.com/avatar?d=mp&f=y',
+  src,
   alt = 'profile-logo',
   style,
 }: IProfileImageProps) {
   return (
     <>
       <Image
-        src={src}
+        src={
+          src
+            ? `http://localhost:4000/${src}`
+            : 'https://www.gravatar.com/avatar?d=mp&f=y'
+        }
         alt={alt}
         width={width}
         height={height}
