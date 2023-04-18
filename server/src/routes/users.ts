@@ -1,4 +1,6 @@
 import { Request, Response, Router } from 'express';
+import { AppDataSource } from '../data-source';
+import Follow from '../entities/Follow';
 import User from '../entities/User';
 
 const router = Router();
@@ -18,7 +20,25 @@ const getUserInfo = async (req: Request, res: Response) => {
       return res.status(404).json({ error: '유저를 찾을 수 없습니다.' });
     }
 
-    return res.json(userInfo);
+    const followersCount = await AppDataSource.createQueryBuilder()
+      .select('COUNT(follow.id)', 'count')
+      .from(Follow, 'follow')
+      .where('follow.followingId = :userId', { userId: userInfo.id })
+      .getRawOne();
+
+    const followingCount = await AppDataSource.createQueryBuilder()
+      .select('COUNT(follow.id)', 'count')
+      .from(Follow, 'follow')
+      .where('follow.followerId = :userId', { userId: userInfo.id })
+      .getRawOne();
+
+    const result = {
+      ...userInfo,
+      followersCount: parseInt(followersCount.count),
+      followingCount: parseInt(followingCount.count),
+    };
+
+    return res.json(result);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'something went wrong' });
