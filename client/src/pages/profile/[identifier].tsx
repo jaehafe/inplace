@@ -1,5 +1,5 @@
 import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
-import { message, TabsProps } from 'antd';
+import { Button, message, TabsProps } from 'antd';
 import { GetServerSideProps } from 'next';
 
 import React, { useState } from 'react';
@@ -14,6 +14,8 @@ import { useUserStore } from '../../store/userStore';
 import { handleFollowAPI } from '../../apis/follow';
 import P from './Profile.styles';
 import T from '../../components/Common/ProfileTab/Tab.styles';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 function Profile({ identifier }: { identifier: string }) {
   const items: TabsProps['items'] = [
@@ -50,7 +52,7 @@ function Profile({ identifier }: { identifier: string }) {
       children: <ProfileCommentTab identifier={identifier} />,
     },
   ];
-
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const currentLoginUser = useUserStore((state) => state.userInfo);
   const { data: userInfo } = getUserInfoAPI(identifier);
@@ -82,25 +84,43 @@ function Profile({ identifier }: { identifier: string }) {
     followMutate({ username: userInfo?.username });
   };
 
+  const handleLogin = () => {
+    message.success('로그인 페이지로 이동합니다.');
+    router.push('/login');
+  };
+
   return (
     <P.Wrapper>
       <LogoHeader headerIcons={false} />
       <P.InfoWrapper>
         <P.InfoLeft>
-          <h2>{userInfo?.username}</h2>
-          <P.FollowInfoWrapper onClick={() => setOpen(true)}>
-            <h4>팔로워 {userInfo?.followersCount}</h4>
-            <h4>팔로잉 {userInfo?.followingCount}</h4>
-          </P.FollowInfoWrapper>
-          {currentLoginUser?.username === userInfo?.username ? (
-            <P.EditButton>프로필 편집</P.EditButton>
+          {currentLoginUser ? (
+            <>
+              <h2>{userInfo?.username}</h2>
+              <P.FollowInfoWrapper onClick={() => setOpen(true)}>
+                <h4>팔로워 {userInfo?.followersCount}</h4>
+                <h4>팔로잉 {userInfo?.followingCount}</h4>
+              </P.FollowInfoWrapper>
+              {/*  */}
+              {currentLoginUser?.username === userInfo?.username ? (
+                <P.EditButton onClick={handleLogin}>프로필 편집</P.EditButton>
+              ) : (
+                <P.FollowButton
+                  onClick={handleFollowing}
+                  isFollowing={userInfo?.isFollowing}
+                >
+                  {userInfo?.isFollowing ? '팔로잉 취소' : '팔로우'}
+                </P.FollowButton>
+              )}
+            </>
           ) : (
-            <P.FollowButton
-              onClick={handleFollowing}
-              isFollowing={userInfo.isFollowing}
-            >
-              {userInfo.isFollowing ? '팔로잉 취소' : '팔로우'}
-            </P.FollowButton>
+            <>
+              <h2>{userInfo?.username}</h2>
+              <P.FollowInfoWrapper onClick={() => setOpen(true)}>
+                <h4>팔로워 {userInfo?.followersCount}</h4>
+                <h4>팔로잉 {userInfo?.followingCount}</h4>
+              </P.FollowInfoWrapper>
+            </>
           )}
         </P.InfoLeft>
         <P.InfoRight>

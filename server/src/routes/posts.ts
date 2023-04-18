@@ -160,8 +160,8 @@ const getOwnPosts = async (req: Request, res: Response) => {
 };
 
 router.get('/', getAllPosts);
-
-router.get('/owned/:identifier', userMiddleware, authMiddleware, getOwnPosts);
+// userMiddleware, authMiddleware,
+router.get('/owned/:identifier', getOwnPosts);
 router.get('/:identifier', getDetailPost);
 router.post(
   '/images',
