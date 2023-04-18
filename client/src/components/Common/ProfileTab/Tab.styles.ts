@@ -3,12 +3,10 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   /* border: 1px solid; */
-  overflow-y: scroll;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  height: 100%;
+  gap: 10px;
 `;
 const Wrapper = styled.div`
   display: flex;

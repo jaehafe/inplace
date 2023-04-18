@@ -53,39 +53,60 @@ function ProfileFollowerTab({ identifier }: IIdentifier) {
     }
   }, [inView, hasNextPage, observeRef]);
 
+  console.log('infiniteData>>', infiniteData);
+
   return (
-    <T.Container ref={observeRef}>
-      <T.Wrapper>
-        <T.BodyLeft>
-          <ProfileImage
-            width={40}
-            height={40}
-            style={{ borderRadius: '50%' }}
-          />
-          <span>유저이름</span>
-        </T.BodyLeft>
+    <T.Container>
+      {infiniteData?.pages.map((page) =>
+        page.result.map((data: any) => {
+          console.log(data);
+          const {
+            follower: { createdAt, username, image },
+          } = data;
+          return (
+            <T.Wrapper ref={observeRef} key={createdAt}>
+              <T.BodyLeft>
+                <ProfileImage
+                  src={image.src}
+                  width={40}
+                  height={40}
+                  style={{ borderRadius: '50%' }}
+                />
+                <span>{username}</span>
+              </T.BodyLeft>
 
-        <T.FollowButton type="dashed" size="small">
-          팔로잉
-        </T.FollowButton>
-      </T.Wrapper>
-
-      <T.Wrapper>
-        <T.BodyLeft>
-          <ProfileImage
-            width={40}
-            height={40}
-            style={{ borderRadius: '50%' }}
-          />
-          <span>유저이름</span>
-        </T.BodyLeft>
-
-        <T.FollowButton type="dashed" size="small">
-          팔로잉
-        </T.FollowButton>
-      </T.Wrapper>
+              <T.BodyRight>
+                <T.FollowButton type="dashed" size="small">
+                  팔로잉
+                </T.FollowButton>
+              </T.BodyRight>
+            </T.Wrapper>
+          );
+        })
+      )}
     </T.Container>
   );
 }
 
 export default ProfileFollowerTab;
+
+{
+  /* <T.Container ref={observeRef} >
+                <T.Wrapper>
+                  <T.BodyLeft>
+                    <ProfileImage
+                      width={40}
+                      height={40}
+                      style={{ borderRadius: '50%' }}
+                    />
+                    <span>유저이름</span>
+                  </T.BodyLeft>
+
+                  <T.FollowButton type="dashed" size="small">
+                    팔로잉
+                  </T.FollowButton>
+                </T.Wrapper>
+
+               
+              </T.Container> */
+}

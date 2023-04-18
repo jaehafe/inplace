@@ -16,7 +16,7 @@ const getFollowers = async (req: Request, res: Response) => {
     const targetUser = await User.findOneOrFail({ where: { username } });
     const followers = await Follow.find({
       where: { followingId: targetUser.id },
-      relations: ['follower'],
+      relations: ['follower', 'follower.image'],
       skip: currentPage * perPage,
       take: perPage,
     });

@@ -113,7 +113,7 @@ const FollowInfoDrawer = styled(Drawer)`
   position: sticky;
   left: 0;
   width: 390px !important;
-  height: 90vh !important;
+  height: 300px !important;
   margin: auto;
   border-radius: 20px;
   overflow-y: scroll;
