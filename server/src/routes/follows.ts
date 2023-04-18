@@ -86,7 +86,6 @@ const handleFollow = async (req: Request, res: Response) => {
 
     // 이미 팔로우 중인지 확인
     const follow = await Follow.findOne({ where: { followerId: user.id, followingId: targetUser.id } });
-    console.log('팔로우 중인지 확인!!!!!!!!!!', follow);
 
     if (follow) {
       // 이미 팔로우한 경우, 팔로우를 취소하고 DB에서 삭제

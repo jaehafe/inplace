@@ -95,7 +95,12 @@ function Profile({ identifier }: { identifier: string }) {
           {currentLoginUser?.username === userInfo?.username ? (
             <P.EditButton>프로필 편집</P.EditButton>
           ) : (
-            <P.EditButton onClick={handleFollowing}>팔로우</P.EditButton>
+            <P.FollowButton
+              onClick={handleFollowing}
+              isFollowing={userInfo.isFollowing}
+            >
+              {userInfo.isFollowing ? '팔로잉 취소' : '팔로우'}
+            </P.FollowButton>
           )}
         </P.InfoLeft>
         <P.InfoRight>

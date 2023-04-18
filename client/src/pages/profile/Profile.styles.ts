@@ -69,6 +69,15 @@ const FollowInfoWrapper = styled.button`
 const EditButton = styled(Button)`
   color: ${({ theme }) => theme.gray700};
 `;
+interface FollowButtonProps {
+  isFollowing: boolean;
+}
+const FollowButton = styled(Button)<FollowButtonProps>`
+  color: ${({ theme, isFollowing }) =>
+    isFollowing ? theme.black : theme.black};
+  background-color: ${({ theme, isFollowing }) =>
+    isFollowing ? theme.white : theme.positiveLight};
+`;
 
 const StyledTab = styled(Tabs)`
   margin-top: 20px;
@@ -135,6 +144,7 @@ const P = {
   StyledTab,
   FollowInfoDrawer,
   StyledFollowTab,
+  FollowButton,
 };
 
 export default P;
