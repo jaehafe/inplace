@@ -6,9 +6,27 @@ import { userMiddleware } from '../middlewares/userMiddleware';
 
 const router = Router();
 
+const getFollowers = async (req: Request, res: Response) => {
+  const { username } = req.params;
+
+  try {
+    const targetUser = await User.findOneOrFail({ where: { username } });
+    const followers = await Follow.find({
+      where: { followingId: targetUser.id },
+      relations: ['follower'],
+    });
+    return res.json(followers);
+  } catch (error) {
+    console.error(error);
+    return res.json({ error: 'something went wrong' });
+  }
+};
+
+const getFollowings = async (req: Request, res: Response) => {};
+
 const addFollow = async (req: Request, res: Response) => {
   const user: User = res.locals.user;
-  const username = req.params.username;
+  const { username } = req.body;
   console.log('req.params>>>', req.params);
 
   try {
@@ -38,7 +56,7 @@ const addFollow = async (req: Request, res: Response) => {
 
 const deleteFollow = async (req: Request, res: Response) => {
   const user: User = res.locals.user;
-  const username = req.params.username;
+  const { username } = req.body;
   console.log('req.params>>>', req.params);
 
   try {
@@ -58,6 +76,8 @@ const deleteFollow = async (req: Request, res: Response) => {
   }
 };
 
+router.get('/:username/followers', getFollowers);
+router.get('/:username/followings', getFollowings);
 router.post('/:username', userMiddleware, authMiddleware, addFollow);
 router.delete('/:username', userMiddleware, authMiddleware, deleteFollow);
 
