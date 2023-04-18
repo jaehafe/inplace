@@ -38,14 +38,12 @@ function ProfileCommentTab({ identifier }: { identifier: string }) {
     staleTime: 10000,
   });
 
-  console.log('commentData>>>>', commentData);
-
   return (
     <T.Wrapper>
       <P.LoadingWrapper>
         {isLoading || isFetching ? <Spin size="large" /> : ''}
       </P.LoadingWrapper>
-      {commentData ? (
+      {commentData?.data.length > 0 ? (
         <>
           {commentData?.data?.map((data: any) => {
             return (

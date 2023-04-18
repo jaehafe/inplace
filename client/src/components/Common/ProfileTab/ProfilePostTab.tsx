@@ -46,7 +46,7 @@ function ProfilePostTab({ identifier }: { identifier: string }) {
       <P.LoadingWrapper>
         {isLoading || isFetching ? <Spin size="large" /> : ''}
       </P.LoadingWrapper>
-      {postData ? (
+      {postData?.data.length > 0 ? (
         <>
           {postData?.data?.map((data: any) => {
             return (
