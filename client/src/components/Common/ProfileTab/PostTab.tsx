@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React from 'react';
 import T from './Tab.styles';
 import ProfileImage from '../ProfileImage';
@@ -10,11 +9,11 @@ import {
   LikeTwoTone,
 } from '@ant-design/icons';
 import { Divider } from 'antd';
-import { useRouter } from 'next/router';
+
 import Link from 'next/link';
 import { formattedDate } from '../../../utils';
 
-function ProfileTab({ post }: any) {
+function PostTab({ post }: any) {
   const {
     identifier,
     commentCount,
@@ -57,4 +56,4 @@ function ProfileTab({ post }: any) {
   );
 }
 
-export default ProfileTab;
+export default PostTab;
