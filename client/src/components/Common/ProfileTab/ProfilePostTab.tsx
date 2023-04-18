@@ -39,8 +39,6 @@ function ProfilePostTab({ identifier }: { identifier: string }) {
   const pageSize = postData?.data?.length;
   const isLastPage = pageSize === 0 || pageSize < postData?.total;
 
-  console.log('postData>> 페이지네이션>', postData);
-
   return (
     <>
       <P.LoadingWrapper>
