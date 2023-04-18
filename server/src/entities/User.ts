@@ -1,5 +1,5 @@
 import { IsEmail, Length } from 'class-validator';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -61,6 +61,16 @@ export default class User extends BaseEntity {
 
   @OneToMany(() => Follow, (follow) => follow.following)
   followers: Follow[];
+
+  @Expose()
+  get followersCount(): number {
+    return this.followers ? this.followers.length : 0;
+  }
+
+  @Expose()
+  get followingCount(): number {
+    return this.following ? this.following.length : 0;
+  }
 
   // User 엔티티가 데이터베이스에 삽입되기 전에 해당 엔티티의 password 필드를 bcrypt를 이용하여 해싱하는 작업
   @BeforeInsert()
