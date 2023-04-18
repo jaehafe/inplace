@@ -65,7 +65,7 @@ function ProfilePostTab({ identifier }: { identifier: string }) {
           />
         </>
       ) : (
-        <span>작성한 댓글이 없습니다.</span>
+        <span>작성한 게시글이 없습니다.</span>
       )}
     </T.Wrapper>
   );
