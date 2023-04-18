@@ -2,6 +2,7 @@ import { HeartOutlined, HeartTwoTone, MoreOutlined } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Divider, Input, message, Popover } from 'antd';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, {
   FormEvent,
@@ -16,6 +17,7 @@ import { deleteCommentAPI, updateCommentAPI } from '../../apis/comment';
 import { voteCommentAPI } from '../../apis/vote';
 import { useUserStore } from '../../store/userStore';
 import { defaultImg, formattedDate } from '../../utils';
+import ProfileImage from '../Common/ProfileImage';
 import P from './Posts.styles';
 
 function PostComment({ data }: any) {
@@ -147,15 +149,14 @@ function PostComment({ data }: any) {
   return (
     <P.PostComment key={commentId}>
       <P.CommentBodyWrapper>
-        <Image
-          src={
-            user?.image ? `http://localhost:4000/${user.image.src}` : defaultImg
-          }
-          width={36}
-          height={36}
-          style={{ borderRadius: '50px' }}
-          alt="avatar"
-        />
+        <Link href={`/profile/${user.username}`}>
+          <ProfileImage
+            src={user.image.src}
+            width={36}
+            height={36}
+            style={{ borderRadius: '50px' }}
+          />
+        </Link>
         <P.CommentInfo>
           <P.CommentInfoHeader>
             <span>
