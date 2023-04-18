@@ -59,14 +59,8 @@ export const updateCommentAPI = (
   options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
   const queryKey = `/comments/${commentId}`;
-  // const queryFn = () => axiosInstance.patch(queryKey).then((res) => res.data);
   const queryFn = (body: { body: string }) =>
     axiosInstance.patch(queryKey, body).then((res) => res.data);
-
-  // const onSuccess = () => {
-  //   message.success('댓글 수정 완료');
-  //   console.log('12312312!!!!!!!!!!!!!');
-  // };
 
   const onError = () => {
     message.error('댓글 수정 실패');
@@ -80,10 +74,6 @@ export const deleteCommentAPI = (
 ) => {
   const queryKey = `/comments/${commentId}`;
   const queryFn = () => axiosInstance.delete(queryKey).then((res) => res.data);
-
-  // const onSuccess = () => {
-  //   message.success('댓글 삭제 완료');
-  // };
 
   const onError = () => {
     message.error('댓글 삭제 실패');
