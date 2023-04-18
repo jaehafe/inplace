@@ -27,6 +27,7 @@ const getFollowings = async (req: Request, res: Response) => {};
 const addFollow = async (req: Request, res: Response) => {
   const user: User = res.locals.user;
   const { username } = req.body;
+  console.log('username>>>', username);
   console.log('req.params>>>', req.params);
 
   try {
@@ -76,9 +77,39 @@ const deleteFollow = async (req: Request, res: Response) => {
   }
 };
 
+const handleFollow = async (req: Request, res: Response) => {
+  const { username } = req.body;
+
+  try {
+    const user: User = res.locals.user;
+    const targetUser = await User.findOneOrFail({ where: { username } });
+
+    // 이미 팔로우 중인지 확인
+    const follow = await Follow.findOne({ where: { followerId: user.id, followingId: targetUser.id } });
+    console.log('팔로우 중인지 확인!!!!!!!!!!', follow);
+
+    if (follow) {
+      // 이미 팔로우한 경우, 팔로우를 취소하고 DB에서 삭제
+      await follow.remove();
+      res.status(200).json({ message: '팔로우 취소' });
+    } else {
+      // 아직 팔로우하지 않은 경우, 팔로우 추가
+      const newFollow = new Follow();
+      newFollow.follower = user;
+      newFollow.following = targetUser;
+      await newFollow.save();
+      res.status(200).json({ message: '팔로우 추가' });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'something went wrong' });
+  }
+};
+
 router.get('/:username/followers', getFollowers);
 router.get('/:username/followings', getFollowings);
-router.post('/:username', userMiddleware, authMiddleware, addFollow);
+router.post('/:username', userMiddleware, authMiddleware, handleFollow);
+// router.post('/:username', userMiddleware, authMiddleware, addFollow);
 router.delete('/:username', userMiddleware, authMiddleware, deleteFollow);
 
 export default router;
