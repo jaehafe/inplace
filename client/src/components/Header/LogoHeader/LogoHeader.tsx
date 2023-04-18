@@ -10,6 +10,7 @@ import B from '../../Common/BackButton';
 import { logoutAPI } from '../../../apis/user';
 import { useUserStore } from '../../../store/userStore';
 import { defaultImg } from '../../../utils';
+import ProfileImage from '../../Common/ProfileImage';
 
 interface IProps {
   headerIcons?: boolean;
@@ -90,16 +91,11 @@ function LogoHeader({ headerIcons }: IProps) {
           >
             <L.DrawerBodyWrapper>
               <L.ProfileWrapper>
-                <Image
-                  src={
-                    currentLoginUser
-                      ? `http://localhost:4000/${currentLoginUser.image.src}`
-                      : defaultImg
-                  }
+                <ProfileImage
+                  src={currentLoginUser?.image.src}
                   width={100}
                   height={100}
                   style={{ borderRadius: '50px' }}
-                  alt="avatar"
                 />
                 {currentLoginUser && (
                   <>
