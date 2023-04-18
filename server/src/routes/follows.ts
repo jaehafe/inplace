@@ -27,7 +27,26 @@ const getFollowers = async (req: Request, res: Response) => {
   }
 };
 
-const getFollowings = async (req: Request, res: Response) => {};
+const getFollowings = async (req: Request, res: Response) => {
+  const currentPage: number = (req.query.page || 0) as number;
+  const perPage: number = (req.query.count || 3) as number;
+  const { username } = req.params;
+  console.log('req.query.page...', req.query.page);
+
+  try {
+    const targetUser = await User.findOneOrFail({ where: { username } });
+    const followers = await Follow.find({
+      where: { followerId: targetUser.id },
+      relations: ['following', 'following.image'],
+      skip: currentPage * perPage,
+      take: perPage,
+    });
+    return res.json(followers);
+  } catch (error) {
+    console.error(error);
+    return res.json({ error: 'something went wrong' });
+  }
+};
 
 const handleFollow = async (req: Request, res: Response) => {
   const { username } = req.body;
