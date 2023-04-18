@@ -1,13 +1,11 @@
-import React, { forwardRef, Fragment, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import {
-  AntDesignOutlined,
   CommentOutlined,
   DislikeTwoTone,
   FrownTwoTone,
   LikeTwoTone,
   MoreOutlined,
   PieChartOutlined,
-  UserOutlined,
 } from '@ant-design/icons';
 import {
   Button,
@@ -57,6 +55,7 @@ function Post(
     votes,
     user,
   } = post;
+  console.log('user>>>', user);
 
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -111,6 +110,10 @@ function Post(
         console.log('123');
         break;
     }
+  };
+
+  const handleFollow = (username: string) => {
+    console.log('username>>', username);
   };
 
   return (
@@ -268,12 +271,20 @@ function Post(
         <Button type="text" shape="round">
           스크랩
         </Button>
+        <Divider style={{ margin: '10px 0' }} />
+        <Button
+          type="text"
+          shape="round"
+          onClick={() => handleFollow(username)}
+        >
+          팔로우
+        </Button>
+        <Divider style={{ margin: '10px 0' }} />
+        <Button type="text" shape="round" style={{ color: 'red' }}>
+          내용 신고
+        </Button>
         {currentLoginUser?.username === user.username ? (
           <>
-            <Divider style={{ margin: '10px 0' }} />
-            <Button type="text" shape="round">
-              팔로우
-            </Button>
             <Divider style={{ margin: '10px 0' }} />
             <Button type="text" shape="round">
               수정

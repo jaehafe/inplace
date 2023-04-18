@@ -12,6 +12,7 @@ import postRoutes from './routes/posts';
 import commentRoutes from './routes/comments';
 import postVoteRoutes from './routes/postVotes';
 import commentVoteRoutes from './routes/commentVotes';
+import followRoutes from './routes/follows';
 
 dotenv.config();
 const app = express();
@@ -35,6 +36,7 @@ app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/postVotes', postVoteRoutes);
 app.use('/api/commentVotes', commentVoteRoutes);
+app.use('/api/follows', followRoutes);
 
 let port = 4000;
 
