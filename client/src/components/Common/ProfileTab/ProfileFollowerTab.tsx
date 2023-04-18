@@ -1,9 +1,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { axiosInstance } from '../../../configs/axios';
 import { IIdentifier } from '../../../types';
+import P from '../../Posts/Posts.styles';
 import ProfileImage from '../ProfileImage';
 import T from './Tab.styles';
 
@@ -43,7 +44,7 @@ function ProfileFollowerTab({ identifier }: IIdentifier) {
           return undefined;
         }
       },
-      cacheTime: 60000, // 60초간 캐시된 데이터 유효
+      cacheTime: 600000, // 6분 동안 캐시된 데이터 유효
     }
   );
 
@@ -53,7 +54,7 @@ function ProfileFollowerTab({ identifier }: IIdentifier) {
     }
   }, [inView, hasNextPage, observeRef]);
 
-  console.log('infiniteData>>', infiniteData);
+  // console.log('infiniteData>>', infiniteData);
 
   return (
     <T.Container>
@@ -84,29 +85,11 @@ function ProfileFollowerTab({ identifier }: IIdentifier) {
           );
         })
       )}
+      <P.LoadingWrapper>
+        {isFetchingNextPage || isFetching ? <Spin size="large" /> : ''}
+      </P.LoadingWrapper>
     </T.Container>
   );
 }
 
 export default ProfileFollowerTab;
-
-{
-  /* <T.Container ref={observeRef} >
-                <T.Wrapper>
-                  <T.BodyLeft>
-                    <ProfileImage
-                      width={40}
-                      height={40}
-                      style={{ borderRadius: '50%' }}
-                    />
-                    <span>유저이름</span>
-                  </T.BodyLeft>
-
-                  <T.FollowButton type="dashed" size="small">
-                    팔로잉
-                  </T.FollowButton>
-                </T.Wrapper>
-
-               
-              </T.Container> */
-}
