@@ -7,6 +7,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, message, RadioChangeEvent, Image as AntdImage } from 'antd';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { postVoteAPI } from '../../apis/vote';
@@ -94,19 +95,21 @@ function PostDetail({ detailPost }: any) {
   return (
     <P.Wrapper>
       <P.HeaderWrapper>
-        <P.HeaderLeft>
-          <ProfileImage
-            src={user?.image.src}
-            width={46}
-            height={46}
-            style={{ borderRadius: '50px' }}
-            alt="avatar"
-          />
-          <P.PostInfo>
-            <h4>{username}</h4>
-            <span>{formattedDate(updatedAt)}</span> · <span>조회 234</span>
-          </P.PostInfo>
-        </P.HeaderLeft>
+        <Link href={`/profile/${username}`}>
+          <P.HeaderLeft>
+            <ProfileImage
+              src={user?.image.src}
+              width={46}
+              height={46}
+              style={{ borderRadius: '50px' }}
+              alt="avatar"
+            />
+            <P.PostInfo>
+              <h4>{username}</h4>
+              <span>{formattedDate(updatedAt)}</span> · <span>조회 234</span>
+            </P.PostInfo>
+          </P.HeaderLeft>
+        </Link>
         <P.HeaderRight>
           <Button type="text" shape="circle" onClick={() => setOpen(true)}>
             <MoreOutlined style={{ fontSize: '20px' }} />
