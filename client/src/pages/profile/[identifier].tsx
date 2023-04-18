@@ -13,6 +13,7 @@ import LogoHeader from '../../components/Header/LogoHeader/LogoHeader';
 import { axiosInstance } from '../../configs/axios';
 import { useUserStore } from '../../store/userStore';
 import P from './Profile.styles';
+import T from '../../components/Common/ProfileTab/Tab.styles';
 
 function Profile({ identifier }: { identifier: string }) {
   const items: TabsProps['items'] = [
@@ -37,7 +38,11 @@ function Profile({ identifier }: { identifier: string }) {
     {
       key: '팔로워',
       label: `팔로워 목록`,
-      children: <ProfileFollowerTab identifier={identifier} />,
+      children: (
+        <T.Wrapper>
+          <ProfileFollowerTab identifier={identifier} />
+        </T.Wrapper>
+      ),
     },
     {
       key: '팔로잉',
@@ -90,6 +95,7 @@ function Profile({ identifier }: { identifier: string }) {
         open={open}
         key="bottom"
         height={'auto'}
+        style={{ overflowY: 'scroll' }}
       >
         <P.StyledFollowTab
           items={followItems}

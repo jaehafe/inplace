@@ -1,8 +1,20 @@
-import { Pagination } from 'antd';
+import { Button, Pagination } from 'antd';
 import styled from 'styled-components';
 
-const Wrapper = styled.div`
+const Container = styled.div`
+  /* border: 1px solid; */
   overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+`;
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const BodyWrapper = styled.div`
@@ -102,7 +114,19 @@ const AntdPagination = styled(Pagination)`
   align-items: center;
 `;
 
+const BodyLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+const BodyRight = styled.div``;
+const FollowButton = styled(Button)`
+  color: ${({ theme }) => theme.gray600};
+  background-color: ${({ theme }) => theme.white};
+`;
+
 const T = {
+  Container,
   Wrapper,
   BodyWrapper,
   Body,
@@ -116,6 +140,9 @@ const T = {
   MyCommentHeaderWrapper,
   MyCommentBodyWrapper,
   AntdPagination,
+  BodyLeft,
+  BodyRight,
+  FollowButton,
 };
 
 export default T;

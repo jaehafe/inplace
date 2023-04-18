@@ -121,6 +121,7 @@ const FollowInfoDrawer = styled(Drawer)`
     display: flex;
     flex-direction: column;
     padding: 0 20px;
+    height: 100%;
   }
 `;
 

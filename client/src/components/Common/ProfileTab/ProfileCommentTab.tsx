@@ -1,11 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { Pagination, PaginationProps, Spin } from 'antd';
+import { PaginationProps, Spin } from 'antd';
 import React, { useState } from 'react';
 import { axiosInstance } from '../../../configs/axios';
 import { IIdentifier } from '../../../types';
 import P from '../../Posts/Posts.styles';
 import CommentTab from './CommentTab';
-import ProfileTab from './PostTab';
 import T from './Tab.styles';
 
 function ProfileCommentTab({ identifier }: IIdentifier) {

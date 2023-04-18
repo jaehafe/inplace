@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { getOwnPostsAPI } from '../../../apis/post';
 import { axiosInstance } from '../../../configs/axios';
 import P from '../../Posts/Posts.styles';
-import ProfileTab from './ProfileTab';
+import PostTab from './PostTab';
 import T from './Tab.styles';
 
 function ProfilePostTab({ identifier }: { identifier: string }) {
@@ -42,7 +42,7 @@ function ProfilePostTab({ identifier }: { identifier: string }) {
   console.log('postData>> 페이지네이션>', postData);
 
   return (
-    <T.Wrapper>
+    <>
       <P.LoadingWrapper>
         {isLoading || isFetching ? <Spin size="large" /> : ''}
       </P.LoadingWrapper>
@@ -50,11 +50,7 @@ function ProfilePostTab({ identifier }: { identifier: string }) {
         <>
           {postData?.data?.map((data: any) => {
             return (
-              <ProfileTab
-                post={data}
-                key={data.identifier}
-                queryKey={queryKey}
-              />
+              <PostTab post={data} key={data.identifier} queryKey={queryKey} />
             );
           })}
           <T.AntdPagination
@@ -67,7 +63,7 @@ function ProfilePostTab({ identifier }: { identifier: string }) {
       ) : (
         <span>작성한 게시글이 없습니다.</span>
       )}
-    </T.Wrapper>
+    </>
   );
 }
 export default ProfilePostTab;
