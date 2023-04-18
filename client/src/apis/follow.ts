@@ -14,16 +14,3 @@ export const handleFollowAPI = (
 
   return useMutation([queryKey], queryFn, { ...options });
 };
-
-export const deleteFollowAPI = (
-  username?: string,
-  options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
-) => {
-  const queryKey = `/follows/${username}`;
-  const queryFn = () => axiosInstance.delete(queryKey).then((res) => res.data);
-
-  const onError = () => {
-    message.error('팔로우 삭제 실패');
-  };
-  return useMutation([queryKey], queryFn, { onError, ...options });
-};
