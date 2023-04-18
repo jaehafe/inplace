@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import { AppDataSource } from './data-source';
 
 import authRoutes from './routes/auth';
+import userRoutes from './routes/users';
 import postRoutes from './routes/posts';
 import commentRoutes from './routes/comments';
 import postVoteRoutes from './routes/postVotes';
@@ -32,6 +33,7 @@ app.get('/', (_, res: Response) => {
   res.send('server is running!!!');
 });
 app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/postVotes', postVoteRoutes);
