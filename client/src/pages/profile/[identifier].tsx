@@ -1,8 +1,7 @@
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { Button, Divider, Tabs, TabsProps } from 'antd';
+import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
+import { message, TabsProps } from 'antd';
 import { GetServerSideProps } from 'next';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
+
 import React, { useState } from 'react';
 import { getUserInfoAPI } from '../../apis/user';
 import ProfileImage from '../../components/Common/ProfileImage';
@@ -12,6 +11,7 @@ import ProfileFollowerTab from '../../components/Common/ProfileTab/ProfileFollow
 import LogoHeader from '../../components/Header/LogoHeader/LogoHeader';
 import { axiosInstance } from '../../configs/axios';
 import { useUserStore } from '../../store/userStore';
+import { handleFollowAPI } from '../../apis/follow';
 import P from './Profile.styles';
 import T from '../../components/Common/ProfileTab/Tab.styles';
 
@@ -54,7 +54,21 @@ function Profile({ identifier }: { identifier: string }) {
   const [open, setOpen] = useState(false);
   const currentLoginUser = useUserStore((state) => state.userInfo);
   const { data: userInfo } = getUserInfoAPI(identifier);
-  console.log('userInfo>>>', userInfo);
+  const queryClient = useQueryClient();
+  console.log(userInfo);
+
+  // onSuccessFollow
+  const onSuccessFollow = (data: any) => {
+    message.success(data.message);
+    queryClient.invalidateQueries([`/user/${identifier}`]);
+  };
+  const onErrorFollow = (data: any) => {
+    message.error(data.response.data.error);
+  };
+  const { mutate: followMutate } = handleFollowAPI(userInfo?.username, {
+    onSuccess: onSuccessFollow,
+    onError: onErrorFollow,
+  });
 
   const onChange = (key: string) => {
     console.log(key);
@@ -62,6 +76,10 @@ function Profile({ identifier }: { identifier: string }) {
 
   const handleFollowTabChange = (key: string) => {
     console.log('>>>>>', key);
+  };
+
+  const handleFollowing = () => {
+    followMutate({ username: userInfo?.username });
   };
 
   return (
@@ -77,7 +95,7 @@ function Profile({ identifier }: { identifier: string }) {
           {currentLoginUser?.username === userInfo?.username ? (
             <P.EditButton>프로필 편집</P.EditButton>
           ) : (
-            <P.EditButton>팔로우</P.EditButton>
+            <P.EditButton onClick={handleFollowing}>팔로우</P.EditButton>
           )}
         </P.InfoLeft>
         <P.InfoRight>

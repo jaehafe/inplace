@@ -3,19 +3,16 @@ import { message } from 'antd';
 import { AxiosError, AxiosResponse } from 'axios';
 import { axiosInstance } from '../configs/axios';
 
-export const addFollowAPI = (
+export const handleFollowAPI = (
   username?: string,
   options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
   const queryKey = `/follows/${username}`;
 
-  const queryFn = (body: string) =>
-    axiosInstance.post(queryKey, body).then((res) => res.data);
+  const queryFn = (data: object) =>
+    axiosInstance.post(queryKey, data).then((res) => res.data);
 
-  const onError = () => {
-    message.error('팔로우 추가 실패');
-  };
-  return useMutation([queryKey], queryFn, { onError, ...options });
+  return useMutation([queryKey], queryFn, { ...options });
 };
 
 export const deleteFollowAPI = (
