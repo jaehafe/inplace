@@ -2,12 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 import { Pagination, PaginationProps, Spin } from 'antd';
 import React, { useState } from 'react';
 import { axiosInstance } from '../../../configs/axios';
+import { IIdentifier } from '../../../types';
 import P from '../../Posts/Posts.styles';
 import CommentTab from './CommentTab';
-import ProfileTab from './ProfileTab';
+import ProfileTab from './PostTab';
 import T from './Tab.styles';
 
-function ProfileCommentTab({ identifier }: { identifier: string }) {
+function ProfileCommentTab({ identifier }: IIdentifier) {
   const [page, setPage] = useState(1);
 
   const onChange: PaginationProps['onChange'] = (page) => {
@@ -39,7 +40,7 @@ function ProfileCommentTab({ identifier }: { identifier: string }) {
   });
 
   return (
-    <T.Wrapper>
+    <>
       <P.LoadingWrapper>
         {isLoading || isFetching ? <Spin size="large" /> : ''}
       </P.LoadingWrapper>
@@ -64,7 +65,7 @@ function ProfileCommentTab({ identifier }: { identifier: string }) {
       ) : (
         <span>작성한 댓글이 없습니다.</span>
       )}
-    </T.Wrapper>
+    </>
   );
 }
 
