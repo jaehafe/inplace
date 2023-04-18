@@ -1,12 +1,14 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { Tabs, TabsProps } from 'antd';
+import { Button, Divider, Tabs, TabsProps } from 'antd';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import { getUserInfoAPI } from '../../apis/user';
 import ProfileImage from '../../components/Common/ProfileImage';
 import ProfileCommentTab from '../../components/Common/ProfileTab/ProfileCommentTab';
 import ProfilePostTab from '../../components/Common/ProfileTab/ProfilePostTab';
+import ProfileFollowerTab from '../../components/Common/ProfileTab/ProfileFollowerTab';
 import LogoHeader from '../../components/Header/LogoHeader/LogoHeader';
 import { axiosInstance } from '../../configs/axios';
 import { useUserStore } from '../../store/userStore';
@@ -31,11 +33,30 @@ function Profile({ identifier }: { identifier: string }) {
     },
   ];
 
+  const followItems: TabsProps['items'] = [
+    {
+      key: '팔로워',
+      label: `팔로워 목록`,
+      children: <ProfileFollowerTab identifier={identifier} />,
+    },
+    {
+      key: '팔로잉',
+      label: `팔로잉 목록`,
+      children: <ProfileCommentTab identifier={identifier} />,
+    },
+  ];
+
+  const [open, setOpen] = useState(false);
   const currentLoginUser = useUserStore((state) => state.userInfo);
   const { data: userInfo } = getUserInfoAPI(identifier);
+  console.log('userInfo>>>', userInfo);
 
   const onChange = (key: string) => {
     console.log(key);
+  };
+
+  const handleFollowTabChange = (key: string) => {
+    console.log('>>>>>', key);
   };
 
   return (
@@ -44,9 +65,9 @@ function Profile({ identifier }: { identifier: string }) {
       <P.InfoWrapper>
         <P.InfoLeft>
           <h2>{userInfo?.username}</h2>
-          <P.FollowInfoWrapper>
-            <h4>팔로워 0 ·</h4>
-            <h4>팔로잉 1</h4>
+          <P.FollowInfoWrapper onClick={() => setOpen(true)}>
+            <h4>팔로워 {userInfo?.followersCount}</h4>
+            <h4>팔로잉 {userInfo?.followingCount}</h4>
           </P.FollowInfoWrapper>
           {currentLoginUser?.username === userInfo?.username ? (
             <P.EditButton>프로필 편집</P.EditButton>
@@ -59,6 +80,22 @@ function Profile({ identifier }: { identifier: string }) {
         </P.InfoRight>
       </P.InfoWrapper>
       <P.StyledTab defaultActiveKey="1" items={items} onChange={onChange} />
+
+      {/* 팔로잉 팔로우 탭 */}
+      <P.FollowInfoDrawer
+        placement="bottom"
+        // title="팔로잉 / 팔로우"
+        closable={false}
+        onClose={() => setOpen(false)}
+        open={open}
+        key="bottom"
+        height={'auto'}
+      >
+        <P.StyledFollowTab
+          items={followItems}
+          onChange={handleFollowTabChange}
+        />
+      </P.FollowInfoDrawer>
     </P.Wrapper>
   );
 }

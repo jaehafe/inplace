@@ -16,3 +16,7 @@ export interface ILogin {
   email: string;
   password: string;
 }
+
+export interface IIdentifier {
+  identifier: string;
+}

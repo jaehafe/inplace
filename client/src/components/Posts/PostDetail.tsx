@@ -12,6 +12,7 @@ import React, { useState } from 'react';
 import { postVoteAPI } from '../../apis/vote';
 import { useUserStore } from '../../store/userStore';
 import { defaultImg, formattedDate } from '../../utils';
+import ProfileImage from '../Common/ProfileImage';
 import PostComments from './PostComments';
 import P from './Posts.styles';
 
@@ -94,12 +95,8 @@ function PostDetail({ detailPost }: any) {
     <P.Wrapper>
       <P.HeaderWrapper>
         <P.HeaderLeft>
-          <Image
-            src={
-              user?.image
-                ? `http://localhost:4000/${user.image.src}`
-                : defaultImg
-            }
+          <ProfileImage
+            src={user?.image.src}
             width={46}
             height={46}
             style={{ borderRadius: '50px' }}
