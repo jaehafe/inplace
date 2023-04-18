@@ -1,8 +1,13 @@
-import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
+import {
+  dehydrate,
+  QueryClient,
+  useInfiniteQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { Button, message, TabsProps } from 'antd';
 import { GetServerSideProps } from 'next';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getUserInfoAPI } from '../../apis/user';
 import ProfileImage from '../../components/Common/ProfileImage';
 import ProfileCommentTab from '../../components/Common/ProfileTab/ProfileCommentTab';
@@ -16,8 +21,38 @@ import P from './Profile.styles';
 import T from '../../components/Common/ProfileTab/Tab.styles';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useInView } from 'react-intersection-observer';
 
 function Profile({ identifier }: { identifier: string }) {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const currentLoginUser = useUserStore((state) => state.userInfo);
+  const { data: userInfo } = getUserInfoAPI(identifier);
+  const queryClient = useQueryClient();
+  // console.log(userInfo);
+
+  // onSuccessFollow
+  const onSuccessFollow = (data: any) => {
+    message.success(data.message);
+    queryClient.invalidateQueries([`/user/${identifier}`]);
+  };
+  const onErrorFollow = (data: any) => {
+    message.error(data.response.data.error);
+  };
+  const { mutate: followMutate } = handleFollowAPI(userInfo?.username, {
+    onSuccess: onSuccessFollow,
+    onError: onErrorFollow,
+  });
+
+  const handleFollowing = () => {
+    followMutate({ username: userInfo?.username });
+  };
+
+  const handleLogin = () => {
+    message.success('로그인 페이지로 이동합니다.');
+    router.push('/login');
+  };
+
   const items: TabsProps['items'] = [
     {
       key: '작성 글',
@@ -52,42 +87,6 @@ function Profile({ identifier }: { identifier: string }) {
       children: <ProfileCommentTab identifier={identifier} />,
     },
   ];
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const currentLoginUser = useUserStore((state) => state.userInfo);
-  const { data: userInfo } = getUserInfoAPI(identifier);
-  const queryClient = useQueryClient();
-  console.log(userInfo);
-
-  // onSuccessFollow
-  const onSuccessFollow = (data: any) => {
-    message.success(data.message);
-    queryClient.invalidateQueries([`/user/${identifier}`]);
-  };
-  const onErrorFollow = (data: any) => {
-    message.error(data.response.data.error);
-  };
-  const { mutate: followMutate } = handleFollowAPI(userInfo?.username, {
-    onSuccess: onSuccessFollow,
-    onError: onErrorFollow,
-  });
-
-  const onChange = (key: string) => {
-    console.log(key);
-  };
-
-  const handleFollowTabChange = (key: string) => {
-    console.log('>>>>>', key);
-  };
-
-  const handleFollowing = () => {
-    followMutate({ username: userInfo?.username });
-  };
-
-  const handleLogin = () => {
-    message.success('로그인 페이지로 이동합니다.');
-    router.push('/login');
-  };
 
   return (
     <P.Wrapper>
@@ -107,7 +106,7 @@ function Profile({ identifier }: { identifier: string }) {
               ) : (
                 <P.FollowButton
                   onClick={handleFollowing}
-                  isFollowing={userInfo?.isFollowing}
+                  $isfollowing={userInfo?.isFollowing}
                 >
                   {userInfo?.isFollowing ? '팔로잉 취소' : '팔로우'}
                 </P.FollowButton>
@@ -127,7 +126,7 @@ function Profile({ identifier }: { identifier: string }) {
           <ProfileImage src={userInfo?.image?.src} />
         </P.InfoRight>
       </P.InfoWrapper>
-      <P.StyledTab defaultActiveKey="1" items={items} onChange={onChange} />
+      <P.StyledTab defaultActiveKey="1" items={items} />
 
       {/* 팔로잉 팔로우 탭 */}
       <P.FollowInfoDrawer
@@ -140,10 +139,7 @@ function Profile({ identifier }: { identifier: string }) {
         height={'auto'}
         style={{ overflowY: 'scroll' }}
       >
-        <P.StyledFollowTab
-          items={followItems}
-          onChange={handleFollowTabChange}
-        />
+        <P.StyledFollowTab items={followItems} />
       </P.FollowInfoDrawer>
     </P.Wrapper>
   );

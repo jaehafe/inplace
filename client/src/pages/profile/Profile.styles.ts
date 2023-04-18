@@ -70,13 +70,13 @@ const EditButton = styled(Button)`
   color: ${({ theme }) => theme.gray700};
 `;
 interface FollowButtonProps {
-  isFollowing: boolean;
+  $isfollowing: boolean;
 }
 const FollowButton = styled(Button)<FollowButtonProps>`
-  color: ${({ theme, isFollowing }) =>
-    isFollowing ? theme.black : theme.black};
-  background-color: ${({ theme, isFollowing }) =>
-    isFollowing ? theme.white : theme.positiveLight};
+  color: ${({ theme, $isfollowing }) =>
+    $isfollowing ? theme.black : theme.black};
+  background-color: ${({ theme, $isfollowing }) =>
+    $isfollowing ? theme.white : theme.positiveLight};
 `;
 
 const StyledTab = styled(Tabs)`
