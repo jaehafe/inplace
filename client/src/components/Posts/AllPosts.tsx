@@ -12,7 +12,7 @@ function AllPosts() {
   const { ref: observeRef, inView } = useInView();
   // const [queryKey, setQueryKey] = useState(`/posts?page=0`);
 
-  const queryKey = `/posts?page=`;
+  const queryKey = `/posts`;
 
   const {
     status,
@@ -28,7 +28,7 @@ function AllPosts() {
   } = useInfiniteQuery(
     [queryKey],
     async ({ pageParam = 0 }) => {
-      const { data } = await axiosInstance.get(`${queryKey}${pageParam}`);
+      const { data } = await axiosInstance.get(`${queryKey}?page=${pageParam}`);
       const isLast = data.length === 0;
 
       return {
@@ -45,6 +45,7 @@ function AllPosts() {
           return undefined;
         }
       },
+      cacheTime: 60000, // 60초간 캐시된 데이터 유효
     }
   );
   // console.log('무한 스크롤 data>>>', infiniteData);

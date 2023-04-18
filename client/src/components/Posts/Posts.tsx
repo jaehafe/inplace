@@ -55,7 +55,7 @@ function Post(
     votes,
     user,
   } = post;
-  console.log('user>>>', user);
+  // console.log('user>>>', user);
 
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -86,7 +86,7 @@ function Post(
     return false;
   };
 
-  const handleVoteChange = (e: RadioChangeEvent, identifier: string) => {
+  const handleVoteChange = (e: RadioChangeEvent) => {
     if (!currentLoginUser) {
       message.error('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
       router.push('/login');
@@ -175,28 +175,25 @@ function Post(
               </P.StaticsButton>
             </P.StaticsLeft>
             {/* O X 투표 기능 */}
-            {/* currentLoginUser && */}
-            {
-              <P.StaticsRight>
-                <P.VoteSelect
-                  size="middle"
-                  optionType="button"
-                  buttonStyle="solid"
-                  onChange={(e) => handleVoteChange(e, postId)}
-                  defaultValue={checkWhetherVoted(currentLoginUser?.username)}
-                >
-                  <P.VoteButtonSmall value="agree">
-                    <LikeTwoTone twoToneColor="#2515d5" />
-                  </P.VoteButtonSmall>
-                  <P.VoteButtonSmall value="neutral">
-                    <FrownTwoTone twoToneColor="#eb2f96" />
-                  </P.VoteButtonSmall>
-                  <P.VoteButtonSmall value="disagree">
-                    <DislikeTwoTone twoToneColor="#52c41a" />
-                  </P.VoteButtonSmall>
-                </P.VoteSelect>
-              </P.StaticsRight>
-            }
+            <P.StaticsRight>
+              <P.VoteSelect
+                size="middle"
+                optionType="button"
+                buttonStyle="solid"
+                onChange={(e) => handleVoteChange(e)}
+                defaultValue={checkWhetherVoted(currentLoginUser?.username)}
+              >
+                <P.VoteButtonSmall value="agree">
+                  <LikeTwoTone twoToneColor="#2515d5" />
+                </P.VoteButtonSmall>
+                <P.VoteButtonSmall value="neutral">
+                  <FrownTwoTone twoToneColor="#eb2f96" />
+                </P.VoteButtonSmall>
+                <P.VoteButtonSmall value="disagree">
+                  <DislikeTwoTone twoToneColor="#52c41a" />
+                </P.VoteButtonSmall>
+              </P.VoteSelect>
+            </P.StaticsRight>
           </P.StaticsWrapper>
 
           {/* 게시물 사진 */}

@@ -77,7 +77,7 @@ function Profile({ identifier }: { identifier: string }) {
           {currentLoginUser?.username === userInfo?.username ? (
             <P.EditButton>프로필 편집</P.EditButton>
           ) : (
-            <P.EditButton>신고하기</P.EditButton>
+            <P.EditButton>팔로우</P.EditButton>
           )}
         </P.InfoLeft>
         <P.InfoRight>
