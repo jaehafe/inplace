@@ -69,7 +69,11 @@ export const getUserInfoAPI = (
     message.error('유저 정보를 가져오는데 실패했습니다.');
   };
 
-  return useQuery([queryKey], queryFn, { onError, ...options });
+  return useQuery([queryKey], queryFn, {
+    onError,
+    staleTime: 300000,
+    ...options,
+  });
 };
 
 export const uploadImageAPI = <T>(data: FormData) => {
