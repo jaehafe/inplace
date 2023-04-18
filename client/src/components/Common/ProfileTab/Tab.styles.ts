@@ -118,9 +118,14 @@ const BodyLeft = styled.div`
   gap: 10px;
 `;
 const BodyRight = styled.div``;
-const FollowButton = styled(Button)`
-  color: ${({ theme }) => theme.gray600};
-  background-color: ${({ theme }) => theme.white};
+interface FollowButtonProps {
+  $isfollowing: boolean;
+}
+const FollowButton = styled(Button)<FollowButtonProps>`
+  color: ${({ theme, $isfollowing }) =>
+    $isfollowing ? theme.black : theme.black};
+  background-color: ${({ theme, $isfollowing }) =>
+    $isfollowing ? theme.white : theme.positiveLight};
 `;
 
 const T = {

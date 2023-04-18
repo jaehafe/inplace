@@ -1,14 +1,22 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { Button, Spin } from 'antd';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { Button, message, Spin } from 'antd';
+import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { handleFollowAPI } from '../../../apis/follow';
+import { getUserInfoAPI } from '../../../apis/user';
 import { axiosInstance } from '../../../configs/axios';
+import { useUserStore } from '../../../store/userStore';
 import { IIdentifier } from '../../../types';
 import P from '../../Posts/Posts.styles';
 import ProfileImage from '../ProfileImage';
 import T from './Tab.styles';
 
 function ProfileFollowerTab({ identifier }: IIdentifier) {
+  const router = useRouter();
+  const currentLoginUser = useUserStore((state) => state.userInfo);
+  const { data: userInfo } = getUserInfoAPI(identifier);
+  const queryClient = useQueryClient();
   const { ref: observeRef, inView } = useInView();
 
   const queryKey = `/follows/${identifier}/followers`;
@@ -54,13 +62,35 @@ function ProfileFollowerTab({ identifier }: IIdentifier) {
     }
   }, [inView, hasNextPage, observeRef]);
 
+  const onSuccessFollow = (data: any) => {
+    message.success(data.message);
+    queryClient.invalidateQueries([`/user/${identifier}`]);
+  };
+  const onErrorFollow = (data: any) => {
+    message.error(data.response.data.error);
+  };
+  const { mutate: followMutate } = handleFollowAPI(userInfo?.username, {
+    onSuccess: onSuccessFollow,
+    onError: onErrorFollow,
+  });
+
+  const handleFollowing = () => {
+    console.log('1231');
+
+    followMutate({ username: userInfo?.username });
+  };
+
+  const handleLogin = () => {
+    message.success('로그인 페이지로 이동합니다.');
+    router.push('/login');
+  };
+
   // console.log('infiniteData>>', infiniteData);
 
   return (
     <T.Container>
       {infiniteData?.pages.map((page) =>
         page.result.map((data: any) => {
-          console.log(data);
           const {
             follower: { createdAt, username, image },
           } = data;
@@ -77,7 +107,12 @@ function ProfileFollowerTab({ identifier }: IIdentifier) {
               </T.BodyLeft>
 
               <T.BodyRight>
-                <T.FollowButton type="dashed" size="small">
+                <T.FollowButton
+                  type="dashed"
+                  size="small"
+                  onClick={handleFollowing}
+                  $isfollowing={userInfo?.isFollowing}
+                >
                   팔로잉
                 </T.FollowButton>
               </T.BodyRight>

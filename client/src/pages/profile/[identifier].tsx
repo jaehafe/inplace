@@ -22,6 +22,7 @@ import T from '../../components/Common/ProfileTab/Tab.styles';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useInView } from 'react-intersection-observer';
+import ProfileFollowingTab from '../../components/Common/ProfileTab/ProfileFollowingTab';
 
 function Profile({ identifier }: { identifier: string }) {
   const router = useRouter();
@@ -84,7 +85,7 @@ function Profile({ identifier }: { identifier: string }) {
     {
       key: '팔로잉',
       label: `팔로잉 목록`,
-      children: <ProfileCommentTab identifier={identifier} />,
+      children: <ProfileFollowingTab identifier={identifier} />,
     },
   ];
 
