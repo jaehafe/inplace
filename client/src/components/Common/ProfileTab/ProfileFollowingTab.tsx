@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, message, Spin } from 'antd';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { handleFollowAPI } from '../../../apis/follow';
 import { getUserInfoAPI } from '../../../apis/user';
@@ -12,10 +12,20 @@ import P from '../../Posts/Posts.styles';
 import ProfileImage from '../ProfileImage';
 import T from './Tab.styles';
 
-function ProfileFollowingTab({ identifier }: IIdentifier) {
+interface IProfileFollowList {
+  identifier: string;
+  setOpenFollowList: Dispatch<SetStateAction<boolean>>;
+}
+
+function ProfileFollowingTab({
+  identifier,
+  setOpenFollowList,
+}: IProfileFollowList) {
   const router = useRouter();
   const currentLoginUser = useUserStore((state) => state.userInfo);
   const { data: userInfo } = getUserInfoAPI(identifier);
+  console.log('getUserInfoAPI>>>', userInfo);
+
   const queryClient = useQueryClient();
   const { ref: observeRef, inView } = useInView();
 
@@ -64,6 +74,7 @@ function ProfileFollowingTab({ identifier }: IIdentifier) {
 
   const onSuccessFollow = (data: any) => {
     message.success(data.message);
+
     queryClient.invalidateQueries([`/user/${identifier}`]);
   };
   const onErrorFollow = (data: any) => {
@@ -75,7 +86,7 @@ function ProfileFollowingTab({ identifier }: IIdentifier) {
   });
 
   const handleFollowing = (username: string) => {
-    console.log('1231');
+    console.log(username);
 
     followMutate({ username });
   };
@@ -83,6 +94,11 @@ function ProfileFollowingTab({ identifier }: IIdentifier) {
   const handleLogin = () => {
     message.success('로그인 페이지로 이동합니다.');
     router.push('/login');
+  };
+
+  const handleProfileRoute = (username: string) => {
+    router.push(`/profile/${username}`);
+    setOpenFollowList(false);
   };
 
   return (
@@ -94,7 +110,7 @@ function ProfileFollowingTab({ identifier }: IIdentifier) {
           } = data;
           return (
             <T.Wrapper ref={observeRef} key={createdAt}>
-              <T.BodyLeft>
+              <T.BodyLeft onClick={() => handleProfileRoute(username)}>
                 <ProfileImage
                   src={image.src}
                   width={40}
@@ -105,14 +121,18 @@ function ProfileFollowingTab({ identifier }: IIdentifier) {
               </T.BodyLeft>
 
               <T.BodyRight>
-                <T.FollowButton
-                  type="dashed"
-                  size="small"
-                  onClick={() => handleFollowing(username)}
-                  $isfollowing={userInfo?.isFollowing}
-                >
-                  {userInfo?.isFollowing ? '팔로잉 취소' : '팔로우'}
-                </T.FollowButton>
+                {currentLoginUser ? (
+                  <T.FollowButton
+                    type="dashed"
+                    size="small"
+                    onClick={() => handleFollowing(username)}
+                    $isfollowing={userInfo?.isFollowing}
+                  >
+                    {userInfo?.isFollowing ? '팔로잉 취소' : '팔로우'}
+                  </T.FollowButton>
+                ) : (
+                  ''
+                )}
               </T.BodyRight>
             </T.Wrapper>
           );

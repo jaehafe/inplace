@@ -26,7 +26,7 @@ import ProfileFollowingTab from '../../components/Common/ProfileTab/ProfileFollo
 
 function Profile({ identifier }: { identifier: string }) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const [openFollowList, setOpenFollowList] = useState(false);
   const currentLoginUser = useUserStore((state) => state.userInfo);
   const { data: userInfo } = getUserInfoAPI(identifier);
   const queryClient = useQueryClient();
@@ -78,14 +78,22 @@ function Profile({ identifier }: { identifier: string }) {
       label: `팔로워 목록`,
       children: (
         <T.Wrapper>
-          <ProfileFollowerTab identifier={identifier} />
+          <ProfileFollowerTab
+            identifier={identifier}
+            setOpenFollowList={setOpenFollowList}
+          />
         </T.Wrapper>
       ),
     },
     {
       key: '팔로잉',
       label: `팔로잉 목록`,
-      children: <ProfileFollowingTab identifier={identifier} />,
+      children: (
+        <ProfileFollowingTab
+          identifier={identifier}
+          setOpenFollowList={setOpenFollowList}
+        />
+      ),
     },
   ];
 
@@ -97,7 +105,7 @@ function Profile({ identifier }: { identifier: string }) {
           {currentLoginUser ? (
             <>
               <h2>{userInfo?.username}</h2>
-              <P.FollowInfoWrapper onClick={() => setOpen(true)}>
+              <P.FollowInfoWrapper onClick={() => setOpenFollowList(true)}>
                 <h4>팔로워 {userInfo?.followersCount}</h4>
                 <h4>팔로잉 {userInfo?.followingCount}</h4>
               </P.FollowInfoWrapper>
@@ -116,7 +124,7 @@ function Profile({ identifier }: { identifier: string }) {
           ) : (
             <>
               <h2>{userInfo?.username}</h2>
-              <P.FollowInfoWrapper onClick={() => setOpen(true)}>
+              <P.FollowInfoWrapper onClick={() => setOpenFollowList(true)}>
                 <h4>팔로워 {userInfo?.followersCount}</h4>
                 <h4>팔로잉 {userInfo?.followingCount}</h4>
               </P.FollowInfoWrapper>
@@ -134,8 +142,8 @@ function Profile({ identifier }: { identifier: string }) {
         placement="bottom"
         // title="팔로잉 / 팔로우"
         closable={false}
-        onClose={() => setOpen(false)}
-        open={open}
+        onClose={() => setOpenFollowList(false)}
+        open={openFollowList}
         key="bottom"
         height={'auto'}
         style={{ overflowY: 'scroll' }}
