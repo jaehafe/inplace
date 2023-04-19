@@ -14,10 +14,15 @@ const getUserInfo = async (req: Request, res: Response) => {
   const { identifier } = req.params;
 
   try {
-    const userInfo = await User.findOne({
-      where: { username: identifier },
-      relations: ['image'],
-    });
+    // const userInfo = await User.findOne({
+    //   where: { username: identifier },
+    //   relations: ['image'],
+    // });
+    const userInfo = await User.createQueryBuilder('user')
+      .select(['user.id', 'user.email', 'user.username', 'user.imageId'])
+      .leftJoinAndSelect('user.image', 'image')
+      .where('user.username = :identifier', { identifier })
+      .getOne();
 
     if (!userInfo) {
       return res.status(404).json({ error: '유저를 찾을 수 없습니다.' });
