@@ -165,11 +165,66 @@ const logout = async (_: Request, res: Response) => {
   res.status(200).json({ success: true });
 };
 
-const updateUserImage = async (req: RequestWithFile, res: Response) => {
+// 프로필 수정
+const updateUser = async (req: Request, res: Response) => {
+  const { username: originalUsername } = res.locals.user;
+  const { username, imageName } = req.body;
+
   try {
-    const user = await User.findOne({
-      where: { id: res.locals.user.id },
-    });
+    let errors: any = {};
+
+    // users db에서 중복체크
+    const usernameUser = await User.findOne({ where: { username } });
+
+    // 이미 있으면 error
+    if (usernameUser && usernameUser.username !== originalUsername) {
+      errors.username = '이미 해당 사용자 이름이 사용되었습니다.';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json(errors);
+    }
+
+    // res.locals.user.id
+    const user = await User.findOne({ where: { id: res.locals.user.id }, relations: ['image'] });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (username) {
+      user.username = username;
+    }
+
+    if (imageName) {
+      // Remove old image
+      if (user.image) {
+        const oldImageId = user.image.id;
+
+        // Set user's imageId to NULL
+        user.image = null;
+        await user.save();
+
+        // Delete the old image
+        const oldImage = await Image.findOne({ where: { id: oldImageId } });
+        if (oldImage) {
+          await Image.remove(oldImage);
+        }
+      }
+
+      // Add new image
+      const newImage = new Image();
+      newImage.src = imageName;
+      await newImage.save();
+
+      // Assign new image to the user
+      user.image = newImage;
+    }
+
+    // Save the updated user
+    await user.save();
+
+    return res.json({ message: '유저 정보가 업데이트 되었습니다.', user });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'something went wrong' });
@@ -183,13 +238,13 @@ router.post('/logout', logout);
 
 // 이미지 업로드
 router.post('/images', upload.single('image'), (req: RequestWithFile, res: Response) => {
-  console.log('req.file.path>>> ', req.file.path);
-  console.log('req.file>>>>', req.file);
+  // console.log('req.file.path>>> ', req.file.path);
+  // console.log('req.file>>>>', req.file);
 
   return res.json(req.file.filename);
 });
 
 // 유저 정보 수정 라우터
-router.patch('/user/image', userMiddleware, authMiddleware, upload.single('image'), updateUserImage);
+router.patch('/edit', userMiddleware, authMiddleware, updateUser);
 
 export default router;
