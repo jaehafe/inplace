@@ -105,7 +105,7 @@ function ProfileFollowingTab({
       {infiniteData?.pages.map((page) =>
         page.result.map((data: any) => {
           const {
-            following: { createdAt, username, image },
+            following: { createdAt, username, image, id: followingId },
             isFollowing,
           } = data;
           return (
@@ -120,20 +120,24 @@ function ProfileFollowingTab({
                 <span>{username}</span>
               </T.BodyLeft>
 
-              <T.BodyRight>
-                {currentLoginUser ? (
-                  <T.FollowButton
-                    type="dashed"
-                    size="small"
-                    onClick={() => handleFollowing(username)}
-                    $isfollowing={isFollowing}
-                  >
-                    {isFollowing ? '팔로잉 취소' : '팔로우'}
-                  </T.FollowButton>
-                ) : (
-                  ''
-                )}
-              </T.BodyRight>
+              {currentLoginUser?.id !== followingId ? (
+                <T.BodyRight>
+                  {currentLoginUser ? (
+                    <T.FollowButton
+                      type="dashed"
+                      size="small"
+                      onClick={() => handleFollowing(username)}
+                      $isfollowing={isFollowing}
+                    >
+                      {isFollowing ? '팔로잉 취소' : '팔로우'}
+                    </T.FollowButton>
+                  ) : (
+                    ''
+                  )}
+                </T.BodyRight>
+              ) : (
+                ''
+              )}
             </T.Wrapper>
           );
         })

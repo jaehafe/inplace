@@ -81,7 +81,11 @@ function ProfileFollowerTab({
   const onErrorFollow = (data: any) => {
     message.error(data.response.data.error);
   };
-  const { mutate: followMutate } = handleFollowAPI(userInfo?.username, {
+
+  console.log('userInfo>>>', userInfo);
+  console.log('currentLoginUser>>>', currentLoginUser);
+
+  const { mutate: followMutate } = handleFollowAPI(userInfo?.id, {
     onSuccess: onSuccessFollow,
     onError: onErrorFollow,
   });
@@ -103,16 +107,16 @@ function ProfileFollowerTab({
     setOpenFollowList(false);
   };
 
-  // console.log('infiniteData>>', infiniteData);
-
   return (
     <T.Container>
       {infiniteData?.pages.map((page) =>
         page.result.map((data: any) => {
           const {
-            follower: { createdAt, username, image },
+            follower: { createdAt, username, image, id: followerId },
             isFollowing,
           } = data;
+          console.log('follower>>>', data.follower);
+
           return (
             <T.Wrapper ref={observeRef} key={createdAt}>
               <T.BodyLeft onClick={() => handleProfileRoute(username)}>
@@ -125,20 +129,24 @@ function ProfileFollowerTab({
                 <span>{username}</span>
               </T.BodyLeft>
 
-              <T.BodyRight>
-                {currentLoginUser ? (
-                  <T.FollowButton
-                    type="dashed"
-                    size="small"
-                    onClick={() => handleFollowing(username)}
-                    $isfollowing={isFollowing}
-                  >
-                    {isFollowing ? '팔로잉 취소' : '팔로우'}
-                  </T.FollowButton>
-                ) : (
-                  ''
-                )}
-              </T.BodyRight>
+              {currentLoginUser?.id !== followerId ? (
+                <T.BodyRight>
+                  {currentLoginUser ? (
+                    <T.FollowButton
+                      type="dashed"
+                      size="small"
+                      onClick={() => handleFollowing(username)}
+                      $isfollowing={isFollowing}
+                    >
+                      {isFollowing ? '팔로잉 취소' : '팔로우'}
+                    </T.FollowButton>
+                  ) : (
+                    ''
+                  )}
+                </T.BodyRight>
+              ) : (
+                ''
+              )}
             </T.Wrapper>
           );
         })
