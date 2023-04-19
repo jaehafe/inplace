@@ -1,16 +1,6 @@
 import { IsEmail, Length } from 'class-validator';
 import { Exclude, Expose } from 'class-transformer';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  Index,
-  OneToMany,
-  BeforeInsert,
-  OneToOne,
-  JoinColumn,
-  ManyToMany,
-} from 'typeorm';
+import { Entity, Column, Index, OneToMany, BeforeInsert, OneToOne, JoinColumn } from 'typeorm';
 import BaseEntity from './Entity';
 import bcrypt from 'bcryptjs';
 import Post from './Post';

@@ -21,13 +21,14 @@ const handlePostVote = async (req: Request, res: Response) => {
     let post: Post = await Post.findOneByOrFail({ identifier });
     let postVote: PostVote | undefined;
 
-    postVote = await PostVote.findOne({ where: { postId: post.id, username: user.username } });
+    postVote = await PostVote.findOne({ where: { postId: post.id, userId: user.id } });
 
     // 투표를 한 사용자가 없으면 새로운 PostVote 인스턴스 생성
     if (!postVote) {
       postVote = new PostVote();
       postVote.post = post;
       postVote.user = user;
+      postVote.userId = user.id;
     } else {
       // 투표를 한 사용자가 있다면 기존에 투표한 값을 0으로 초기화
       postVote.agree = 0;

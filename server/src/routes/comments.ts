@@ -5,6 +5,7 @@ import Comment from '../entities/Comment';
 import Post from '../entities/Post';
 import { AppDataSource } from '../data-source';
 import CommentVote from '../entities/CommentVote';
+import User from '../entities/User';
 
 const router = Router();
 
@@ -17,6 +18,7 @@ const createPostComment = async (req: Request, res: Response) => {
     const comment = new Comment();
     comment.body = body;
     comment.user = res.locals.user;
+    comment.userId = res.locals.user.id;
     comment.post = post;
 
     if (res.locals.user) {
@@ -66,8 +68,10 @@ const getOwnComments = async (req: Request, res: Response) => {
     // });
 
     // return res.json(comments);
+    const user = await User.findOneOrFail({ where: { username: identifier } });
     const [comments, total] = await Comment.createQueryBuilder('comment')
-      .where('comment.username = :identifier', { identifier })
+      // .where('post.userId = :userId', { userId: user.id })
+      .where('comment.userId = :userId', { userId: user.id })
       .orderBy('comment.createdAt', 'DESC')
       .leftJoinAndSelect('comment.post', 'post')
       .leftJoinAndSelect('post.user', 'postUser')
@@ -94,7 +98,7 @@ const updateComment = async (req: Request, res: Response) => {
   try {
     const comment = await Comment.findOneOrFail({ where: { identifier }, relations: ['post'] });
 
-    if (comment.username !== user.username) {
+    if (comment.userId !== user.id) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
@@ -140,7 +144,7 @@ const deleteComment = async (req: Request, res: Response) => {
   try {
     const comment = await Comment.findOneOrFail({ where: { identifier }, relations: ['post', 'commentVotes'] });
 
-    if (comment.username !== user.username) {
+    if (comment.userId !== user.id) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 

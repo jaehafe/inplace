@@ -59,7 +59,7 @@ const createPost = async (req: Request, res: Response) => {
     post.disagree = disagree;
     post.desc = desc;
     post.images = imageName;
-    post.username = user;
+    post.userId = user.id;
 
     await post.save();
 
@@ -142,8 +142,10 @@ const getOwnPosts = async (req: Request, res: Response) => {
   const { identifier } = req.params;
 
   try {
+    const user = await User.findOneOrFail({ where: { username: identifier } });
+
     const [ownPosts, total] = await Post.createQueryBuilder('post')
-      .where('post.username = :identifier', { identifier })
+      .where('post.userId = :userId', { userId: user.id })
       .orderBy('post.createdAt', 'DESC')
       .leftJoinAndSelect('post.votes', 'votes')
       .leftJoinAndSelect('post.comments', 'comments')

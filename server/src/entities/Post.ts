@@ -27,15 +27,21 @@ export default class Post extends BaseEntity {
   @Column({ nullable: true })
   placeName: string;
 
+  // @Column()
+  // username: string;
   @Column()
-  username: string;
+  userId: number;
 
   @OneToMany(() => Image, (image) => image.post)
   @JoinColumn({ name: 'id', referencedColumnName: 'postId' })
   images: Image[];
 
+  // @ManyToOne(() => User, (user) => user.posts)
+  // @JoinColumn({ name: 'username', referencedColumnName: 'username' })
+  // user: User;
+
   @ManyToOne(() => User, (user) => user.posts)
-  @JoinColumn({ name: 'username', referencedColumnName: 'username' })
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
 
   @ManyToOne(() => Place, (place) => place.posts)
@@ -77,7 +83,7 @@ export default class Post extends BaseEntity {
   }
 
   setUserVote(user: User) {
-    const vote = this.votes?.find((v) => v.username === user.username);
+    const vote = this.votes?.find((v) => v.userId === user.id);
     if (vote) {
       this.userVote = vote.agree > 0 ? 'agree' : vote.neutral > 0 ? 'neutral' : 'disagree';
     } else {

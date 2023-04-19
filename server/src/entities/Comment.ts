@@ -17,10 +17,10 @@ export default class Comment extends BaseEntity {
   body: string;
 
   @Column()
-  username: string;
+  userId: number;
 
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'username', referencedColumnName: 'username' })
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
 
   @Column()

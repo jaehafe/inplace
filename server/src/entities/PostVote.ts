@@ -15,11 +15,11 @@ export default class PostVote extends BaseEntity {
   disagree: number;
 
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'username', referencedColumnName: 'username' })
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
 
   @Column()
-  username: string;
+  userId: number;
 
   @ManyToOne(() => Post, (post) => post.votes)
   post: Post;
