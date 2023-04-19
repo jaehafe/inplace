@@ -23,6 +23,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useInView } from 'react-intersection-observer';
 import ProfileFollowingTab from '../../components/Common/ProfileTab/ProfileFollowingTab';
+import ProfileInfo from '../../components/Common/ProfileTab/ProfileInfo';
 
 function Profile({ identifier }: { identifier: string }) {
   const router = useRouter();
@@ -96,60 +97,32 @@ function Profile({ identifier }: { identifier: string }) {
       ),
     },
   ];
-  console.log('userInfo error>>', userInfo);
+
+  const renderProfileInfo = () => {
+    if (userInfo?.error) {
+      return <span>존재하지 않는 유저 입니다. 다른 유저를 찾아보세요</span>;
+    }
+
+    return (
+      <ProfileInfo
+        userInfo={userInfo}
+        currentLoginUser={currentLoginUser || null}
+        handleFollowing={handleFollowing}
+        setOpenFollowList={setOpenFollowList}
+      />
+    );
+  };
 
   return (
     <P.Wrapper>
       <LogoHeader headerIcons={false} />
       <P.InfoWrapper>
-        <P.InfoLeft>
-          {currentLoginUser ? (
-            <>
-              {!userInfo?.error ? (
-                <>
-                  <h2>{userInfo?.username}</h2>
-                  <P.FollowInfoWrapper onClick={() => setOpenFollowList(true)}>
-                    <h4>팔로워 {userInfo?.followersCount}</h4>
-                    <h4>팔로잉 {userInfo?.followingCount}</h4>
-                  </P.FollowInfoWrapper>
-                  {/*  */}
-                  {currentLoginUser?.username === userInfo?.username ? (
-                    <P.EditButton onClick={handleLogin}>
-                      프로필 편집
-                    </P.EditButton>
-                  ) : (
-                    <P.FollowButton
-                      onClick={handleFollowing}
-                      $isfollowing={userInfo?.isFollowing}
-                    >
-                      {userInfo?.isFollowing ? '팔로잉 취소' : '팔로우'}
-                    </P.FollowButton>
-                  )}
-                </>
-              ) : (
-                <span>존재하지 않는 유저 입니다. 다른 유저를 찾아보세요</span>
-              )}
-            </>
-          ) : (
-            <>
-              {!userInfo?.error ? (
-                <>
-                  <h2>{userInfo?.username}</h2>
-                  <P.FollowInfoWrapper onClick={() => setOpenFollowList(true)}>
-                    <h4>팔로워 {userInfo?.followersCount}</h4>
-                    <h4>팔로잉 {userInfo?.followingCount}</h4>
-                  </P.FollowInfoWrapper>
-                </>
-              ) : (
-                <span>존재하지 않는 유저 입니다. 다른 유저를 찾아보세요</span>
-              )}
-            </>
-          )}
-        </P.InfoLeft>
+        <P.InfoLeft>{renderProfileInfo()}</P.InfoLeft>
         <P.InfoRight>
           <ProfileImage src={userInfo?.image?.src} />
         </P.InfoRight>
       </P.InfoWrapper>
+      {/* 탭 부분 */}
       <P.StyledTab defaultActiveKey="1" items={items} />
 
       {/* 팔로잉 팔로우 탭 */}
