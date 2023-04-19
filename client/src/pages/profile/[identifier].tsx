@@ -41,6 +41,8 @@ function Profile({ identifier }: { identifier: string }) {
   const onSuccessFollow = (data: any) => {
     message.success(data.message);
     queryClient.invalidateQueries([`/user/${identifier}`]);
+    queryClient.invalidateQueries([`/follows/${identifier}/followers`]);
+    queryClient.invalidateQueries([`/follows/${identifier}/followings`]);
   };
   const onErrorFollow = (data: any) => {
     message.error(data.response.data.error);
