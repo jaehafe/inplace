@@ -8,6 +8,7 @@ interface InputGroupProps {
   error: string | undefined;
   setValue: (str: string) => void;
   isfill: string;
+  disabled?: boolean;
 }
 
 function InputGroup({
@@ -17,6 +18,7 @@ function InputGroup({
   value,
   setValue,
   isfill,
+  disabled = false,
 }: InputGroupProps) {
   return (
     <I.InputWrapper>
@@ -26,6 +28,7 @@ function InputGroup({
         value={value}
         onChange={(e) => setValue(e.target.value)}
         isfill={isfill}
+        disabled={disabled}
       />
       <small>{error}</small>
     </I.InputWrapper>
