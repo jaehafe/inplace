@@ -28,9 +28,10 @@ function Profile({ identifier }: { identifier: string }) {
   const router = useRouter();
   const [openFollowList, setOpenFollowList] = useState(false);
   const currentLoginUser = useUserStore((state) => state.userInfo);
-  const { data: userInfo } = getUserInfoAPI(identifier);
   const queryClient = useQueryClient();
   // console.log(userInfo);
+
+  const { data: userInfo } = getUserInfoAPI(identifier);
 
   // onSuccessFollow
   const onSuccessFollow = (data: any) => {
@@ -50,8 +51,7 @@ function Profile({ identifier }: { identifier: string }) {
   };
 
   const handleLogin = () => {
-    message.success('로그인 페이지로 이동합니다.');
-    router.push('/login');
+    message.success('프로필 편집 페이지로 이동합니다.(아직 미 구현)');
   };
 
   const items: TabsProps['items'] = [
@@ -96,6 +96,7 @@ function Profile({ identifier }: { identifier: string }) {
       ),
     },
   ];
+  console.log('userInfo error>>', userInfo);
 
   return (
     <P.Wrapper>
@@ -104,30 +105,44 @@ function Profile({ identifier }: { identifier: string }) {
         <P.InfoLeft>
           {currentLoginUser ? (
             <>
-              <h2>{userInfo?.username}</h2>
-              <P.FollowInfoWrapper onClick={() => setOpenFollowList(true)}>
-                <h4>팔로워 {userInfo?.followersCount}</h4>
-                <h4>팔로잉 {userInfo?.followingCount}</h4>
-              </P.FollowInfoWrapper>
-              {/*  */}
-              {currentLoginUser?.username === userInfo?.username ? (
-                <P.EditButton onClick={handleLogin}>프로필 편집</P.EditButton>
+              {!userInfo?.error ? (
+                <>
+                  <h2>{userInfo?.username}</h2>
+                  <P.FollowInfoWrapper onClick={() => setOpenFollowList(true)}>
+                    <h4>팔로워 {userInfo?.followersCount}</h4>
+                    <h4>팔로잉 {userInfo?.followingCount}</h4>
+                  </P.FollowInfoWrapper>
+                  {/*  */}
+                  {currentLoginUser?.username === userInfo?.username ? (
+                    <P.EditButton onClick={handleLogin}>
+                      프로필 편집
+                    </P.EditButton>
+                  ) : (
+                    <P.FollowButton
+                      onClick={handleFollowing}
+                      $isfollowing={userInfo?.isFollowing}
+                    >
+                      {userInfo?.isFollowing ? '팔로잉 취소' : '팔로우'}
+                    </P.FollowButton>
+                  )}
+                </>
               ) : (
-                <P.FollowButton
-                  onClick={handleFollowing}
-                  $isfollowing={userInfo?.isFollowing}
-                >
-                  {userInfo?.isFollowing ? '팔로잉 취소' : '팔로우'}
-                </P.FollowButton>
+                <span>존재하지 않는 유저 입니다. 다른 유저를 찾아보세요</span>
               )}
             </>
           ) : (
             <>
-              <h2>{userInfo?.username}</h2>
-              <P.FollowInfoWrapper onClick={() => setOpenFollowList(true)}>
-                <h4>팔로워 {userInfo?.followersCount}</h4>
-                <h4>팔로잉 {userInfo?.followingCount}</h4>
-              </P.FollowInfoWrapper>
+              {!userInfo?.error ? (
+                <>
+                  <h2>{userInfo?.username}</h2>
+                  <P.FollowInfoWrapper onClick={() => setOpenFollowList(true)}>
+                    <h4>팔로워 {userInfo?.followersCount}</h4>
+                    <h4>팔로잉 {userInfo?.followingCount}</h4>
+                  </P.FollowInfoWrapper>
+                </>
+              ) : (
+                <span>존재하지 않는 유저 입니다. 다른 유저를 찾아보세요</span>
+              )}
             </>
           )}
         </P.InfoLeft>

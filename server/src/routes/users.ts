@@ -25,7 +25,7 @@ const getUserInfo = async (req: Request, res: Response) => {
       .getOne();
 
     if (!userInfo) {
-      return res.status(404).json({ error: '유저를 찾을 수 없습니다.' });
+      return res.json({ error: '유저를 찾을 수 없습니다.' });
     }
 
     const followersCount = await AppDataSource.createQueryBuilder()

@@ -65,14 +65,16 @@ export const getUserInfoAPI = (
   const queryKey = `/user/${identifier}`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
 
-  const onError = () => {
-    message.error('유저 정보를 가져오는데 실패했습니다.');
+  const onSuccess = (data: any) => {
+    if (data.error) {
+      return message.error(`${data.error} 다른 유저를 찾아보세요`);
+    }
   };
 
   return useQuery([queryKey], queryFn, {
-    onError,
     staleTime: 300000,
     ...options,
+    onSuccess,
   });
 };
 
