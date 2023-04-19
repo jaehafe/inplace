@@ -24,10 +24,13 @@ import { useRouter } from 'next/router';
 import { useInView } from 'react-intersection-observer';
 import ProfileFollowingTab from '../../components/Common/ProfileTab/ProfileFollowingTab';
 import ProfileInfo from '../../components/Common/ProfileTab/ProfileInfo';
+import ProfileEditModal from '../../components/Common/ProfileTab/ProfileEditModal';
 
 function Profile({ identifier }: { identifier: string }) {
   const router = useRouter();
   const [openFollowList, setOpenFollowList] = useState(false);
+  const [openProfileEditModal, setOpenProfileEditModal] = useState(false);
+
   const currentLoginUser = useUserStore((state) => state.userInfo);
   const queryClient = useQueryClient();
   // console.log(userInfo);
@@ -109,6 +112,7 @@ function Profile({ identifier }: { identifier: string }) {
         currentLoginUser={currentLoginUser || null}
         handleFollowing={handleFollowing}
         setOpenFollowList={setOpenFollowList}
+        setOpenProfileEditModal={setOpenProfileEditModal}
       />
     );
   };
@@ -122,6 +126,7 @@ function Profile({ identifier }: { identifier: string }) {
           <ProfileImage src={userInfo?.image?.src} />
         </P.InfoRight>
       </P.InfoWrapper>
+
       {/* 탭 부분 */}
       <P.StyledTab defaultActiveKey="1" items={items} />
 
@@ -138,6 +143,13 @@ function Profile({ identifier }: { identifier: string }) {
       >
         <P.StyledFollowTab items={followItems} />
       </P.FollowInfoDrawer>
+
+      {/* 프로필 편집 모달 */}
+      <ProfileEditModal
+        userInfo={userInfo}
+        setOpenProfileEditModal={setOpenProfileEditModal}
+        openProfileEditModal={openProfileEditModal}
+      />
     </P.Wrapper>
   );
 }
