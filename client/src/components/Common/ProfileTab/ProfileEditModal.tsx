@@ -58,7 +58,7 @@ function ProfileEditModal({
   const [imagePath, setImagePath] = useState<string>('');
   const [imageName, setImageName] = useState('');
 
-  console.log('userInfo>>>', userInfo);
+  // console.log('userInfo>>>', userInfo);
 
   const getFileListFromUserImage = (userImage: any) => {
     if (userImage) {
@@ -83,7 +83,7 @@ function ProfileEditModal({
     // setFileList(getFileListFromUserImage(userInfo?.image));
     setFileList(userInfo?.image?.src);
   }, [userInfo]);
-  console.log('fileList>>>', fileList);
+  // console.log('fileList>>>', fileList);
 
   const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>

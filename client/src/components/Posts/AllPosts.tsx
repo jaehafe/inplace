@@ -48,7 +48,7 @@ function AllPosts() {
       cacheTime: 600000, // 6분 동안 캐시된 데이터 유효
     }
   );
-  // console.log('무한 스크롤 data>>>', infiniteData);
+  console.log('무한 스크롤 data>>>', infiniteData);
 
   useEffect(() => {
     if (inView && hasNextPage) {

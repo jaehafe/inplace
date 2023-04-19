@@ -20,7 +20,6 @@ import P from './Posts.styles';
 function PostDetail({ detailPost }: any) {
   const {
     identifier,
-    username,
     createdAt,
     updatedAt,
     title,
@@ -34,6 +33,8 @@ function PostDetail({ detailPost }: any) {
     votes,
     user,
   } = detailPost;
+  const { username } = user;
+  console.log('user>>', user);
 
   const queryClient = useQueryClient();
   const router = useRouter();

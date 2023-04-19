@@ -27,11 +27,11 @@ function PostComment({ data }: any) {
     updatedAt,
     userVote,
     voteScore,
-    username,
     identifier: commentId,
     commentVotes,
     user,
   } = data;
+  const { username } = user;
 
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
@@ -124,10 +124,12 @@ function PostComment({ data }: any) {
       );
     }
   };
+  console.log('currentLoginUser>>>', currentLoginUser);
+  console.log('commentVotes>>', commentVotes);
 
-  const checkWhetherVoted = (currentLoginUser: string) => {
+  const checkWhetherVoted = (currentLoginUser: any) => {
     const alreadyVote = commentVotes.find(
-      (vote: any) => vote.username === currentLoginUser
+      (vote: any) => vote.userId === currentLoginUser.id
     );
 
     if (alreadyVote) {
@@ -214,7 +216,7 @@ function PostComment({ data }: any) {
         <button onClick={() => handleCommentVote(1, commentId)}>
           {/* <HeartOutlined className="heart-icon" />
           <HeartTwoTone twoToneColor="#4e062d" /> */}
-          {checkWhetherVoted(currentLoginUser?.username)}
+          {checkWhetherVoted(currentLoginUser)}
         </button>
       </P.LikeWrapper>
       <Divider style={{ margin: '14px 0' }} />
