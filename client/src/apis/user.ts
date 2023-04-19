@@ -81,3 +81,7 @@ export const getUserInfoAPI = (
 export const uploadImageAPI = <T>(data: FormData) => {
   return axiosInstance.post<T>(`/auth/images`, data);
 };
+
+export const uploadEditImageAPI = <T>(data: FormData) => {
+  return axiosInstance.patch<T>(`/auth/user/`, data);
+};

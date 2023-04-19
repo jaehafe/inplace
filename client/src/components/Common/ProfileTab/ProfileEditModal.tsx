@@ -109,7 +109,6 @@ function ProfileEditModal({
       console.log('imageData>>', imageData);
 
       const imageFormData = new FormData();
-
       imageFormData.append('image', imageData as any);
 
       // uploadImageAPI<any>(imageFormData).then((res) => {

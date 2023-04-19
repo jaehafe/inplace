@@ -165,16 +165,31 @@ const logout = async (_: Request, res: Response) => {
   res.status(200).json({ success: true });
 };
 
-router.post('/images', upload.single('image'), (req: RequestWithFile, res: Response) => {
-  console.log('req.file.path>>> ', req.file.path);
-  console.log('req.file>>>>', req.file);
-
-  res.json(req.file.filename);
-});
+const updateUserImage = async (req: RequestWithFile, res: Response) => {
+  try {
+    const user = await User.findOne({
+      where: { id: res.locals.user.id },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'something went wrong' });
+  }
+};
 
 router.get('/me', userMiddleware, authMiddleware, me);
 router.post('/signup', signup);
 router.post('/login', userMiddleware, login);
 router.post('/logout', logout);
+
+// 이미지 업로드
+router.post('/images', upload.single('image'), (req: RequestWithFile, res: Response) => {
+  console.log('req.file.path>>> ', req.file.path);
+  console.log('req.file>>>>', req.file);
+
+  return res.json(req.file.filename);
+});
+
+// 유저 정보 수정 라우터
+router.patch('/user/image', userMiddleware, authMiddleware, upload.single('image'), updateUserImage);
 
 export default router;
