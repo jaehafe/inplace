@@ -53,10 +53,7 @@ function Signup() {
   const [profileUploadLoading, setProfileUploadLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
   const [imageInfo, setImageInfo] = useState<any>(null);
-  const [imagePath, setImagePath] = useState<string>('');
   const [imageName, setImageName] = useState('');
-
-  console.log('imageName>>>>>>>>', imageName);
 
   const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
@@ -102,7 +99,7 @@ function Signup() {
     [email, username, password]
   );
 
-  const onClickSignup = async (e: FormEvent) => {
+  const handleSubmitSignup = async (e: FormEvent) => {
     e.preventDefault();
     console.log('imageInfo', imageInfo);
 
@@ -110,7 +107,10 @@ function Signup() {
   };
 
   return (
-    <S.SignupWrapper onSubmit={onClickSignup} encType="multipart/form-data">
+    <S.SignupWrapper
+      onSubmit={handleSubmitSignup}
+      encType="multipart/form-data"
+    >
       <h2>
         인플레이스 활동에 필요한
         <br />
