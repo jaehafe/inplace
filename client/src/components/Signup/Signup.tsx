@@ -140,6 +140,7 @@ function Signup() {
         error={errors.username}
       />
       <h4>플레이스 활동 시 필요한 닉네임을 입력해 주세요.</h4>
+      {/* 비밀번호 */}
       <h3>비밀번호</h3>
       <InputGroup
         type="password"
