@@ -82,6 +82,12 @@ export const uploadImageAPI = <T>(data: FormData) => {
   return axiosInstance.post<T>(`/auth/images`, data);
 };
 
-export const uploadEditImageAPI = <T>(data: FormData) => {
-  return axiosInstance.patch<T>(`/auth/user/`, data);
+export const editUserInfoAPI = (
+  options?: UseMutationOptions<AxiosResponse<string>, AxiosError, any>
+) => {
+  const queryKey = `/auth/edit`;
+  const queryFn = (data: any) =>
+    axiosInstance.patch(queryKey, data).then((res) => res.data);
+
+  return useMutation([queryKey], queryFn, { ...options });
 };
