@@ -54,7 +54,7 @@ const getUserInfo = async (req: Request, res: Response) => {
       ...userInfo,
       followersCount: parseInt(followersCount.count),
       followingCount: parseInt(followingCount.count),
-      isFollowing: !!isFollowing,
+      isFollowing: Boolean(isFollowing),
     };
 
     return res.json(result);
