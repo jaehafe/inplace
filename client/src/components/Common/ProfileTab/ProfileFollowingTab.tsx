@@ -24,7 +24,6 @@ function ProfileFollowingTab({
   const router = useRouter();
   const currentLoginUser = useUserStore((state) => state.userInfo);
   const { data: userInfo } = getUserInfoAPI(identifier);
-  console.log('getUserInfoAPI>>>', userInfo);
 
   const queryClient = useQueryClient();
   const { ref: observeRef, inView } = useInView();
@@ -74,7 +73,7 @@ function ProfileFollowingTab({
 
   const onSuccessFollow = (data: any) => {
     message.success(data.message);
-
+    queryClient.invalidateQueries([queryKey]);
     queryClient.invalidateQueries([`/user/${identifier}`]);
   };
   const onErrorFollow = (data: any) => {
@@ -107,6 +106,7 @@ function ProfileFollowingTab({
         page.result.map((data: any) => {
           const {
             following: { createdAt, username, image },
+            isFollowing,
           } = data;
           return (
             <T.Wrapper ref={observeRef} key={createdAt}>
@@ -126,9 +126,9 @@ function ProfileFollowingTab({
                     type="dashed"
                     size="small"
                     onClick={() => handleFollowing(username)}
-                    $isfollowing={userInfo?.isFollowing}
+                    $isfollowing={isFollowing}
                   >
-                    {userInfo?.isFollowing ? '팔로잉 취소' : '팔로우'}
+                    {isFollowing ? '팔로잉 취소' : '팔로우'}
                   </T.FollowButton>
                 ) : (
                   ''

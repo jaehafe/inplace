@@ -75,6 +75,7 @@ function ProfileFollowerTab({
     console.log('data>>>', data);
 
     message.success(data.message);
+    queryClient.invalidateQueries([queryKey]);
     queryClient.invalidateQueries([`/user/${identifier}`]);
   };
   const onErrorFollow = (data: any) => {
@@ -102,12 +103,15 @@ function ProfileFollowerTab({
     setOpenFollowList(false);
   };
 
+  // console.log('infiniteData>>', infiniteData);
+
   return (
     <T.Container>
       {infiniteData?.pages.map((page) =>
         page.result.map((data: any) => {
           const {
             follower: { createdAt, username, image },
+            isFollowing,
           } = data;
           return (
             <T.Wrapper ref={observeRef} key={createdAt}>
@@ -127,9 +131,9 @@ function ProfileFollowerTab({
                     type="dashed"
                     size="small"
                     onClick={() => handleFollowing(username)}
-                    $isfollowing={userInfo?.isFollowing}
+                    $isfollowing={isFollowing}
                   >
-                    {userInfo?.isFollowing ? '팔로잉 취소' : '팔로우'}
+                    {isFollowing ? '팔로잉 취소' : '팔로우'}
                   </T.FollowButton>
                 ) : (
                   ''

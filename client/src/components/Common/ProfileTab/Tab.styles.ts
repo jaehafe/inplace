@@ -116,6 +116,7 @@ const BodyLeft = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 `;
 const BodyRight = styled.div``;
 interface FollowButtonProps {
