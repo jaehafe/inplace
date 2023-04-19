@@ -1,10 +1,12 @@
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { useQueryClient } from '@tanstack/react-query';
 import { message, Upload, UploadProps } from 'antd';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/es/upload';
 import { UploadFileStatus } from 'antd/es/upload/interface';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
-import { uploadImageAPI } from '../../../apis/user';
+import { editUserInfoAPI, uploadImageAPI } from '../../../apis/user';
 import P from '../../../pages/profile/Profile.styles';
 import InputGroup from '../../InputGroup/InputGroup';
 import S from '../../Signup/Signup.styles';
@@ -34,7 +36,6 @@ const beforeUpload = (file: RcFile) => {
 interface IProfileEditModal {
   userInfo?: any;
   currentLoginUser?: any;
-  handleFollowing?: () => void;
   openProfileEditModal: boolean;
   setOpenProfileEditModal: (value: boolean) => void;
 }
@@ -45,10 +46,10 @@ function ProfileEditModal({
   setOpenProfileEditModal,
 }: IProfileEditModal) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<any>({});
 
   const [profileUploadLoading, setProfileUploadLoading] = useState(false);
@@ -58,12 +59,6 @@ function ProfileEditModal({
   const [imageName, setImageName] = useState('');
 
   console.log('userInfo>>>', userInfo);
-
-  const loadImage = () => {
-    if (userInfo && userInfo.image.src) {
-      setImageUrl(userInfo.image.src);
-    }
-  };
 
   const getFileListFromUserImage = (userImage: any) => {
     if (userImage) {
@@ -79,20 +74,16 @@ function ProfileEditModal({
     return [];
   };
 
-  const [fileList, setFileList] = useState(
-    getFileListFromUserImage(userInfo?.image)
-  );
+  const [fileList, setFileList] = useState();
+  // getFileListFromUserImage(userInfo?.image)
 
   useEffect(() => {
     setEmail(userInfo?.email);
     setUsername(userInfo?.username);
-    setFileList(getFileListFromUserImage(userInfo?.image));
+    // setFileList(getFileListFromUserImage(userInfo?.image));
+    setFileList(userInfo?.image?.src);
   }, [userInfo]);
   console.log('fileList>>>', fileList);
-
-  // useEffect(() => {
-  //   loadImage();
-  // }, [userInfo]);
 
   const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
@@ -111,11 +102,13 @@ function ProfileEditModal({
       const imageFormData = new FormData();
       imageFormData.append('image', imageData as any);
 
-      // uploadImageAPI<any>(imageFormData).then((res) => {
-      //   console.log('imageData>>>>>>', res.data);
+      uploadImageAPI<any>(imageFormData).then((res) => {
+        console.log('imageData>>>>>>', res.data);
 
-      //   return setImageName(res.data);
-      // });
+        setImageName(res.data);
+        setFileList(res.data);
+        return;
+      });
       setImageInfo(info.file.originFileObj);
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setProfileUploadLoading(false);
@@ -136,11 +129,20 @@ function ProfileEditModal({
     [email, username]
   );
 
-  const onClickSignup = async (e: FormEvent) => {
+  const onSuccess = () => {
+    queryClient.invalidateQueries([`/user/${username}`]);
+  };
+
+  const onError = (error: AxiosError) => {
+    setErrors(error.response?.data || {});
+  };
+  const { mutate } = editUserInfoAPI({ onError, onSuccess });
+
+  const submitEditForm = async (e: FormEvent) => {
     e.preventDefault();
     console.log('imageInfo', imageInfo);
 
-    // mutate({ email, password, username, imageName } as ISignup);
+    mutate({ username, imageName });
   };
 
   return (
@@ -154,7 +156,7 @@ function ProfileEditModal({
       height={'auto'}
       style={{ overflowY: 'scroll' }}
     >
-      <S.SignupWrapper onSubmit={onClickSignup} encType="multipart/form-data">
+      <S.SignupWrapper onSubmit={submitEditForm} encType="multipart/form-data">
         {/* 이메일 */}
         <h3>이메일 주소</h3>
         <InputGroup
@@ -187,16 +189,11 @@ function ProfileEditModal({
           showUploadList={false}
           beforeUpload={beforeUpload}
           onChange={handleProfileChange}
-          fileList={fileList}
+          // fileList={fileList}
         >
-          {/* {imageUrl ? (
-            <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
-          ) : (
-            uploadButton
-          )} */}
-          {fileList.length > 0 ? (
+          {fileList ? (
             <img
-              src={`http://localhost:4000/${fileList[0].url}`}
+              src={`http://localhost:4000/${fileList}`}
               alt="avatar"
               style={{ width: '100%' }}
             />
@@ -204,6 +201,7 @@ function ProfileEditModal({
             uploadButton
           )}
         </Upload>
+
         <h4>
           png, jpeg, svg 파일만 가능하며, 2MB 이하의 파일만 업로드 가능합니다.
         </h4>
