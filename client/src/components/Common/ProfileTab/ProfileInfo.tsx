@@ -3,19 +3,43 @@
 import { message } from 'antd';
 import P from '../../../pages/profile/Profile.styles';
 
+interface IProfileInfoProps {
+  userInfo: any;
+  currentLoginUser: any;
+  handleFollowing: () => void;
+  setOpenFollowList: (value: boolean) => void;
+  setOpenProfileEditModal: (value: boolean) => void;
+}
+
 function ProfileInfo({
   userInfo,
   currentLoginUser,
   handleFollowing,
   setOpenFollowList,
-}: {
-  userInfo: any;
-  currentLoginUser: any;
-  handleFollowing: () => void;
-  setOpenFollowList: (open: boolean) => void;
-}) {
+  setOpenProfileEditModal,
+}: IProfileInfoProps) {
   const handleLogin = () => {
-    message.success('프로필 편집 페이지로 이동합니다.(아직 미 구현)');
+    setOpenProfileEditModal(true);
+    // message.success('프로필 편집 페이지로 이동합니다.(아직 미 구현)');
+  };
+
+  const renderFollowInfo = () => {
+    if (currentLoginUser) {
+      if (currentLoginUser?.username === userInfo?.username) {
+        return <P.EditButton onClick={handleLogin}>프로필 편집</P.EditButton>;
+      } else {
+        return (
+          <P.FollowButton
+            onClick={handleFollowing}
+            $isFollowing={userInfo?.isFollowing}
+          >
+            {userInfo?.isFollowing ? '팔로잉 취소' : '팔로우'}
+          </P.FollowButton>
+        );
+      }
+    } else {
+      return '';
+    }
   };
 
   return (
@@ -25,16 +49,7 @@ function ProfileInfo({
         <h4>팔로워 {userInfo?.followersCount}</h4>
         <h4>팔로잉 {userInfo?.followingCount}</h4>
       </P.FollowInfoWrapper>
-      {currentLoginUser?.username === userInfo?.username ? (
-        <P.EditButton onClick={handleLogin}>프로필 편집</P.EditButton>
-      ) : (
-        <P.FollowButton
-          onClick={handleFollowing}
-          $isFollowing={userInfo?.isFollowing}
-        >
-          {userInfo?.isFollowing ? '팔로잉 취소' : '팔로우'}
-        </P.FollowButton>
-      )}
+      {renderFollowInfo()}
     </>
   );
 }
