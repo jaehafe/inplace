@@ -10,6 +10,9 @@ export default class Follow extends BaseEntity {
   @Column()
   followingId: number;
 
+  @Column({ nullable: true, default: false })
+  isFollowing?: boolean;
+
   @ManyToOne(() => User, (user) => user.following)
   @JoinColumn({ name: 'followerId' })
   follower: User;

@@ -12,6 +12,8 @@ const getFollowers = async (req: Request, res: Response) => {
   const { username } = req.params;
   console.log('req.query.page...', req.query.page);
 
+  const loggedInUser = res.locals.user;
+
   try {
     const targetUser = await User.findOneOrFail({ where: { username } });
     const followers = await Follow.find({
@@ -20,6 +22,20 @@ const getFollowers = async (req: Request, res: Response) => {
       skip: currentPage * perPage,
       take: perPage,
     });
+
+    if (loggedInUser) {
+      for (let i = 0; i < followers.length; i++) {
+        const isFollowing = await Follow.findOne({
+          where: {
+            followerId: loggedInUser.id,
+            followingId: followers[i].followerId,
+          },
+        });
+
+        followers[i].isFollowing = Boolean(isFollowing);
+      }
+    }
+
     return res.json(followers);
   } catch (error) {
     console.error(error);
@@ -76,7 +92,7 @@ const handleFollow = async (req: Request, res: Response) => {
   }
 };
 
-router.get('/:username/followers', getFollowers);
+router.get('/:username/followers', userMiddleware, getFollowers);
 router.get('/:username/followings', getFollowings);
 router.post('/:username', userMiddleware, authMiddleware, handleFollow);
 // router.post('/:username', userMiddleware, authMiddleware, addFollow);
