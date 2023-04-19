@@ -134,6 +134,27 @@ const FollowInfoDrawer = styled(Drawer)`
   }
 `;
 
+const ProfileEditDrawer = styled(Drawer)`
+  position: sticky;
+  left: 0;
+  width: 390px !important;
+  height: 90vh !important;
+  margin: auto;
+  border-radius: 20px;
+  overflow-y: scroll;
+
+  & div.ant-drawer-content-wrapper {
+    box-shadow: none !important;
+  }
+
+  & div.ant-drawer-body {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    height: 100%;
+  }
+`;
+
 const P = {
   Wrapper,
   InfoWrapper,
@@ -143,6 +164,7 @@ const P = {
   EditButton,
   StyledTab,
   FollowInfoDrawer,
+  ProfileEditDrawer,
   StyledFollowTab,
   FollowButton,
 };
