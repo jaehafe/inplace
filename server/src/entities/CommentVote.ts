@@ -8,12 +8,13 @@ export default class CommentVote extends BaseEntity {
   @Column()
   value: number;
 
+  // username -> user id 수정함.
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'username', referencedColumnName: 'username' })
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
 
   @Column()
-  username: string;
+  userId: number;
 
   @Column({ nullable: true })
   commentId: number;

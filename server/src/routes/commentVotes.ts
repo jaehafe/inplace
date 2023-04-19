@@ -17,7 +17,7 @@ const handleCommentVote = async (req: Request, res: Response) => {
     const comment = await Comment.findOneByOrFail({ identifier });
 
     // 해당 comment의 vote를 이미 했는지 안 했는지 확인
-    const commentVote = await CommentVote.findOne({ where: { username: user.username, commentId: comment.id } });
+    const commentVote = await CommentVote.findOne({ where: { userId: user.id, commentId: comment.id } });
 
     // 투표를 했지만 내가 투표하는 값이랑 다를때 (내가 이미 투표했을 때)
     if (commentVote) {
