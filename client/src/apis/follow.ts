@@ -4,10 +4,12 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { axiosInstance } from '../configs/axios';
 
 export const handleFollowAPI = (
-  username?: string,
+  userId?: number,
   options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
-  const queryKey = `/follows/${username}`;
+  // console.log('user id>>>', userId);
+
+  const queryKey = `/follows/${userId}`;
 
   const queryFn = (data: object) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
