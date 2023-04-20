@@ -45,10 +45,10 @@ function AllPosts() {
           return undefined;
         }
       },
-      cacheTime: 600000, // 6분 동안 캐시된 데이터 유효
+      staleTime: 600000,
+      cacheTime: 300000,
     }
   );
-  console.log('무한 스크롤 data>>>', infiniteData);
 
   useEffect(() => {
     if (inView && hasNextPage) {

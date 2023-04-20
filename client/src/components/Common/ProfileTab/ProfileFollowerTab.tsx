@@ -61,7 +61,8 @@ function ProfileFollowerTab({
           return undefined;
         }
       },
-      cacheTime: 600000, // 6분 동안 캐시된 데이터 유효
+      cacheTime: 700000, // 6분 동안 캐시된 데이터 유효
+      staleTime: 600000,
     }
   );
 

@@ -72,7 +72,7 @@ export const getUserInfoAPI = (
   };
 
   return useQuery([queryKey], queryFn, {
-    staleTime: 300000,
+    staleTime: 600000,
     ...options,
     onSuccess,
   });

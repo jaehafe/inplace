@@ -109,7 +109,7 @@ function ProfileFollowingTab({
             isFollowing,
             followingId,
           } = data;
-          console.log('팔로잉 탭>>>', data);
+
           return (
             <T.Wrapper ref={observeRef} key={createdAt}>
               <T.BodyLeft onClick={() => handleProfileRoute(username)}>
@@ -131,7 +131,7 @@ function ProfileFollowingTab({
                       onClick={() => handleFollowing(followingId)}
                       $isFollowing={isFollowing}
                     >
-                      {isFollowing ? '팔로잉 취소' : '팔로우'}
+                      {isFollowing ? '팔로우' : '팔로잉 취소'}
                     </T.FollowButton>
                   ) : (
                     ''

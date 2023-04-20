@@ -1,5 +1,5 @@
 import { Divider, Segmented, Space } from 'antd';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import AllPosts from '../Posts/AllPosts';
 import HotPosts from '../Posts/HotPosts';
 import LogoHeader from '../Header/LogoHeader/LogoHeader';
@@ -7,22 +7,22 @@ import M from './MainPage.styles';
 import Places from '../Posts/Places';
 import WritePostButton from '../Common/WritePostButton/WritePostButton';
 
-const displayBody = (value: string | number) => {
-  switch (value) {
-    case '전체':
-      return <AllPosts />;
-    case '인기글':
-      return <HotPosts />;
-    case '플레이스':
-      return <Places />;
-
-    default:
-      return <AllPosts />;
-  }
-};
-
 function MainPage() {
   const [value, setValue] = useState<string | number>('전체');
+
+  const displayBody = useMemo(() => {
+    switch (value) {
+      case '전체':
+        return <AllPosts />;
+      case '인기글':
+        return <HotPosts />;
+      case '플레이스':
+        return <Places />;
+
+      default:
+        return <AllPosts />;
+    }
+  }, [value]);
 
   return (
     <M.MainPageWrapper>
@@ -41,7 +41,7 @@ function MainPage() {
         </M.StyledSpace>
       </M.HeaderWrapper>
 
-      <M.BodyWrapper>{displayBody(value)}</M.BodyWrapper>
+      <M.BodyWrapper>{displayBody}</M.BodyWrapper>
       <WritePostButton />
     </M.MainPageWrapper>
   );

@@ -7,7 +7,7 @@ import {
 import { Button, message, TabsProps } from 'antd';
 import { GetServerSideProps } from 'next';
 
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { getUserInfoAPI } from '../../apis/user';
 import ProfileImage from '../../components/Common/ProfileImage';
 import ProfileCommentTab from '../../components/Common/ProfileTab/ProfileCommentTab';
@@ -60,16 +60,19 @@ function Profile({ identifier }: { identifier: string }) {
     message.success('프로필 편집 페이지로 이동합니다.(아직 미 구현)');
   };
 
+  const MemoizedProfilePostTab = memo(ProfilePostTab);
+  const MemoizedProfileCommentTab = memo(ProfileCommentTab);
+
   const items: TabsProps['items'] = [
     {
       key: '작성 글',
       label: `작성 글`,
-      children: <ProfilePostTab identifier={identifier} />,
+      children: <MemoizedProfilePostTab identifier={identifier} />,
     },
     {
       key: '작성 댓글',
       label: `작성 댓글`,
-      children: <ProfileCommentTab identifier={identifier} />,
+      children: <MemoizedProfileCommentTab identifier={identifier} />,
     },
     {
       key: '응답한 글',
@@ -78,13 +81,16 @@ function Profile({ identifier }: { identifier: string }) {
     },
   ];
 
+  const MemoizedProfileFollowerTab = memo(ProfileFollowerTab);
+  const MemoizedProfileFollowingTab = memo(ProfileFollowingTab);
+
   const followItems: TabsProps['items'] = [
     {
       key: '팔로워',
       label: `팔로워 목록`,
       children: (
         <T.Wrapper>
-          <ProfileFollowerTab
+          <MemoizedProfileFollowerTab
             identifier={identifier}
             setOpenFollowList={setOpenFollowList}
           />
@@ -95,7 +101,7 @@ function Profile({ identifier }: { identifier: string }) {
       key: '팔로잉',
       label: `팔로잉 목록`,
       children: (
-        <ProfileFollowingTab
+        <MemoizedProfileFollowingTab
           identifier={identifier}
           setOpenFollowList={setOpenFollowList}
         />

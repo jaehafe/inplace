@@ -55,8 +55,6 @@ function Post(
     user,
   } = post;
   const { username } = user;
-  // console.log('user>>>', user);
-  console.log('comments>>>', comments);
 
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -226,8 +224,6 @@ function Post(
           {/* comment 작업 */}
           <P.CommentWrapper>
             {comments?.map((c: any) => {
-              console.log('ccccc>>>>', c);
-
               const { identifier: commentId, body } = c;
               return (
                 <Link href={`/post/${postId}`} key={commentId}>
