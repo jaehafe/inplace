@@ -56,6 +56,7 @@ function Post(
   } = post;
   const { username } = user;
   // console.log('user>>>', user);
+  console.log('comments>>>', comments);
 
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -70,10 +71,8 @@ function Post(
     onSuccess: onSuccessVote,
   });
 
-  const checkWhetherVoted = (loginUsername: any) => {
-    const alreadyVote = votes.find(
-      (vote: any) => vote.userId === loginUsername?.id
-    );
+  const checkWhetherVoted = (loginUserId: any) => {
+    const alreadyVote = votes.find((vote: any) => vote.userId === loginUserId);
     if (alreadyVote) {
       if (alreadyVote.agree) {
         return 'agree';
@@ -181,7 +180,7 @@ function Post(
                 optionType="button"
                 buttonStyle="solid"
                 onChange={(e) => handleVoteChange(e)}
-                defaultValue={checkWhetherVoted(currentLoginUser)}
+                defaultValue={checkWhetherVoted(currentLoginUser?.id)}
               >
                 <P.VoteButtonSmall value="agree">
                   <LikeTwoTone twoToneColor="#2515d5" />
@@ -227,16 +226,14 @@ function Post(
           {/* comment 작업 */}
           <P.CommentWrapper>
             {comments?.map((c: any) => {
+              console.log('ccccc>>>>', c);
+
               const { identifier: commentId, body } = c;
               return (
                 <Link href={`/post/${postId}`} key={commentId}>
                   <P.Comment>
-                    <Image
-                      src={
-                        c.user
-                          ? `http://localhost:4000/${c.user.image.src}`
-                          : defaultImg
-                      }
+                    <ProfileImage
+                      src={c.user?.image.src}
                       width={20}
                       height={20}
                       style={{ borderRadius: '50px' }}
@@ -250,6 +247,8 @@ function Post(
           </P.CommentWrapper>
         </P.BodyWrapper>
         <Divider />
+
+        {/* 무한스크롤 관찰 요소 */}
         <div ref={ref}></div>
       </P.Wrapper>
 
