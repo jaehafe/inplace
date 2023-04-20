@@ -32,6 +32,8 @@ import { postVoteAPI } from '../../apis/vote';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '../../store/userStore';
 import ProfileImage from '../Common/ProfileImage';
+import { handleFollowAPI } from '../../apis/follow';
+import PostDrawer from './PostDrawer';
 
 function Post(
   { post, isFetchingNextPage }: any,
@@ -54,11 +56,13 @@ function Post(
     votes,
     user,
   } = post;
-  const { username } = user;
+  const { username, followers } = user;
+  console.log('followers>>>>>', followers);
 
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [open, setOpen] = useState(false);
+  const [openPostDrawer, setOpenPostDrawer] = useState(false);
+
   const currentLoginUser = useUserStore((state) => state.userInfo);
 
   const onSuccessVote = () => {
@@ -109,10 +113,6 @@ function Post(
     }
   };
 
-  const handleFollow = (username: string) => {
-    console.log('username>>', username);
-  };
-
   return (
     <>
       <P.Wrapper>
@@ -133,7 +133,11 @@ function Post(
             </P.PostInfo>
           </P.HeaderLeft>
           <P.HeaderRight>
-            <Button type="text" shape="circle" onClick={() => setOpen(true)}>
+            <Button
+              type="text"
+              shape="circle"
+              onClick={() => setOpenPostDrawer(true)}
+            >
               <MoreOutlined style={{ fontSize: '20px' }} />
             </Button>
           </P.HeaderRight>
@@ -248,48 +252,13 @@ function Post(
         <div ref={ref}></div>
       </P.Wrapper>
 
-      <P.PostDrawer
-        placement="bottom"
-        closable={false}
-        onClose={() => setOpen(false)}
-        open={open}
-        key="bottom"
-        height={'auto'}
-      >
-        <Button type="text" shape="round">
-          공유
-        </Button>
-        <Divider style={{ margin: '10px 0' }} />
-        <Button type="text" shape="round">
-          스크랩
-        </Button>
-        <Divider style={{ margin: '10px 0' }} />
-        <Button
-          type="text"
-          shape="round"
-          onClick={() => handleFollow(username)}
-        >
-          팔로우
-        </Button>
-        <Divider style={{ margin: '10px 0' }} />
-        <Button type="text" shape="round" style={{ color: 'red' }}>
-          내용 신고
-        </Button>
-        {currentLoginUser?.username === user.username ? (
-          <>
-            <Divider style={{ margin: '10px 0' }} />
-            <Button type="text" shape="round">
-              수정
-            </Button>
-            <Divider style={{ margin: '10px 0' }} />
-            <Button type="text" shape="round">
-              삭제
-            </Button>
-          </>
-        ) : (
-          ''
-        )}
-      </P.PostDrawer>
+      <PostDrawer
+        followers={followers}
+        postAuthorInfo={user}
+        openPostDrawer={openPostDrawer}
+        setOpenPostDrawer={setOpenPostDrawer}
+        currentLoginUser={currentLoginUser}
+      />
     </>
   );
 }

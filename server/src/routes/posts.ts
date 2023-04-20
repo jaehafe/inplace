@@ -88,44 +88,6 @@ const createPost = async (req: Request, res: Response) => {
   }
 };
 
-// const getAllPosts = async (req: Request, res: Response) => {
-//   const currentPage: number = (req.query.page || 0) as number;
-//   const perPage: number = (req.query.count || 3) as number;
-
-//   console.log('req.query.page...', req.query.page);
-
-//   try {
-//     const allPosts = await AppDataSource.createQueryBuilder(Post, 'post')
-//       .leftJoinAndSelect('post.votes', 'votes')
-//       .leftJoinAndSelect('post.user', 'user')
-//       .leftJoinAndSelect('user.image', 'userImage')
-//       .orderBy('post.createdAt', 'DESC')
-//       .skip(currentPage * perPage)
-//       .take(perPage)
-//       .getMany();
-
-//     const postIds = allPosts.map((post) => post.id);
-
-//     const latestComments = await AppDataSource.createQueryBuilder(Comment, 'comment')
-//       .leftJoinAndSelect('comment.user', 'user')
-//       .leftJoinAndSelect('user.image', 'userImage')
-//       .where('comment.postId IN (:...postIds)', { postIds })
-//       .orderBy('comment.createdAt', 'DESC')
-//       .take(5)
-//       .getMany();
-//     console.log('latestComments>>>', latestComments);
-
-//     allPosts.forEach((post) => {
-//       post.comments = latestComments.filter((comment) => comment.postId === post.id);
-//     });
-
-//     return res.json(allPosts);
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ error: 'something went wrong' });
-//   }
-// };
-
 const getAllPosts = async (req: Request, res: Response) => {
   const currentPage: number = (req.query.page || 0) as number;
   const perPage: number = (req.query.count || 3) as number;
@@ -138,6 +100,7 @@ const getAllPosts = async (req: Request, res: Response) => {
       .leftJoinAndSelect('post.user', 'user')
       .leftJoinAndSelect('post.images', 'postImages')
       .leftJoinAndSelect('user.image', 'userImage')
+      .leftJoinAndSelect('user.followers', 'followers')
       .orderBy('post.createdAt', 'DESC')
       .skip(currentPage * perPage)
       .take(perPage)
@@ -152,7 +115,7 @@ const getAllPosts = async (req: Request, res: Response) => {
           .leftJoinAndSelect('user.image', 'userImage')
           .where('comment.postId = :postId', { postId })
           .orderBy('comment.createdAt', 'DESC')
-          .take(5)
+          .limit(5)
           .getMany();
         return { postId, comments };
       })
@@ -171,31 +134,6 @@ const getAllPosts = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'something went wrong' });
   }
 };
-
-// const getAllPosts = async (req: Request, res: Response) => {
-//   const currentPage: number = (req.query.page || 0) as number;
-//   const perPage: number = (req.query.count || 3) as number;
-
-//   console.log('req.query.page...', req.query.page);
-
-//   try {
-//     const allPosts = await Post.find({
-//       order: { createdAt: 'DESC' },
-//       relations: ['votes', 'comments', 'images', 'user.image', 'comments.user', 'user', 'comments.user.image'],
-//       skip: currentPage * perPage,
-//       take: perPage,
-//     });
-
-//     // if (res.locals.user) {
-//     //   allPosts.forEach((p) => p.setUserVote(res.locals.user));
-//     // }
-
-//     return res.json(allPosts);
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ error: 'something went wrong' });
-//   }
-// };
 
 const getDetailPost = async (req: Request, res: Response) => {
   const { identifier } = req.params;
@@ -263,3 +201,28 @@ router.post(
 router.post('/', userMiddleware, authMiddleware, createPost);
 
 export default router;
+
+// const getAllPosts = async (req: Request, res: Response) => {
+//   const currentPage: number = (req.query.page || 0) as number;
+//   const perPage: number = (req.query.count || 3) as number;
+
+//   console.log('req.query.page...', req.query.page);
+
+//   try {
+//     const allPosts = await Post.find({
+//       order: { createdAt: 'DESC' },
+//       relations: ['votes', 'comments', 'images', 'user.image', 'comments.user', 'user', 'comments.user.image'],
+//       skip: currentPage * perPage,
+//       take: perPage,
+//     });
+
+//     // if (res.locals.user) {
+//     //   allPosts.forEach((p) => p.setUserVote(res.locals.user));
+//     // }
+
+//     return res.json(allPosts);
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ error: 'something went wrong' });
+//   }
+// };
