@@ -55,7 +55,7 @@ function Post(
     user,
   } = post;
   const { username } = user;
-  console.log('user>>>', user);
+  // console.log('user>>>', user);
 
   const router = useRouter();
   const queryClient = useQueryClient();
