@@ -196,7 +196,7 @@ function Post(
           </P.StaticsWrapper>
 
           {/* 게시물 사진 */}
-          {images.length > 0 ? (
+          {images?.length > 0 ? (
             <P.PostImageWrapper>
               <AntdImage.PreviewGroup
                 preview={{
@@ -233,7 +233,7 @@ function Post(
                 <Link href={`/post/${postId}`} key={commentId}>
                   <P.Comment>
                     <ProfileImage
-                      src={c.user?.image.src}
+                      src={c.user?.image?.src}
                       width={20}
                       height={20}
                       style={{ borderRadius: '50px' }}

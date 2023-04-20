@@ -42,7 +42,8 @@ const getPostComments = async (req: Request, res: Response) => {
     const comments = await Comment.find({
       where: { postId: post.id },
       order: { createdAt: 'DESC' },
-      relations: ['commentVotes', 'user.image'],
+      relations: ['commentVotes', 'user', 'user.image'],
+      // relations: ['commentVotes', 'user'],
     });
 
     return res.json(comments);

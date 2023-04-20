@@ -153,7 +153,7 @@ function PostComment({ data }: any) {
       <P.CommentBodyWrapper>
         <Link href={`/profile/${user.username}`}>
           <ProfileImage
-            src={user.image.src}
+            src={user?.image?.src}
             width={36}
             height={36}
             style={{ borderRadius: '50px' }}
