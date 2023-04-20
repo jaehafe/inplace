@@ -8,7 +8,7 @@ const router = Router();
 
 // 개별 유저 정보
 const getUserInfo = async (req: Request, res: Response) => {
-  console.log('req.params>>>', req.params);
+  // console.log('req.params>>>', req.params);
   const loggedInUser = res.locals.user;
 
   const { identifier } = req.params;
