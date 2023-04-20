@@ -50,10 +50,8 @@ function PostDetail({ detailPost }: any) {
     onSuccess: onSuccessVote,
   });
 
-  const checkWhetherVoted = (loginUsername: string) => {
-    const alreadyVote = votes?.find(
-      (vote: any) => vote.username === loginUsername
-    );
+  const checkWhetherVoted = (loginUserId: any) => {
+    const alreadyVote = votes?.find((vote: any) => vote.userId === loginUserId);
 
     if (alreadyVote) {
       if (alreadyVote.agree) {
@@ -146,7 +144,7 @@ function PostDetail({ detailPost }: any) {
               optionType="button"
               buttonStyle="solid"
               onChange={(e) => handleVoteChange(e)}
-              defaultValue={checkWhetherVoted(currentLoginUser?.username)}
+              defaultValue={checkWhetherVoted(currentLoginUser?.id)}
               // defaultValue="disagree"
             >
               <P.VoteButton value="agree">
