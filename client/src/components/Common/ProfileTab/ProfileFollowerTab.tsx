@@ -85,15 +85,16 @@ function ProfileFollowerTab({
   // console.log('userInfo>>>', userInfo);
   // console.log('currentLoginUser>>>', currentLoginUser);
 
-  const { mutate: followMutate } = handleFollowAPI(userInfo?.id, {
+  // userInfo?.id,
+  const { mutate: followMutate } = handleFollowAPI({
     onSuccess: onSuccessFollow,
     onError: onErrorFollow,
   });
 
-  const handleFollowing = (followerId: number) => {
-    console.log('followerId>>', followerId);
+  const handleFollowing = (id: number) => {
+    console.log('followerId>>', id);
 
-    followMutate({ followerId });
+    followMutate({ id });
   };
 
   const handleLogin = () => {
@@ -112,10 +113,12 @@ function ProfileFollowerTab({
       {infiniteData?.pages.map((page) =>
         page.result.map((data: any) => {
           const {
-            follower: { createdAt, username, image, id: followerId },
+            follower: { createdAt, username, image },
             isFollowing,
+            followerId,
           } = data;
-          console.log('팔로워 탭>>>', data);
+          // console.log('팔로워 탭>>>', data);
+          // console.log('팔로워 아이디>>>', followerId);
 
           return (
             <T.Wrapper ref={observeRef} key={createdAt}>

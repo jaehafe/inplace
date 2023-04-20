@@ -47,13 +47,13 @@ function Profile({ identifier }: { identifier: string }) {
   const onErrorFollow = (data: any) => {
     message.error(data.response.data.error);
   };
-  const { mutate: followMutate } = handleFollowAPI(userInfo?.username, {
+  const { mutate: followMutate } = handleFollowAPI({
     onSuccess: onSuccessFollow,
     onError: onErrorFollow,
   });
 
   const handleFollowing = () => {
-    followMutate({ username: userInfo?.username });
+    followMutate({ id: userInfo?.id });
   };
 
   const handleLogin = () => {

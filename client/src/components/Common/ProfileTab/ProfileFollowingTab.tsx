@@ -79,15 +79,15 @@ function ProfileFollowingTab({
   const onErrorFollow = (data: any) => {
     message.error(data.response.data.error);
   };
-  const { mutate: followMutate } = handleFollowAPI(userInfo?.id, {
+  const { mutate: followMutate } = handleFollowAPI({
     onSuccess: onSuccessFollow,
     onError: onErrorFollow,
   });
 
-  const handleFollowing = (followingId: number) => {
-    console.log('followingId>>', followingId);
+  const handleFollowing = (id: number) => {
+    console.log('following id>>', id);
 
-    followMutate({ followingId });
+    followMutate({ id });
   };
 
   const handleLogin = () => {
@@ -105,9 +105,11 @@ function ProfileFollowingTab({
       {infiniteData?.pages.map((page) =>
         page.result.map((data: any) => {
           const {
-            following: { createdAt, username, image, id: followingId },
+            following: { createdAt, username, image },
             isFollowing,
+            followingId,
           } = data;
+          console.log('팔로잉 탭>>>', data);
           return (
             <T.Wrapper ref={observeRef} key={createdAt}>
               <T.BodyLeft onClick={() => handleProfileRoute(username)}>

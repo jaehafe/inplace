@@ -67,17 +67,15 @@ const getFollowings = async (req: Request, res: Response) => {
 };
 
 const handleFollow = async (req: Request, res: Response) => {
-  const { userId } = req.params;
-  console.log('userId>>>', userId);
+  const { id: userId } = req.body;
+  const user: User = res.locals.user;
 
   try {
-    const user: User = res.locals.user;
-
     if (user.id === Number(userId)) {
       return res.status(400).json({ error: '자신을 팔로우하거나 언팔로우할 수 없습니다.' });
     }
 
-    const targetUser = await User.findOneOrFail({ where: { id: Number(userId) } });
+    const targetUser = await User.findOneOrFail({ where: { id: userId } });
     console.log('targetUser>>>', targetUser);
 
     // 이미 팔로우 중인지 확인
@@ -103,66 +101,6 @@ const handleFollow = async (req: Request, res: Response) => {
 
 router.get('/:username/followers', userMiddleware, getFollowers);
 router.get('/:username/followings', getFollowings);
-router.post('/:userId', userMiddleware, authMiddleware, handleFollow);
-// router.post('/:username', userMiddleware, authMiddleware, addFollow);
-// router.delete('/:username', userMiddleware, authMiddleware, deleteFollow);
+router.post('/', userMiddleware, authMiddleware, handleFollow);
 
 export default router;
-
-// 팔로우 추가: POST /api/follows/:username
-// 팔로우 삭제: DELETE /api/follows/:username
-// 팔로잉 목록 조회: GET /api/follows/following/:username
-// 팔로워 목록 조회: GET /api/follows/followers/:username
-
-// const addFollow = async (req: Request, res: Response) => {
-//   const user: User = res.locals.user;
-//   const { username } = req.body;
-//   console.log('username>>>', username);
-//   console.log('req.params>>>', req.params);
-
-//   try {
-//     const targetUser = await User.findOneOrFail({ where: { username } });
-
-//     // 이미 팔로우 중인지 확인
-//     const isFollowing = await Follow.findOne({
-//       where: { followerId: user.id, followingId: targetUser.id },
-//     });
-
-//     if (isFollowing) {
-//       return res.status(400).json({ error: '이미 팔로우 중입니다.' });
-//     }
-
-//     // 팔로우 추가
-//     const follow = new Follow();
-//     follow.follower = user;
-//     follow.following = targetUser;
-//     await follow.save();
-
-//     return res.json({ message: '팔로우 추가 성공' });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ error: 'something went wrong' });
-//   }
-// };
-
-// const deleteFollow = async (req: Request, res: Response) => {
-//   const user: User = res.locals.user;
-//   const { username } = req.body;
-//   console.log('req.params>>>', req.params);
-
-//   try {
-//     const targetUser = await User.findOneOrFail({ where: { username } });
-//     // 이미 팔로우 중인지 확인
-//     const isFollowing = await Follow.findOne({
-//       where: { followerId: user.id, followingId: targetUser.id },
-//     });
-
-//     if (isFollowing) {
-//       await Follow.delete({ followingId: targetUser.id });
-//     }
-//     return res.json({ success: '팔로워 삭제 완료' });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ error: 'something went wrong' });
-//   }
-// };
