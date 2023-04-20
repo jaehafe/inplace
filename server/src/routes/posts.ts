@@ -97,7 +97,7 @@ const getAllPosts = async (req: Request, res: Response) => {
   try {
     const allPosts = await Post.find({
       order: { createdAt: 'DESC' },
-      relations: ['votes', 'comments', 'comments.user', 'user', 'comments.user.image'],
+      relations: ['votes', 'comments', 'user.image', 'comments.user', 'user', 'comments.user.image'],
       skip: currentPage * perPage,
       take: perPage,
     });
