@@ -10,7 +10,9 @@ const getFollowers = async (req: Request, res: Response) => {
   const currentPage: number = (req.query.page || 0) as number;
   const perPage: number = (req.query.count || 3) as number;
   const { username } = req.params;
-  console.log('req.query.page...', req.query.page);
+  // console.log('username>>>', username);
+
+  // console.log('req.query.page...', req.query.page);
 
   const loggedInUser = res.locals.user;
 
@@ -47,7 +49,7 @@ const getFollowings = async (req: Request, res: Response) => {
   const currentPage: number = (req.query.page || 0) as number;
   const perPage: number = (req.query.count || 3) as number;
   const { username } = req.params;
-  console.log('req.query.page...', req.query.page);
+  // console.log('req.query.page...', req.query.page);
 
   try {
     const targetUser = await User.findOneOrFail({ where: { username } });
@@ -65,11 +67,18 @@ const getFollowings = async (req: Request, res: Response) => {
 };
 
 const handleFollow = async (req: Request, res: Response) => {
-  const { username } = req.body;
+  const { userId } = req.params;
+  console.log('userId>>>', userId);
 
   try {
     const user: User = res.locals.user;
-    const targetUser = await User.findOneOrFail({ where: { username } });
+
+    if (user.id === Number(userId)) {
+      return res.status(400).json({ error: '자신을 팔로우하거나 언팔로우할 수 없습니다.' });
+    }
+
+    const targetUser = await User.findOneOrFail({ where: { id: Number(userId) } });
+    console.log('targetUser>>>', targetUser);
 
     // 이미 팔로우 중인지 확인
     const follow = await Follow.findOne({ where: { followerId: user.id, followingId: targetUser.id } });
@@ -94,7 +103,7 @@ const handleFollow = async (req: Request, res: Response) => {
 
 router.get('/:username/followers', userMiddleware, getFollowers);
 router.get('/:username/followings', getFollowings);
-router.post('/:username', userMiddleware, authMiddleware, handleFollow);
+router.post('/:userId', userMiddleware, authMiddleware, handleFollow);
 // router.post('/:username', userMiddleware, authMiddleware, addFollow);
 // router.delete('/:username', userMiddleware, authMiddleware, deleteFollow);
 
