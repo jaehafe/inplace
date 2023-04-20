@@ -82,18 +82,18 @@ function ProfileFollowerTab({
     message.error(data.response.data.error);
   };
 
-  console.log('userInfo>>>', userInfo);
-  console.log('currentLoginUser>>>', currentLoginUser);
+  // console.log('userInfo>>>', userInfo);
+  // console.log('currentLoginUser>>>', currentLoginUser);
 
   const { mutate: followMutate } = handleFollowAPI(userInfo?.id, {
     onSuccess: onSuccessFollow,
     onError: onErrorFollow,
   });
 
-  const handleFollowing = (username: string) => {
-    console.log('username>>', username);
+  const handleFollowing = (followerId: number) => {
+    console.log('followerId>>', followerId);
 
-    followMutate({ username });
+    followMutate({ followerId });
   };
 
   const handleLogin = () => {
@@ -115,7 +115,7 @@ function ProfileFollowerTab({
             follower: { createdAt, username, image, id: followerId },
             isFollowing,
           } = data;
-          console.log('follower>>>', data.follower);
+          console.log('팔로워 탭>>>', data);
 
           return (
             <T.Wrapper ref={observeRef} key={createdAt}>
@@ -135,8 +135,8 @@ function ProfileFollowerTab({
                     <T.FollowButton
                       type="dashed"
                       size="small"
-                      onClick={() => handleFollowing(username)}
-                      $isfollowing={isFollowing}
+                      onClick={() => handleFollowing(followerId)}
+                      $isFollowing={isFollowing}
                     >
                       {isFollowing ? '팔로잉 취소' : '팔로우'}
                     </T.FollowButton>

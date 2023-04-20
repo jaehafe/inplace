@@ -79,15 +79,15 @@ function ProfileFollowingTab({
   const onErrorFollow = (data: any) => {
     message.error(data.response.data.error);
   };
-  const { mutate: followMutate } = handleFollowAPI(userInfo?.username, {
+  const { mutate: followMutate } = handleFollowAPI(userInfo?.id, {
     onSuccess: onSuccessFollow,
     onError: onErrorFollow,
   });
 
-  const handleFollowing = (username: string) => {
-    console.log(username);
+  const handleFollowing = (followingId: number) => {
+    console.log('followingId>>', followingId);
 
-    followMutate({ username });
+    followMutate({ followingId });
   };
 
   const handleLogin = () => {
@@ -126,8 +126,8 @@ function ProfileFollowingTab({
                     <T.FollowButton
                       type="dashed"
                       size="small"
-                      onClick={() => handleFollowing(username)}
-                      $isfollowing={isFollowing}
+                      onClick={() => handleFollowing(followingId)}
+                      $isFollowing={isFollowing}
                     >
                       {isFollowing ? '팔로잉 취소' : '팔로우'}
                     </T.FollowButton>
