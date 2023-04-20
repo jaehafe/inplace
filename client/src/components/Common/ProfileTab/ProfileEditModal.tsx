@@ -83,7 +83,6 @@ function ProfileEditModal({
     // setFileList(getFileListFromUserImage(userInfo?.image));
     setFileList(userInfo?.image?.src);
   }, [userInfo]);
-  console.log('fileList>>>', fileList);
 
   const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
@@ -124,24 +123,13 @@ function ProfileEditModal({
     </div>
   );
 
-  const isSameImage = () => {
-    if (userInfo?.image.src === fileList) {
-      return true;
-    }
-  };
-
-  const isSameUsername = () => {
-    if (userInfo?.username === username) {
-      return true;
-    }
-  };
+  const isSameImage = () => userInfo?.image.src === fileList;
+  const isSameUsername = () => userInfo?.username === username;
 
   const isDisabled = useMemo(
     () => Boolean(!email || !username || (isSameImage() && isSameUsername())),
-    [email, username]
+    [email, username, userInfo, fileList]
   );
-  console.log('userInfo>>>', userInfo);
-  console.log();
 
   const onSuccess = () => {
     message.success(`${username} 수정 완료`);
