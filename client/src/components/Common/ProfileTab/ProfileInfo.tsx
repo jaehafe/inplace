@@ -18,15 +18,14 @@ function ProfileInfo({
   setOpenFollowList,
   setOpenProfileEditModal,
 }: IProfileInfoProps) {
-  const handleLogin = () => {
-    setOpenProfileEditModal(true);
-    // message.success('프로필 편집 페이지로 이동합니다.(아직 미 구현)');
-  };
-
   const renderFollowInfo = () => {
     if (currentLoginUser) {
-      if (currentLoginUser?.username === userInfo?.username) {
-        return <P.EditButton onClick={handleLogin}>프로필 편집</P.EditButton>;
+      if (currentLoginUser?.id === userInfo?.id) {
+        return (
+          <P.EditButton onClick={() => setOpenProfileEditModal(true)}>
+            프로필 편집
+          </P.EditButton>
+        );
       } else {
         return (
           <P.FollowButton
