@@ -196,7 +196,7 @@ const CommentSubmitButton = styled(Button)`
 `;
 const CommentBodyWrapper = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
 `;
 const CommentInfoHeader = styled.div`
