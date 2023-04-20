@@ -88,6 +88,44 @@ const createPost = async (req: Request, res: Response) => {
   }
 };
 
+// const getAllPosts = async (req: Request, res: Response) => {
+//   const currentPage: number = (req.query.page || 0) as number;
+//   const perPage: number = (req.query.count || 3) as number;
+
+//   console.log('req.query.page...', req.query.page);
+
+//   try {
+//     const allPosts = await AppDataSource.createQueryBuilder(Post, 'post')
+//       .leftJoinAndSelect('post.votes', 'votes')
+//       .leftJoinAndSelect('post.user', 'user')
+//       .leftJoinAndSelect('user.image', 'userImage')
+//       .orderBy('post.createdAt', 'DESC')
+//       .skip(currentPage * perPage)
+//       .take(perPage)
+//       .getMany();
+
+//     const postIds = allPosts.map((post) => post.id);
+
+//     const latestComments = await AppDataSource.createQueryBuilder(Comment, 'comment')
+//       .leftJoinAndSelect('comment.user', 'user')
+//       .leftJoinAndSelect('user.image', 'userImage')
+//       .where('comment.postId IN (:...postIds)', { postIds })
+//       .orderBy('comment.createdAt', 'DESC')
+//       .take(5)
+//       .getMany();
+//     console.log('latestComments>>>', latestComments);
+
+//     allPosts.forEach((post) => {
+//       post.comments = latestComments.filter((comment) => comment.postId === post.id);
+//     });
+
+//     return res.json(allPosts);
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ error: 'something went wrong' });
+//   }
+// };
+
 const getAllPosts = async (req: Request, res: Response) => {
   const currentPage: number = (req.query.page || 0) as number;
   const perPage: number = (req.query.count || 3) as number;
@@ -95,16 +133,37 @@ const getAllPosts = async (req: Request, res: Response) => {
   console.log('req.query.page...', req.query.page);
 
   try {
-    const allPosts = await Post.find({
-      order: { createdAt: 'DESC' },
-      relations: ['votes', 'comments', 'user.image', 'comments.user', 'user', 'comments.user.image'],
-      skip: currentPage * perPage,
-      take: perPage,
-    });
+    const allPosts = await AppDataSource.createQueryBuilder(Post, 'post')
+      .leftJoinAndSelect('post.votes', 'votes')
+      .leftJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('post.images', 'postImages')
+      .leftJoinAndSelect('user.image', 'userImage')
+      .orderBy('post.createdAt', 'DESC')
+      .skip(currentPage * perPage)
+      .take(perPage)
+      .getMany();
 
-    // if (res.locals.user) {
-    //   allPosts.forEach((p) => p.setUserVote(res.locals.user));
-    // }
+    const postIds = allPosts.map((post) => post.id);
+
+    const latestComments = await Promise.all(
+      postIds.map(async (postId) => {
+        const comments = await AppDataSource.createQueryBuilder(Comment, 'comment')
+          .leftJoinAndSelect('comment.user', 'user')
+          .leftJoinAndSelect('user.image', 'userImage')
+          .where('comment.postId = :postId', { postId })
+          .orderBy('comment.createdAt', 'DESC')
+          .take(5)
+          .getMany();
+        return { postId, comments };
+      })
+    );
+
+    allPosts.forEach((post) => {
+      const postLatestComments = latestComments.find((item) => item.postId === post.id);
+      if (postLatestComments) {
+        post.comments = postLatestComments.comments;
+      }
+    });
 
     return res.json(allPosts);
   } catch (error) {
@@ -112,6 +171,31 @@ const getAllPosts = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'something went wrong' });
   }
 };
+
+// const getAllPosts = async (req: Request, res: Response) => {
+//   const currentPage: number = (req.query.page || 0) as number;
+//   const perPage: number = (req.query.count || 3) as number;
+
+//   console.log('req.query.page...', req.query.page);
+
+//   try {
+//     const allPosts = await Post.find({
+//       order: { createdAt: 'DESC' },
+//       relations: ['votes', 'comments', 'images', 'user.image', 'comments.user', 'user', 'comments.user.image'],
+//       skip: currentPage * perPage,
+//       take: perPage,
+//     });
+
+//     // if (res.locals.user) {
+//     //   allPosts.forEach((p) => p.setUserVote(res.locals.user));
+//     // }
+
+//     return res.json(allPosts);
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ error: 'something went wrong' });
+//   }
+// };
 
 const getDetailPost = async (req: Request, res: Response) => {
   const { identifier } = req.params;
@@ -179,51 +263,3 @@ router.post(
 router.post('/', userMiddleware, authMiddleware, createPost);
 
 export default router;
-
-// const getPost = async (req: Request, res: Response) => {
-//   const id = req.params.id;
-
-//   try {
-//     const post = await Post.findOneOrFail(id);
-//     res.json(post);
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ error: 'something went wrong' });
-//   }
-// };
-
-//////////////////////
-
-// const allPosts = await Post.createQueryBuilder('post')
-//   .leftJoinAndSelect('post.votes', 'votes')
-//   .leftJoinAndSelect('post.images', 'images')
-//   .leftJoinAndSelect('post.user', 'user')
-//   .leftJoinAndSelect('user.image', 'userImage')
-//   .leftJoin('post.comments', 'comments')
-//   .addSelect((subQuery) => {
-//     return subQuery
-//       .select('*')
-//       .from('comments', 'sub_comments')
-//       .where('post.id = sub_comments.postId')
-//       .orderBy('sub_comments.createdAt', 'DESC')
-//       .limit(5);
-//   }, 'comments')
-//   .orderBy('post.createdAt', 'DESC')
-//   .getMany();
-
-// const allPosts = await Post.createQueryBuilder('post')
-//   .leftJoinAndSelect('post.votes', 'votes')
-//   .leftJoinAndSelect('post.images', 'images')
-//   .leftJoinAndSelect('post.user', 'user')
-//   .leftJoinAndSelect('user.image', 'userImage')
-//   .leftJoinAndSelect('post.comments', 'comments')
-//   .orderBy('post.createdAt', 'DESC')
-//   .addOrderBy('comments.createdAt', 'DESC')
-//   .getMany();
-
-// // 각 게시물에 대해 댓글을 최대 5개로 제한합니다.
-// allPosts.forEach((post) => {
-//   if (post.comments.length > 5) {
-//     post.comments.length = 5;
-//   }
-// });
