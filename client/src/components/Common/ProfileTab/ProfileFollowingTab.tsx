@@ -102,8 +102,8 @@ function ProfileFollowingTab({
 
   return (
     <T.Container>
-      {infiniteData?.pages.map((page) =>
-        page.result.map((data: any) => {
+      {infiniteData?.pages?.map((page) =>
+        page?.result?.map((data: any) => {
           const {
             following: { createdAt, username, image },
             isFollowing,
