@@ -60,19 +60,19 @@ function ProfileEditModal({
 
   // console.log('userInfo>>>', userInfo);
 
-  const getFileListFromUserImage = (userImage: any) => {
-    if (userImage) {
-      return [
-        {
-          uid: userImage.id,
-          name: userImage.src,
-          status: 'done' as UploadFileStatus,
-          url: userImage.src,
-        },
-      ];
-    }
-    return [];
-  };
+  // const getFileListFromUserImage = (userImage: any) => {
+  //   if (userImage) {
+  //     return [
+  //       {
+  //         uid: userImage.id,
+  //         name: userImage.src,
+  //         status: 'done' as UploadFileStatus,
+  //         url: userImage.src,
+  //       },
+  //     ];
+  //   }
+  //   return [];
+  // };
 
   const [fileList, setFileList] = useState();
   // getFileListFromUserImage(userInfo?.image)
@@ -83,7 +83,7 @@ function ProfileEditModal({
     // setFileList(getFileListFromUserImage(userInfo?.image));
     setFileList(userInfo?.image?.src);
   }, [userInfo]);
-  // console.log('fileList>>>', fileList);
+  console.log('fileList>>>', fileList);
 
   const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
@@ -124,12 +124,29 @@ function ProfileEditModal({
     </div>
   );
 
+  const isSameImage = () => {
+    if (userInfo?.image.src === fileList) {
+      return true;
+    }
+  };
+
+  const isSameUsername = () => {
+    if (userInfo?.username === username) {
+      return true;
+    }
+  };
+
   const isDisabled = useMemo(
-    () => Boolean(!email || !username),
+    () => Boolean(!email || !username || (isSameImage() && isSameUsername())),
     [email, username]
   );
+  console.log('userInfo>>>', userInfo);
+  console.log();
 
   const onSuccess = () => {
+    message.success(`${username} 수정 완료`);
+    setOpenProfileEditModal(false);
+    router.push(`/profile/${username}`);
     queryClient.invalidateQueries([`/user/${username}`]);
   };
 
