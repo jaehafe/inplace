@@ -207,10 +207,10 @@ function Post(
                 {images?.map((img: any) => {
                   return (
                     <AntdImage
-                      key={img.src}
+                      key={img?.src}
                       src={`http://localhost:4000/${img.src}`}
-                      width={80}
-                      height={80}
+                      width={100}
+                      height={100}
                       alt="alt"
                     />
                   );
