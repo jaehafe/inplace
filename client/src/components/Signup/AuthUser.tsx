@@ -6,13 +6,13 @@ import { useSetUserInfo } from '../../store/userStore';
 const AuthUser: React.FC = () => {
   const setUserInfo = useSetUserInfo();
   const [cookie] = useCookies(['inplace']);
-  const { data: authMeData, isLoading, error } = authMeAPI();
+  const { data: authMeData } = cookie?.inplace ? authMeAPI() : { data: null };
 
   useEffect(() => {
     if (cookie?.inplace) {
       setUserInfo(authMeData);
     }
-  }, [cookie?.inplace, authMeData]);
+  }, [cookie?.inplace]);
 
   return null;
 };
