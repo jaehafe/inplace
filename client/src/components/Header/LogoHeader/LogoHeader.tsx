@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import L from './LogoHeader.styles';
 import { AppImages } from '../../../configs/AppImages';
-import { Button, Divider } from 'antd';
+import { Button } from 'antd';
 import { useRouter } from 'next/router';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { LeftOutlined } from '@ant-design/icons';
+import NavigateDrawer from '../../HeaderDrawer/NavigateDrawer';
+import L from './LogoHeader.styles';
 import B from '../../Common/BackButton';
-import { logoutAPI } from '../../../apis/user';
-import { useUserInfo } from '../../../store/userStore';
-import { defaultImg } from '../../../utils';
-import ProfileImage from '../../Common/ProfileImage';
+import SearchUserDrawer from '../../HeaderDrawer/SearchUserDrawer';
 
 interface IProps {
   headerIcons?: boolean;
@@ -18,30 +16,10 @@ interface IProps {
 
 function LogoHeader({ headerIcons }: IProps) {
   const router = useRouter();
-  const [openDrawer, setOpenDrawer] = useState(false);
-  const currentLoginUser = useUserInfo();
+  const [openNavigateDrawer, setOpenNavigateDrawer] = useState(false);
+  const [openSearchUserDrawer, setOpenSearchUserDrawer] = useState(false);
 
-  const { mutate: logoutMutate } = logoutAPI();
-  const handleLogout = () => {
-    logoutMutate();
-  };
-
-  const buttons = [
-    {
-      text: '작성 글',
-      onClick: () => router.push(`/profile/${currentLoginUser?.username}`),
-    },
-    { text: '작성 댓글', onClick: () => console.log('작성 댓글 버튼 클릭') },
-    {
-      text: '프로필 편집',
-      onClick: () => console.log('프로필 편집 버튼 클릭'),
-    },
-  ];
-
-  const loginButtons = [
-    { text: '로그인', onClick: () => router.push('/login') },
-    { text: '회원가입', onClick: () => router.push('/signup') },
-  ];
+  const handleOpenUserSearchDrawer = () => {};
 
   return (
     <L.LogoHeaderWrapper>
@@ -59,18 +37,48 @@ function LogoHeader({ headerIcons }: IProps) {
             <Button type="text" shape="circle" onClick={() => router.push(`/`)}>
               <Image src={AppImages.ArchiveIcon} alt="ArchiveIcon" />
             </Button>
-            <Button type="text" shape="circle" onClick={() => router.push(`/`)}>
+            <Button
+              type="text"
+              shape="circle"
+              onClick={() => setOpenSearchUserDrawer(true)}
+            >
               <Image src={AppImages.UserIcon} alt="UserIcon" />
             </Button>
             <Button
               type="text"
               shape="circle"
-              onClick={() => setOpenDrawer(true)}
+              onClick={() => setOpenNavigateDrawer(true)}
             >
               <Image src={AppImages.ListIcon} alt="ListIcon" />
             </Button>
           </L.HeaderIcons>
-          <L.MyDrawer
+          <NavigateDrawer
+            openNavigateDrawer={openNavigateDrawer}
+            setOpenNavigateDrawer={setOpenNavigateDrawer}
+          />
+          <SearchUserDrawer
+            openSearchUserDrawer={openSearchUserDrawer}
+            setOpenSearchUserDrawer={setOpenSearchUserDrawer}
+          />
+        </>
+      ) : (
+        <B.BackButton
+          type="dashed"
+          shape="round"
+          size="large"
+          onClick={() => router.back()}
+        >
+          <LeftOutlined />
+        </B.BackButton>
+      )}
+    </L.LogoHeaderWrapper>
+  );
+}
+
+export default LogoHeader;
+
+{
+  /* <L.MyDrawer
             title={
               <L.DrawerHeader>
                 <Image
@@ -150,20 +158,5 @@ function LogoHeader({ headerIcons }: IProps) {
               </L.LoginOutWrapper>
               <Divider />
             </L.DrawerBodyWrapper>
-          </L.MyDrawer>
-        </>
-      ) : (
-        <B.BackButton
-          type="dashed"
-          shape="round"
-          size="large"
-          onClick={() => router.back()}
-        >
-          <LeftOutlined />
-        </B.BackButton>
-      )}
-    </L.LogoHeaderWrapper>
-  );
+          </L.MyDrawer> */
 }
-
-export default LogoHeader;
