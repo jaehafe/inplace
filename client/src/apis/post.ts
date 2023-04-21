@@ -2,10 +2,11 @@ import {
   useMutation,
   UseMutationOptions,
   useQuery,
+  useQueryClient,
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { message } from 'antd';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { axiosInstance } from '../configs/axios';
 
@@ -86,11 +87,17 @@ export const deletePostAPI = (
   postId?: string,
   options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
+  const queryClient = useQueryClient();
   const queryKey = `/posts/${postId}`;
   const queryFn = () => axiosInstance.delete(queryKey).then((res) => res.data);
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries([`/posts`]);
+    message.success('게시글 삭제 완료');
+  };
 
   const onError = () => {
     message.error('게시물 삭제 실패');
   };
-  return useMutation([queryKey], queryFn, { onError, ...options });
+  return useMutation([queryKey], queryFn, { onSuccess, onError, ...options });
 };

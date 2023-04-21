@@ -67,17 +67,10 @@ function PostDrawer({
     setOpenPostDrawer(false);
   };
 
-  const onSuccessDeletePost = () => {
-    queryClient.invalidateQueries([`/posts`]);
-    message.success('게시글 삭제 완료');
-  };
-
-  const { mutate: deletePostMutate } = deletePostAPI(postId, {
-    onSuccess: onSuccessDeletePost,
-  });
+  const { mutate: deletePostMutate } = deletePostAPI(postId);
 
   const handleDeletePost = () => {
-    console.log('게시글 삭제>>', postId);
+    // console.log('게시글 삭제>>', postId);
     deletePostMutate(postId);
   };
 
