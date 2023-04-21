@@ -219,6 +219,8 @@ const deletePost = async (req: Request, res: Response) => {
   }
 };
 
+const updatePost = async (req: Request, res: Response) => {};
+
 router.get('/', getAllPosts);
 // userMiddleware, authMiddleware,
 router.get('/owned/:identifier', getOwnPosts);
@@ -235,8 +237,10 @@ router.post(
     return res.json(req.files.map((file) => file.filename));
   }
 );
+
 router.post('/', userMiddleware, authMiddleware, createPost);
 router.delete('/:identifier', userMiddleware, authMiddleware, deletePost);
+router.patch('/:identifier', userMiddleware, authMiddleware, updatePost);
 
 export default router;
 

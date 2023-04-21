@@ -5,15 +5,15 @@ import {
   LoadingOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
-import { Button, Collapse, Input, message, Upload, UploadProps } from 'antd';
+import { Collapse, Input, message, Upload, UploadProps } from 'antd';
 import { UploadFile } from 'antd/es/upload';
 import { useRouter } from 'next/router';
-import React, { FormEvent, useMemo, useState } from 'react';
+import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import { createPostAPI, uploadPostImagesAPI } from '../../apis/post';
-import CommonButton from '../Common/CommonButton';
 import PostHeader from '../Header/PostHeader/PostHeader';
 import P from '../../pages/profile/Profile.styles';
 import { useEditPostModalStoreActions } from '../../store/editPostStore';
+import { UploadFileStatus } from 'antd/es/upload/interface';
 
 // const getBase64 = (file: RcFile): Promise<string> =>
 //   new Promise((resolve, reject) => {
@@ -23,7 +23,7 @@ import { useEditPostModalStoreActions } from '../../store/editPostStore';
 //     reader.onerror = (error) => reject(error);
 //   });
 
-const isUploadable = (fileList: UploadFile[]) => {
+const beforeUpload = (fileList: UploadFile[]) => {
   return fileList.every((file) => {
     const isJpgOrPng =
       file.type === 'image/jpeg' ||
@@ -42,8 +42,19 @@ const isUploadable = (fileList: UploadFile[]) => {
   });
 };
 
-// { open, setOpen }: any
-function PostEditModal() {
+function PostEditModal({ data }: any) {
+  const {
+    agree: agreeBody,
+    disagree: disagreeBody,
+    neutral: neutralBody,
+    title: titleBody,
+    desc: descBody,
+    imageName: imageNameBody,
+    identifier,
+    images,
+  } = data;
+  // console.log('data>>>', data);
+
   const router = useRouter();
 
   const [title, setTitle] = useState('');
@@ -55,6 +66,25 @@ function PostEditModal() {
   const [loading, setLoading] = useState(false);
   const [imageName, setImageName] = useState<string[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  const getFileListFromPostImage = images.map((image: any) => {
+    return {
+      // type: `png`,
+      uid: `${image.id}`,
+      name: image.src,
+      status: 'done' as UploadFileStatus,
+      url: `http://localhost:4000/${image.src}`,
+    };
+  });
+
+  useEffect(() => {
+    setTitle(titleBody);
+    setAgree(agreeBody);
+    setNeutral(neutralBody);
+    setDisagree(disagreeBody);
+    setDesc(descBody);
+    setFileList(getFileListFromPostImage);
+  }, [data]);
 
   const { openEditPostModal, editPostId, setOpenEditPostModal } =
     useEditPostModalStoreActions();
@@ -75,58 +105,55 @@ function PostEditModal() {
     onSuccess: onSuccessCreatePost,
   });
 
-  const isDisabled = useMemo(
-    () =>
-      Boolean(
-        !title.trim() || !agree.trim() || !neutral.trim() || !disagree.trim()
-      ),
-    [title, agree, neutral, disagree]
-  );
+  const isSameTitle = title === titleBody;
+  const isSameAgree = agree === agreeBody;
+  const isSameNeutral = neutral === neutralBody;
+  const isSameDisagree = disagree === disagreeBody;
+  const isSameDesc = desc === descBody;
+
+  /** 비어있거나 이전과 같으면 Disabled */
+  const isDisabled = useMemo(() => {
+    const isEmpty =
+      !title.trim() ||
+      !agree.trim() ||
+      !neutral.trim() ||
+      !disagree.trim() ||
+      !desc.trim();
+
+    const isSame =
+      isSameTitle &&
+      isSameAgree &&
+      isSameNeutral &&
+      isSameDisagree &&
+      isSameDesc;
+
+    return isEmpty || isSame;
+  }, [
+    title,
+    agree,
+    neutral,
+    disagree,
+    desc,
+    titleBody,
+    agreeBody,
+    neutralBody,
+    disagreeBody,
+    descBody,
+  ]);
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    if (isUploadable(newFileList)) {
-      setLoading(true);
-      setFileList(newFileList);
-      // if (newFileList.some((file) => file.status !== 'done')) {
-      //   // setLoading(true);
+    setLoading(true);
+    setFileList(newFileList);
 
-      //   return;
-      // }
+    if (newFileList.every((file) => file.status === 'done')) {
+      const imageFormData = new FormData();
+      setLoading(false);
 
-      // // fileList 안에 있는 애들 마다 업로드가 성공하면 아래 코드가 실행
-      // // fileList 안에 있는 애들 전부 업로드가 성공하면 아래 코드 실행
-      // if (!newFileList.some((file) => file.status !== 'done')) {
-      //   const imageFormData = new FormData();
-      //   setLoading(false);
-      //   // getBase64(newFileList.originFileObj as RcFile, (url) => {
-      //   //   setLoading(false);
-      //   // });
-
-      //   for (let i = 0; i < newFileList.length; i++) {
-      //     imageFormData.append(
-      //       'postImages',
-      //       newFileList[i].originFileObj as any
-      //     );
-      //   }
-
-      //   uploadPostImageMutate(imageFormData);
-      //   console.log('!!!!!!!!!!!!!!!!!!!!!');
-      // }
-
-      if (newFileList.every((file) => file.status === 'done')) {
-        const imageFormData = new FormData();
-        setLoading(false);
-
-        for (let i = 0; i < newFileList.length; i++) {
-          imageFormData.append(
-            'postImages',
-            newFileList[i].originFileObj as any
-          );
-        }
-
-        uploadPostImageMutate(imageFormData);
-        console.log('!!!!!!!!!!!!!!!!!!!!!');
+      for (let i = 0; i < newFileList.length; i++) {
+        imageFormData.append('postImages', newFileList[i].originFileObj as any);
       }
+
+      uploadPostImageMutate(imageFormData);
     }
   };
 
@@ -142,7 +169,7 @@ function PostEditModal() {
     e.preventDefault();
     console.log('12312123');
 
-    createPostMutate({ title, agree, neutral, disagree, desc, imageName });
+    // createPostMutate({ title, agree, neutral, disagree, desc, imageName });
   };
 
   return (
@@ -169,6 +196,7 @@ function PostEditModal() {
           onChange={(e) => setTitle(e.target.value)}
           style={{ height: 120, resize: 'none' }}
           placeholder="질문과 간단한 설명을 입력해 주세요"
+          value={title}
         />
         <br />
         <br />
@@ -179,6 +207,7 @@ function PostEditModal() {
           prefix={<LikeTwoTone twoToneColor="#2515d5" />}
           maxLength={30}
           onChange={(e) => setAgree(e.target.value)}
+          value={agree}
         />
         <br />
         <br />
@@ -188,6 +217,7 @@ function PostEditModal() {
           prefix={<FrownTwoTone twoToneColor="#eb2f96" />}
           maxLength={30}
           onChange={(e) => setNeutral(e.target.value)}
+          value={neutral}
         />
         <br />
         <br />
@@ -197,6 +227,7 @@ function PostEditModal() {
           prefix={<DislikeTwoTone twoToneColor="#52c41a" />}
           maxLength={30}
           onChange={(e) => setDisagree(e.target.value)}
+          value={disagree}
         />
         <br />
         <br />
@@ -209,6 +240,7 @@ function PostEditModal() {
               maxLength={300}
               onChange={(e) => setDesc(e.target.value)}
               style={{ height: 200, resize: 'none' }}
+              value={desc}
             />
           </Collapse.Panel>
         </Collapse>

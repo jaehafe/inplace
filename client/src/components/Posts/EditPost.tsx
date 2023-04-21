@@ -1,3 +1,4 @@
+import { Spin } from 'antd';
 import React, { useEffect } from 'react';
 import { getDetailPostAPI } from '../../apis/post';
 import { useEditPostModalStoreActions } from '../../store/editPostStore';
@@ -5,19 +6,10 @@ import PostEditModal from './PostEditModal';
 
 function EditPost() {
   const { editPostId } = useEditPostModalStoreActions();
-  console.log('editPostId>>>');
 
-  const { data } = getDetailPostAPI(editPostId!);
-  console.log('data>>', data);
+  const { data, isLoading } = getDetailPostAPI(editPostId!);
 
-  useEffect(() => {}, [editPostId]);
-
-  return (
-    <div>
-      EditPost
-      <PostEditModal />
-    </div>
-  );
+  return <div>{!isLoading && data && <PostEditModal data={data} />}</div>;
 }
 
 export default EditPost;

@@ -106,31 +106,6 @@ function CreatePost() {
     if (isUploadable(newFileList)) {
       setLoading(true);
       setFileList(newFileList);
-      // if (newFileList.some((file) => file.status !== 'done')) {
-      //   // setLoading(true);
-
-      //   return;
-      // }
-
-      // // fileList 안에 있는 애들 마다 업로드가 성공하면 아래 코드가 실행
-      // // fileList 안에 있는 애들 전부 업로드가 성공하면 아래 코드 실행
-      // if (!newFileList.some((file) => file.status !== 'done')) {
-      //   const imageFormData = new FormData();
-      //   setLoading(false);
-      //   // getBase64(newFileList.originFileObj as RcFile, (url) => {
-      //   //   setLoading(false);
-      //   // });
-
-      //   for (let i = 0; i < newFileList.length; i++) {
-      //     imageFormData.append(
-      //       'postImages',
-      //       newFileList[i].originFileObj as any
-      //     );
-      //   }
-
-      //   uploadPostImageMutate(imageFormData);
-      //   console.log('!!!!!!!!!!!!!!!!!!!!!');
-      // }
 
       if (newFileList.every((file) => file.status === 'done')) {
         const imageFormData = new FormData();
