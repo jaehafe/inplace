@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import { Like } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import Follow from '../entities/Follow';
 import User from '../entities/User';
@@ -69,6 +70,30 @@ const getUserInfo = async (req: Request, res: Response) => {
   }
 };
 
+const searchUsername = async (req: Request, res: Response) => {
+  const currentPage: number = (req.query.page || 0) as number;
+  const perPage: number = (req.query.count || 3) as number;
+
+  const { username } = req.params;
+  console.log('username>>>>', username);
+
+  try {
+    const users = await User.find({
+      where: { username: Like(`%${username}%`) },
+      order: { createdAt: 'DESC' },
+      relations: ['image'],
+      skip: currentPage * perPage,
+      take: perPage,
+    });
+
+    return res.json({ users });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'something went wrong' });
+  }
+};
+
 router.get('/:identifier', userMiddleware, getUserInfo);
+router.get('/:username', userMiddleware, searchUsername);
 
 export default router;

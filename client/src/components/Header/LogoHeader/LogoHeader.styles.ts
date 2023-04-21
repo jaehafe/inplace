@@ -1,4 +1,4 @@
-import { Button, Drawer } from 'antd';
+import { Button, Drawer, Input } from 'antd';
 import styled from 'styled-components';
 
 const LogoHeaderWrapper = styled.div`
@@ -70,6 +70,8 @@ const MyDrawer = styled(Drawer)`
   left: 0;
   width: 390px !important;
   margin: auto;
+  border-top-left-radius: 20px !important;
+  border-bottom-left-radius: 20px !important;
 `;
 
 const DrawerHeader = styled.header`
@@ -78,7 +80,9 @@ const DrawerHeader = styled.header`
   gap: 10px;
 `;
 
-const DrawerBodyWrapper = styled.div``;
+const DrawerBodyWrapper = styled.div`
+  overflow-y: scroll;
+`;
 
 const ProfileWrapper = styled.div`
   display: flex;
@@ -101,6 +105,55 @@ const LoginOutWrapper = styled.div`
   align-items: center;
 `;
 
+const SearchUserInput = styled(Input.Search)`
+  & .ant-input-affix-wrapper {
+    background-color: ${({ theme }) => theme.gray200};
+  }
+  & .ant-input {
+    background-color: ${({ theme }) => theme.gray200};
+  }
+  & .ant-btn {
+    background-color: ${({ theme }) => theme.primary};
+
+    &:hover,
+    &:active {
+      background-color: ${({ theme }) => theme.negative};
+    }
+  }
+`;
+
+interface SearchHeaderProps {
+  $isSearching: boolean;
+}
+const SearchHeader = styled.div<SearchHeaderProps>`
+  display: ${({ $isSearching }) => ($isSearching ? 'none' : 'flex')};
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const SearchBody = styled.div`
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+const SearchWrapper = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+`;
+const SearchLeft = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const UserNameWrapper = styled.div`
+  margin-left: 10px;
+`;
+const SearchRight = styled.div<SearchHeaderProps>`
+  display: ${({ $isSearching }) => ($isSearching ? 'none' : 'flex')};
+`;
+
 const L = {
   LogoHeaderWrapper,
   HeaderIcons,
@@ -110,6 +163,13 @@ const L = {
   ProfileWrapper,
   LoginOutWrapper,
   StyledButton,
+  SearchUserInput,
+  SearchHeader,
+  SearchBody,
+  SearchWrapper,
+  SearchLeft,
+  SearchRight,
+  UserNameWrapper,
 };
 
 export default L;

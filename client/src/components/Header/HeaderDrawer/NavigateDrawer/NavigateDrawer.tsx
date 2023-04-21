@@ -1,13 +1,13 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { logoutAPI } from '../../apis/user';
-import { useUserInfo } from '../../store/userStore';
-import { AppImages } from '../../configs/AppImages';
+import { logoutAPI } from '../../../../apis/user';
+import { useUserInfo } from '../../../../store/userStore';
+import { AppImages } from '../../../../configs/AppImages';
 import Image from 'next/image';
-import ProfileImage from '../Common/ProfileImage';
+import ProfileImage from '../../../Common/ProfileImage';
 import { Divider } from 'antd';
 import { RightOutlined } from '@ant-design/icons';
-import L from '../Header/LogoHeader/LogoHeader.styles';
+import L from '../../LogoHeader/LogoHeader.styles';
 
 interface INavigateDrawer {
   openNavigateDrawer: boolean;
@@ -57,7 +57,7 @@ function NavigateDrawer({
         </L.DrawerHeader>
       }
       placement="right"
-      closable={true}
+      closable={false}
       width={'auto'}
       onClose={() => setOpenNavigateDrawer(false)}
       open={openNavigateDrawer}

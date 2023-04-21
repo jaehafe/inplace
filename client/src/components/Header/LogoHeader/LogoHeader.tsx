@@ -5,10 +5,10 @@ import { AppImages } from '../../../configs/AppImages';
 import { Button } from 'antd';
 import { useRouter } from 'next/router';
 import { LeftOutlined } from '@ant-design/icons';
-import NavigateDrawer from '../../HeaderDrawer/NavigateDrawer';
+import NavigateDrawer from '../HeaderDrawer/NavigateDrawer/NavigateDrawer';
 import L from './LogoHeader.styles';
 import B from '../../Common/BackButton';
-import SearchUserDrawer from '../../HeaderDrawer/SearchUserDrawer';
+import SearchUserDrawer from '../HeaderDrawer/SearchUserDrawer/SearchUserDrawer';
 
 interface IProps {
   headerIcons?: boolean;
