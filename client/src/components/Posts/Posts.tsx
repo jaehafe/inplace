@@ -57,7 +57,6 @@ function Post(
     user,
   } = post;
   const { username, followers } = user;
-  console.log('followers>>>>>', followers);
 
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -73,7 +72,7 @@ function Post(
     onSuccess: onSuccessVote,
   });
 
-  const checkWhetherVoted = (loginUserId: any) => {
+  const isVoted = (loginUserId: any) => {
     const alreadyVote = votes.find((vote: any) => vote.userId === loginUserId);
     if (alreadyVote) {
       if (alreadyVote.agree) {
@@ -182,7 +181,7 @@ function Post(
                 optionType="button"
                 buttonStyle="solid"
                 onChange={(e) => handleVoteChange(e)}
-                defaultValue={checkWhetherVoted(currentLoginUser?.id)}
+                defaultValue={isVoted(currentLoginUser?.id)}
               >
                 <P.VoteButtonSmall value="agree">
                   <LikeTwoTone twoToneColor="#2515d5" />
