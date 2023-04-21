@@ -143,6 +143,7 @@ const PostImageWrapper = styled.div`
   margin: 20px 0 0;
 
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 `;
