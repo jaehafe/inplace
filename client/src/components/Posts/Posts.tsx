@@ -258,6 +258,7 @@ function Post(
       </P.Wrapper>
 
       <PostDrawer
+        postId={postId}
         followers={followers}
         postAuthorInfo={user}
         openPostDrawer={openPostDrawer}

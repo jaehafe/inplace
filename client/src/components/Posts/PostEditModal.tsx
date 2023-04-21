@@ -12,6 +12,8 @@ import React, { FormEvent, useMemo, useState } from 'react';
 import { createPostAPI, uploadPostImagesAPI } from '../../apis/post';
 import CommonButton from '../Common/CommonButton';
 import PostHeader from '../Header/PostHeader/PostHeader';
+import P from '../../pages/profile/Profile.styles';
+import { useEditPostModalStoreValue } from '../../store/editPostStore';
 
 // const getBase64 = (file: RcFile): Promise<string> =>
 //   new Promise((resolve, reject) => {
@@ -40,20 +42,19 @@ const isUploadable = (fileList: UploadFile[]) => {
   });
 };
 
-function EditPost() {
+// { open, setOpen }: any
+function PostEditModal() {
+  const router = useRouter();
+
   const [title, setTitle] = useState('');
   const [agree, setAgree] = useState('');
   const [neutral, setNeutral] = useState('');
   const [disagree, setDisagree] = useState('');
-
-  // const [downVote, setDownVote] = useState('');
   const [desc, setDesc] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [imageName, setImageName] = useState<string[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
-  const router = useRouter();
 
   const onSuccess = (data: any) => {
     setImageName(data);
@@ -140,7 +141,18 @@ function EditPost() {
   };
 
   return (
-    <div>
+    <P.ProfileEditDrawer
+      placement="bottom"
+      title="게시물 수정"
+      closable={false}
+      // onClose={() => setOpenEditPost(false)}
+      // open={openEditPost}
+      // onClose={() => setOpen(false)}
+      // open={open}
+      key="bottom"
+      height={'auto'}
+      style={{ overflowY: 'scroll' }}
+    >
       <PostHeader title="OX 질문" />
       <form onSubmit={handleSubmitPost}>
         {/* 제목 */}
@@ -212,8 +224,8 @@ function EditPost() {
           작성완료
         </CommonButton>
       </form>
-    </div>
+    </P.ProfileEditDrawer>
   );
 }
 
-export default EditPost;
+export default PostEditModal;

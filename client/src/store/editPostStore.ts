@@ -1,14 +1,14 @@
 import { create } from 'zustand';
 
-const useEditPostStore = create((set) => ({
-  postInfo: null,
-  setPostInfo: (postInfo: any) => set({ postInfo }),
-  clearPostInfo: () => set({ postInfo: null }),
+type ModalState = {
+  openEditPost: boolean;
+  setOpenEditPost: (isOpen: boolean) => void;
+};
+
+const useEditPostModalStore = create<ModalState>((set) => ({
+  openEditPost: false,
+  setOpenEditPost: (isOpen) => set({ openEditPost: false }),
 }));
 
-export const usePostInfo = () =>
-  useEditPostStore((state: any) => state.postInfo);
-export const useSetPostInfo = () =>
-  useEditPostStore((state: any) => state.setPostInfo);
-export const useClearPostInfo = () =>
-  useEditPostStore((state: any) => state.clearPostInfo);
+export const useEditPostModalStoreValue = () =>
+  useEditPostModalStore((state) => state);
