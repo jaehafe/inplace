@@ -9,6 +9,8 @@ import Image from '../entities/Image';
 import { AppDataSource } from '../data-source';
 import Comment from '../entities/Comment';
 import User from '../entities/User';
+import CommentVote from '../entities/CommentVote';
+import PostVote from '../entities/PostVote';
 
 const router = Router();
 
@@ -181,6 +183,42 @@ const getOwnPosts = async (req: Request, res: Response) => {
   }
 };
 
+const deletePost = async (req: Request, res: Response) => {
+  const { identifier } = req.params;
+  const user = res.locals.user;
+
+  try {
+    const post = await Post.findOneOrFail({
+      where: { identifier },
+      relations: ['comments', 'images', 'comments.commentVotes', 'votes'],
+    });
+
+    if (post.userId !== user.id) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    // 1. commentVotes 삭제
+    await Promise.all(post.comments.map((comment) => CommentVote.delete({ commentId: comment.id })));
+
+    // 2. comments 삭제
+    await Comment.delete({ postId: post.id });
+
+    // 3. PostVote 삭제
+    await PostVote.delete({ postId: post.id });
+
+    // 4. images 삭제
+    await Promise.all(post.images.map((image) => Image.delete({ id: image.id })));
+
+    // 5. 마지막으로 post 삭제
+    await Post.delete({ identifier });
+
+    return res.json({ message: '게시물 삭제 완료' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'something went wrong' });
+  }
+};
+
 router.get('/', getAllPosts);
 // userMiddleware, authMiddleware,
 router.get('/owned/:identifier', getOwnPosts);
@@ -197,8 +235,8 @@ router.post(
     return res.json(req.files.map((file) => file.filename));
   }
 );
-
 router.post('/', userMiddleware, authMiddleware, createPost);
+router.delete('/:identifier', userMiddleware, authMiddleware, deletePost);
 
 export default router;
 

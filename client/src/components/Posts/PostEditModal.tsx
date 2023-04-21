@@ -58,7 +58,6 @@ function PostEditModal() {
 
   const { openEditPostModal, editPostId, setOpenEditPostModal } =
     useEditPostModalStoreActions();
-  console.log('editPostId>>>>', editPostId);
 
   const open = editPostId ? openEditPostModal[editPostId] : false;
 

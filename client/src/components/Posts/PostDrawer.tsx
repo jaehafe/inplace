@@ -3,6 +3,7 @@ import { Button, Divider, message } from 'antd';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { handleFollowAPI } from '../../apis/follow';
+import { deletePostAPI } from '../../apis/post';
 import { useEditPostModalStoreActions } from '../../store/editPostStore';
 import PostEditModal from './PostEditModal';
 import P from './Posts.styles';
@@ -66,6 +67,20 @@ function PostDrawer({
     setOpenPostDrawer(false);
   };
 
+  const onSuccessDeletePost = () => {
+    queryClient.invalidateQueries([`/posts`]);
+    message.success('게시글 삭제 완료');
+  };
+
+  const { mutate: deletePostMutate } = deletePostAPI(postId, {
+    onSuccess: onSuccessDeletePost,
+  });
+
+  const handleDeletePost = () => {
+    console.log('게시글 삭제>>', postId);
+    deletePostMutate(postId);
+  };
+
   return (
     <>
       <P.PostDrawer
@@ -91,7 +106,7 @@ function PostDrawer({
               게시물 수정
             </Button>
             <Divider style={{ margin: '10px 0' }} />
-            <Button type="text" shape="round">
+            <Button type="text" shape="round" onClick={handleDeletePost}>
               게시물 삭제
             </Button>
           </>
@@ -117,7 +132,6 @@ function PostDrawer({
           </>
         )}
       </P.PostDrawer>
-      {/* <PostEditModal open={open} setOpen={setOpen} /> */}
     </>
   );
 }

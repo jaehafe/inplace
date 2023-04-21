@@ -75,5 +75,22 @@ export const getDetailPostAPI = (
   const onError = () => {
     message.error('불러오기 실패');
   };
-  return useQuery([queryKey], queryFn, { onError, ...options });
+  return useQuery([queryKey], queryFn, {
+    onError,
+    ...options,
+    enabled: Boolean(identifier),
+  });
+};
+
+export const deletePostAPI = (
+  postId?: string,
+  options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
+) => {
+  const queryKey = `/posts/${postId}`;
+  const queryFn = () => axiosInstance.delete(queryKey).then((res) => res.data);
+
+  const onError = () => {
+    message.error('게시물 삭제 실패');
+  };
+  return useMutation([queryKey], queryFn, { onError, ...options });
 };
