@@ -30,7 +30,7 @@ import {
 import Link from 'next/link';
 import { postVoteAPI } from '../../apis/vote';
 import { useQueryClient } from '@tanstack/react-query';
-import { useUserStore } from '../../store/userStore';
+import { useUserInfo } from '../../store/userStore';
 import ProfileImage from '../Common/ProfileImage';
 import { handleFollowAPI } from '../../apis/follow';
 import PostDrawer from './PostDrawer';
@@ -62,7 +62,7 @@ function Post(
   const queryClient = useQueryClient();
   const [openPostDrawer, setOpenPostDrawer] = useState(false);
 
-  const currentLoginUser = useUserStore((state) => state.userInfo);
+  const currentLoginUser = useUserInfo();
 
   const onSuccessVote = () => {
     message.success('투표 완료');

@@ -6,8 +6,13 @@ type UserState = {
   clearUserInfo: () => void;
 };
 
-export const useUserStore = create<UserState>((set) => ({
+const useUserStore = create<UserState>((set) => ({
   userInfo: null,
   setUserInfo: (userInfo) => set({ userInfo }),
   clearUserInfo: () => set({ userInfo: null }),
 }));
+
+export const useUserInfo = () => useUserStore((state) => state.userInfo);
+export const useSetUserInfo = () => useUserStore((state) => state.setUserInfo);
+export const useClearUserInfo = () =>
+  useUserStore((state) => state.clearUserInfo);

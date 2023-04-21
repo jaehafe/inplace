@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 
-type UserState = {
-  userInfo: any | null;
-  setUserInfo: (userInfo: any) => void;
-  clearUserInfo: () => void;
-};
+// type UserState = {
+//   userInfo: any | null;
+//   setUserInfo: (userInfo: any) => void;
+//   clearUserInfo: () => void;
+// };
 
-export const useUserStore = create<UserState>((set) => ({
+export const useEditPostStore = create((set) => ({
   userInfo: null,
-  setUserInfo: (userInfo) => set({ userInfo }),
+  setUserInfo: (userInfo: any) => set({ userInfo }),
   clearUserInfo: () => set({ userInfo: null }),
 }));

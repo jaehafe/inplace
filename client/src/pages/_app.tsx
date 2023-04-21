@@ -13,7 +13,7 @@ import theme from '../styles/theme';
 import AppLayout from '../components/Layout/AppLayout';
 import Head from 'next/head';
 import { useCookies } from 'react-cookie';
-import { useUserStore } from '../store/userStore';
+import { useSetUserInfo } from '../store/userStore';
 import { useEffect } from 'react';
 import { axiosInstance } from '../configs/axios';
 
@@ -58,14 +58,13 @@ export default function App({ Component, pageProps }: AppProps) {
     },
   });
 
-  const setUserInfo = useUserStore((state) => state.setUserInfo);
+  const setUserInfo = useSetUserInfo();
   const [cookie] = useCookies(['inplace']);
 
   useEffect(() => {
     if (cookie?.inplace) {
       const fetchUserInfo = async () => {
         const { data } = await axiosInstance.get(`/auth/me`);
-        // console.log('data>>>', data);
         setUserInfo(data);
       };
 

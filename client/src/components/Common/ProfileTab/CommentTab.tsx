@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { deleteCommentAPI, updateCommentAPI } from '../../../apis/comment';
-import { useUserStore } from '../../../store/userStore';
+import { useUserInfo } from '../../../store/userStore';
 import {
   commentBodyEllipsis,
   formattedDate,
@@ -32,13 +32,12 @@ function CommentTab({ data, queryKey }: any) {
     username: commentAuthor,
   } = user;
 
-  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState(commentBody);
   const editCommentRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
-  const currentLoginUser = useUserStore((state) => state.userInfo);
+  const currentLoginUser = useUserInfo();
 
   useEffect(() => {
     if (isEditing && editCommentRef.current) {

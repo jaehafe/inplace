@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import B from '../../Common/BackButton';
 import { logoutAPI } from '../../../apis/user';
-import { useUserStore } from '../../../store/userStore';
+import { useUserInfo } from '../../../store/userStore';
 import { defaultImg } from '../../../utils';
 import ProfileImage from '../../Common/ProfileImage';
 
@@ -19,8 +19,7 @@ interface IProps {
 function LogoHeader({ headerIcons }: IProps) {
   const router = useRouter();
   const [openDrawer, setOpenDrawer] = useState(false);
-
-  const currentLoginUser = useUserStore((state) => state.userInfo);
+  const currentLoginUser = useUserInfo();
 
   const { mutate: logoutMutate } = logoutAPI();
   const handleLogout = () => {

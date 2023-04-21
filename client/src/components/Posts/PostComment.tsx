@@ -15,8 +15,8 @@ import React, {
 } from 'react';
 import { deleteCommentAPI, updateCommentAPI } from '../../apis/comment';
 import { voteCommentAPI } from '../../apis/vote';
-import { useUserStore } from '../../store/userStore';
-import { defaultImg, formattedDate } from '../../utils';
+import { useUserInfo } from '../../store/userStore';
+import { formattedDate } from '../../utils';
 import ProfileImage from '../Common/ProfileImage';
 import P from './Posts.styles';
 
@@ -39,7 +39,7 @@ function PostComment({ data }: any) {
   const editCommentRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
-  const currentLoginUser = useUserStore((state) => state.userInfo);
+  const currentLoginUser = useUserInfo();
 
   useEffect(() => {
     if (isEditing && editCommentRef.current) {

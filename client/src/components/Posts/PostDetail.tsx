@@ -6,12 +6,11 @@ import {
 } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, message, RadioChangeEvent, Image as AntdImage } from 'antd';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { postVoteAPI } from '../../apis/vote';
-import { useUserStore } from '../../store/userStore';
+import { useUserInfo } from '../../store/userStore';
 import { defaultImg, formattedDate } from '../../utils';
 import ProfileImage from '../Common/ProfileImage';
 import PostComments from './PostComments';
@@ -39,8 +38,7 @@ function PostDetail({ detailPost }: any) {
   const queryClient = useQueryClient();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-
-  const currentLoginUser = useUserStore((state) => state.userInfo);
+  const currentLoginUser = useUserInfo();
 
   const onSuccessVote = () => {
     message.success('투표 완료');

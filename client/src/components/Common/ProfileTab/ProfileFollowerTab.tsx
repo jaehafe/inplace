@@ -7,8 +7,7 @@ import { useInView } from 'react-intersection-observer';
 import { handleFollowAPI } from '../../../apis/follow';
 import { getUserInfoAPI } from '../../../apis/user';
 import { axiosInstance } from '../../../configs/axios';
-import { useUserStore } from '../../../store/userStore';
-import { IIdentifier } from '../../../types';
+import { useUserInfo } from '../../../store/userStore';
 import P from '../../Posts/Posts.styles';
 import ProfileImage from '../ProfileImage';
 import T from './Tab.styles';
@@ -23,7 +22,7 @@ function ProfileFollowerTab({
   setOpenFollowList,
 }: IProfileFollowList) {
   const router = useRouter();
-  const currentLoginUser = useUserStore((state) => state.userInfo);
+  const currentLoginUser = useUserInfo();
   const { data: userInfo } = getUserInfoAPI(identifier);
   const queryClient = useQueryClient();
   const { ref: observeRef, inView } = useInView();
