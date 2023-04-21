@@ -94,8 +94,6 @@ const getAllPosts = async (req: Request, res: Response) => {
   const currentPage: number = (req.query.page || 0) as number;
   const perPage: number = (req.query.count || 3) as number;
 
-  console.log('req.query.page...', req.query.page);
-
   try {
     const allPosts = await AppDataSource.createQueryBuilder(Post, 'post')
       .leftJoinAndSelect('post.votes', 'votes')
@@ -131,6 +129,65 @@ const getAllPosts = async (req: Request, res: Response) => {
     });
 
     return res.json(allPosts);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'something went wrong' });
+  }
+};
+
+const getHotPosts = async (req: Request, res: Response) => {
+  const currentPage: number = (req.query.page || 0) as number;
+  const perPage: number = (req.query.count || 3) as number;
+
+  try {
+    const allPosts = await AppDataSource.createQueryBuilder(Post, 'post')
+      .leftJoinAndSelect('post.votes', 'votes')
+      .leftJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('post.images', 'postImages')
+      .leftJoinAndSelect('user.image', 'userImage')
+      .leftJoinAndSelect('user.followers', 'followers')
+      .orderBy('post.createdAt', 'DESC')
+      .skip(currentPage * perPage)
+      .take(perPage)
+      .getMany();
+
+    const postIds = allPosts.map((post) => post.id);
+
+    const latestComments = await Promise.all(
+      postIds.map(async (postId) => {
+        const comments = await AppDataSource.createQueryBuilder(Comment, 'comment')
+          .leftJoinAndSelect('comment.user', 'user')
+          .leftJoinAndSelect('user.image', 'userImage')
+          .where('comment.postId = :postId', { postId })
+          .orderBy('comment.createdAt', 'DESC')
+          .limit(5)
+          .getMany();
+        return { postId, comments };
+      })
+    );
+
+    allPosts.forEach((post) => {
+      const postLatestComments = latestComments.find((item) => item.postId === post.id);
+      if (postLatestComments) {
+        post.comments = postLatestComments.comments;
+      }
+    });
+
+    const postsWithCommentAndVote = allPosts.map((post) => {
+      const voteScore = post.votes?.reduce((memo, curt) => memo + (curt.agree + curt.neutral + curt.disagree), 0);
+      const commentCount = post.comments?.length ?? 0;
+
+      return {
+        ...post,
+        voteScore,
+        commentCount,
+        totalScore: voteScore + commentCount,
+      };
+    });
+
+    const sortedPosts = postsWithCommentAndVote.sort((a, b) => b.totalScore - a.totalScore);
+
+    return res.json(sortedPosts);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'something went wrong' });
@@ -282,6 +339,7 @@ const updatePost = async (req: Request, res: Response) => {
 };
 
 router.get('/', getAllPosts);
+router.get('/hot', getHotPosts);
 // userMiddleware, authMiddleware,
 router.get('/owned/:identifier', getOwnPosts);
 router.get('/:identifier', getDetailPost);
