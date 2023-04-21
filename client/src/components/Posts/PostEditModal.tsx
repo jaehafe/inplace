@@ -9,19 +9,17 @@ import { Collapse, Input, message, Upload, UploadProps } from 'antd';
 import { UploadFile } from 'antd/es/upload';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
-import { createPostAPI, uploadPostImagesAPI } from '../../apis/post';
+import {
+  createPostAPI,
+  updatePostAPI,
+  uploadPostImagesAPI,
+} from '../../apis/post';
 import PostHeader from '../Header/PostHeader/PostHeader';
 import P from '../../pages/profile/Profile.styles';
 import { useEditPostModalStoreActions } from '../../store/editPostStore';
 import { UploadFileStatus } from 'antd/es/upload/interface';
-
-// const getBase64 = (file: RcFile): Promise<string> =>
-//   new Promise((resolve, reject) => {
-//     const reader = new FileReader();
-//     reader.readAsDataURL(file);
-//     reader.onload = () => resolve(reader.result as string);
-//     reader.onerror = (error) => reject(error);
-//   });
+import useDebounce from '../../hooks/useDebounce';
+import { useQueryClient } from '@tanstack/react-query';
 
 const beforeUpload = (fileList: UploadFile[]) => {
   return fileList.every((file) => {
@@ -49,23 +47,46 @@ function PostEditModal({ data }: any) {
     neutral: neutralBody,
     title: titleBody,
     desc: descBody,
-    imageName: imageNameBody,
-    identifier,
+    id: postId,
     images,
   } = data;
-  // console.log('data>>>', data);
 
-  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { openEditPostModal, editPostId, setOpenEditPostModal } =
+    useEditPostModalStoreActions();
+  const open = editPostId ? openEditPostModal[editPostId] : false;
 
   const [title, setTitle] = useState('');
   const [agree, setAgree] = useState('');
   const [neutral, setNeutral] = useState('');
   const [disagree, setDisagree] = useState('');
   const [desc, setDesc] = useState('');
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [previousImage, setPreviousImage] = useState<UploadFile[]>([]);
 
-  const [loading, setLoading] = useState(false);
+  const [newImageName, setNewImageName] = useState<string[]>([]);
+
   const [imageName, setImageName] = useState<string[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  /** 이미지가 변경되었는지 체크 서버에 넘겨줄 값 */
+  const isImageArrayDifferent = async (newImages: any, oldImages: any) => {
+    if (newImages.length !== oldImages?.length) {
+      return true;
+    }
+
+    const sortedNewImages = newImages.map((image: any) => image.name).sort();
+    const sortedOldImages = oldImages.map((image: any) => image.src).sort();
+
+    for (let i = 0; i < sortedNewImages.length; i++) {
+      if (sortedNewImages[i] !== sortedOldImages[i]) {
+        return true;
+      }
+    }
+
+    return false;
+  };
 
   const getFileListFromPostImage = images.map((image: any) => {
     return {
@@ -84,61 +105,73 @@ function PostEditModal({ data }: any) {
     setDisagree(disagreeBody);
     setDesc(descBody);
     setFileList(getFileListFromPostImage);
+    // setPreviousImage(getFileListFromPostImage);
   }, [data]);
 
-  const { openEditPostModal, editPostId, setOpenEditPostModal } =
-    useEditPostModalStoreActions();
-
-  const open = editPostId ? openEditPostModal[editPostId] : false;
-
   const onSuccess = (data: any) => {
-    setImageName(data);
+    setNewImageName(data);
     // message.success('이미지 업로드 완료');
     // router.push('/');
   };
   const { mutate: uploadPostImageMutate } = uploadPostImagesAPI({ onSuccess });
 
-  const onSuccessCreatePost = (data: any) => {
-    console.log('data>>>>', data);
+  const onSuccessUpdatePost = () => {
+    queryClient.invalidateQueries([`/posts`]);
+    // setOpenEditPostModal(postId, false);
+    message.success('게시물이 성공적으로 업데이트 되었습니다.');
+    if (editPostId) {
+      setOpenEditPostModal(editPostId, false);
+    }
   };
-  const { mutate: createPostMutate } = createPostAPI({
-    onSuccess: onSuccessCreatePost,
+  const { mutate: updatePostMutate } = updatePostAPI(postId, {
+    onSuccess: onSuccessUpdatePost,
   });
 
-  const isSameTitle = title === titleBody;
-  const isSameAgree = agree === agreeBody;
-  const isSameNeutral = neutral === neutralBody;
-  const isSameDisagree = disagree === disagreeBody;
-  const isSameDesc = desc === descBody;
+  const debouncedTitle = useDebounce(title, 2000);
+  const debouncedAgree = useDebounce(agree, 2000);
+  const debouncedNeutral = useDebounce(neutral, 2000);
+  const debouncedDisagree = useDebounce(disagree, 2000);
+  const debouncedDesc = useDebounce(desc, 2000);
 
   /** 비어있거나 이전과 같으면 Disabled */
-  const isDisabled = useMemo(() => {
-    const isEmpty =
-      !title.trim() ||
-      !agree.trim() ||
-      !neutral.trim() ||
-      !disagree.trim() ||
-      !desc.trim();
+  useEffect(() => {
+    const checkIsDisabled = async () => {
+      const isEmpty =
+        !debouncedTitle.trim() ||
+        !debouncedAgree.trim() ||
+        !debouncedNeutral.trim() ||
+        !debouncedDisagree.trim() ||
+        !debouncedDesc.trim();
 
-    const isSame =
-      isSameTitle &&
-      isSameAgree &&
-      isSameNeutral &&
-      isSameDisagree &&
-      isSameDesc;
+      const isSame =
+        title === titleBody &&
+        agree === agreeBody &&
+        neutral === neutralBody &&
+        disagree === disagreeBody &&
+        desc === descBody;
 
-    return isEmpty || isSame;
+      const isChanged = await isImageArrayDifferent(images, fileList);
+      // console.log('isChanged?>>', isChanged);
+      // console.log('isEmpty?>>>', isEmpty);
+
+      setIsDisabled(isEmpty && !isSame && !isChanged);
+    };
+    // console.log('disabled>>>', isDisabled);
+
+    checkIsDisabled();
   }, [
-    title,
-    agree,
-    neutral,
-    disagree,
-    desc,
+    debouncedTitle,
+    debouncedAgree,
+    debouncedNeutral,
+    debouncedDisagree,
+    debouncedDesc,
     titleBody,
     agreeBody,
     neutralBody,
     disagreeBody,
     descBody,
+    images,
+    isDisabled,
   ]);
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
@@ -160,16 +193,23 @@ function PostEditModal({ data }: any) {
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      {/* <PlusOutlined /> */}
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
 
   const handleSubmitPost = async (e: FormEvent) => {
     e.preventDefault();
-    console.log('12312123');
+    const isImageChanged = await isImageArrayDifferent(images, newImageName);
 
-    // createPostMutate({ title, agree, neutral, disagree, desc, imageName });
+    updatePostMutate({
+      title,
+      agree,
+      neutral,
+      disagree,
+      desc,
+      imageName: setNewImageName,
+      isImageChanged,
+    });
   };
 
   return (
@@ -187,7 +227,7 @@ function PostEditModal({ data }: any) {
       height={'auto'}
       style={{ overflowY: 'scroll' }}
     >
-      <PostHeader title="OX 질문" />
+      {/* <PostHeader title="OX 질문" /> */}
       <form onSubmit={handleSubmitPost}>
         {/* 제목 */}
         <Input.TextArea

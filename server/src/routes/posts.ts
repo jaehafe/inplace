@@ -219,7 +219,67 @@ const deletePost = async (req: Request, res: Response) => {
   }
 };
 
-const updatePost = async (req: Request, res: Response) => {};
+const updatePost = async (req: Request, res: Response) => {
+  const { title, agree, neutral, disagree, desc = '', imageName = [], isImageChanged = false } = req.body;
+  console.log('imageChanged>>>>', isImageChanged);
+  const { identifier } = req.params;
+
+  try {
+    const post = await Post.findOneOrFail({ where: { id: Number(identifier) }, relations: ['images'] });
+
+    if (!post) {
+      return res.status(404).json({ error: '게시물을 찾을 수 없습니다.' });
+    }
+
+    if (title) {
+      post.title = title;
+    }
+
+    if (agree) {
+      post.agree = agree;
+    }
+
+    if (neutral) {
+      post.neutral = neutral;
+    }
+
+    if (disagree) {
+      post.disagree = disagree;
+    }
+
+    if (desc) {
+      post.desc = desc;
+    }
+
+    if (isImageChanged) {
+      if (imageName.length > 0) {
+        // 1. 기존 이미지 삭제
+        for (const image of post.images) {
+          await Image.delete({ id: image.id });
+        }
+
+        // 2. 새로운 이미지 업로드 및 게시물과 연결
+        const images = [];
+        for (const file of imageName) {
+          const image = new Image();
+          image.src = file;
+          image.post = post;
+          await image.save();
+          images.push(image);
+        }
+
+        post.images = images;
+      }
+    }
+
+    await post.save();
+
+    return res.json({ message: '게시물이 업데이트 되었습니다.' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'something went wrong' });
+  }
+};
 
 router.get('/', getAllPosts);
 // userMiddleware, authMiddleware,

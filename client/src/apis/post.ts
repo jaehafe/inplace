@@ -101,3 +101,14 @@ export const deletePostAPI = (
   };
   return useMutation([queryKey], queryFn, { onSuccess, onError, ...options });
 };
+
+export const updatePostAPI = (
+  identifier: string,
+  options?: UseMutationOptions<AxiosResponse<string>, AxiosError, any>
+) => {
+  const queryKey = `/posts/${identifier}`;
+  const queryFn = (data: any) =>
+    axiosInstance.patch(queryKey, data).then((res) => res.data);
+
+  return useMutation([queryKey], queryFn, { ...options });
+};
