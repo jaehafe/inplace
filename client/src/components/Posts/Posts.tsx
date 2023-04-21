@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useCallback, useState } from 'react';
 import {
   CommentOutlined,
   DislikeTwoTone,
@@ -72,19 +72,25 @@ function Post(
     onSuccess: onSuccessVote,
   });
 
-  const isVoted = (loginUserId: any) => {
-    const alreadyVote = votes.find((vote: any) => vote.userId === loginUserId);
-    if (alreadyVote) {
-      if (alreadyVote.agree) {
-        return 'agree';
-      } else if (alreadyVote.neutral) {
-        return 'neutral';
-      } else if (alreadyVote.disagree) {
-        return 'disagree';
+  // useCallback은 이전에 생성된 함수를 기억하고, 의존성 배열에 따라 함수가 재생성되는 것을 제어
+  const isVoted = useCallback(
+    (loginUserId: any) => {
+      const alreadyVote = votes.find(
+        (vote: any) => vote.userId === loginUserId
+      );
+      if (alreadyVote) {
+        if (alreadyVote.agree) {
+          return 'agree';
+        } else if (alreadyVote.neutral) {
+          return 'neutral';
+        } else if (alreadyVote.disagree) {
+          return 'disagree';
+        }
       }
-    }
-    return false;
-  };
+      return false;
+    },
+    [votes]
+  );
 
   const handleVoteChange = (e: RadioChangeEvent) => {
     if (!currentLoginUser) {
@@ -117,7 +123,7 @@ function Post(
       <P.Wrapper>
         <P.HeaderWrapper>
           <P.HeaderLeft>
-            <Link href={`/profile/${user.username}`}>
+            <Link href={`/profile/${username}`}>
               <ProfileImage
                 src={user.image && `${user.image.src}`}
                 width={46}
