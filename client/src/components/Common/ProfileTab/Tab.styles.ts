@@ -106,7 +106,7 @@ const MyCommentHeaderWrapper = styled.div`
 `;
 
 const AntdPagination = styled(Pagination)`
-  margin-top: 20px;
+  margin: 20px;
   display: flex;
   justify-content: center;
   align-items: center;

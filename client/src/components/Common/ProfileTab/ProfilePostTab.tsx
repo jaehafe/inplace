@@ -55,7 +55,7 @@ function ProfilePostTab({ identifier }: { identifier: string }) {
             current={page}
             onChange={onChange}
             total={postData?.total}
-            pageSize={pageSize}
+            // pageSize={pageSize}
           />
         </>
       ) : (

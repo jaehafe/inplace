@@ -38,6 +38,8 @@ function ProfileCommentTab({ identifier }: IIdentifier) {
     staleTime: 10000,
   });
 
+  console.log('commentData>>>', commentData);
+
   return (
     <>
       <P.LoadingWrapper>
@@ -57,8 +59,8 @@ function ProfileCommentTab({ identifier }: IIdentifier) {
           <T.AntdPagination
             current={page}
             onChange={onChange}
-            total={commentData?.data.length}
-            pageSize={commentData?.total}
+            total={commentData?.total}
+            // pageSize={commentData?.total.length}
           />
         </>
       ) : (
