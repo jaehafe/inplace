@@ -1,13 +1,14 @@
 import { create } from 'zustand';
 
-// type UserState = {
-//   userInfo: any | null;
-//   setUserInfo: (userInfo: any) => void;
-//   clearUserInfo: () => void;
-// };
-
-export const useEditPostStore = create((set) => ({
-  userInfo: null,
-  setUserInfo: (userInfo: any) => set({ userInfo }),
-  clearUserInfo: () => set({ userInfo: null }),
+const useEditPostStore = create((set) => ({
+  postInfo: null,
+  setPostInfo: (postInfo: any) => set({ postInfo }),
+  clearPostInfo: () => set({ postInfo: null }),
 }));
+
+export const usePostInfo = () =>
+  useEditPostStore((state: any) => state.postInfo);
+export const useSetPostInfo = () =>
+  useEditPostStore((state: any) => state.setPostInfo);
+export const useClearPostInfo = () =>
+  useEditPostStore((state: any) => state.clearPostInfo);
