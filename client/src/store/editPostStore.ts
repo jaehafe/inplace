@@ -1,14 +1,27 @@
 import { create } from 'zustand';
 
-type ModalState = {
-  openEditPost: boolean;
-  setOpenEditPost: (isOpen: boolean) => void;
+type EditPostModalState = {
+  openEditPostModal: Record<string, boolean>;
+  editPostId: string | null;
 };
 
-const useEditPostModalStore = create<ModalState>((set) => ({
-  openEditPost: false,
-  setOpenEditPost: (isOpen) => set({ openEditPost: false }),
+type EditPostModalActions = {
+  setOpenEditPostModal: (postId: string, open: boolean) => void;
+  setEditPostId: (postId: string | null) => void;
+};
+
+type EditPostModalStore = EditPostModalState & EditPostModalActions;
+
+const useEditPostModalStore = create<EditPostModalStore>((set) => ({
+  openEditPostModal: {},
+  editPostId: null,
+  setOpenEditPostModal: (postId, open) =>
+    set((state) => ({
+      ...state,
+      openEditPostModal: { ...state.openEditPostModal, [postId]: open },
+    })),
+  setEditPostId: (postId) => set((state) => ({ ...state, editPostId: postId })),
 }));
 
-export const useEditPostModalStoreValue = () =>
+export const useEditPostModalStoreActions = (): EditPostModalStore =>
   useEditPostModalStore((state) => state);

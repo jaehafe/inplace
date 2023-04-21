@@ -3,7 +3,7 @@ import { Button, Divider, message } from 'antd';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { handleFollowAPI } from '../../apis/follow';
-import { useEditPostModalStoreValue } from '../../store/editPostStore';
+import { useEditPostModalStoreActions } from '../../store/editPostStore';
 import PostEditModal from './PostEditModal';
 import P from './Posts.styles';
 
@@ -27,8 +27,8 @@ function PostDrawer({
 }: IPostDrawer) {
   const queryClient = useQueryClient();
   const router = useRouter();
-  // const { openEditPost, setOpenEditPost } = useEditPostModalStoreValue();
-  const [open, setOpen] = useState(false);
+  const { setEditPostId, setOpenEditPostModal } =
+    useEditPostModalStoreActions();
 
   const { id, username } = postAuthorInfo;
 
@@ -61,8 +61,9 @@ function PostDrawer({
   };
 
   const handleEditPost = () => {
-    // setOpenEditPost(true);
-    // setOpen(true);
+    setOpenEditPostModal(postId, true);
+    setEditPostId(postId);
+    setOpenPostDrawer(false);
   };
 
   return (
@@ -117,7 +118,6 @@ function PostDrawer({
         )}
       </P.PostDrawer>
       {/* <PostEditModal open={open} setOpen={setOpen} /> */}
-      <PostEditModal />
     </>
   );
 }

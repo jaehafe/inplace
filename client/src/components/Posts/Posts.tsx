@@ -34,6 +34,7 @@ import { useUserInfo } from '../../store/userStore';
 import ProfileImage from '../Common/ProfileImage';
 import { handleFollowAPI } from '../../apis/follow';
 import PostDrawer from './PostDrawer';
+import PostEditModal from './PostEditModal';
 
 function Post(
   { post, isFetchingNextPage }: any,

@@ -5,7 +5,7 @@ import {
   LoadingOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
-import { Collapse, Input, message, Upload, UploadProps } from 'antd';
+import { Button, Collapse, Input, message, Upload, UploadProps } from 'antd';
 import { UploadFile } from 'antd/es/upload';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
@@ -13,7 +13,7 @@ import { createPostAPI, uploadPostImagesAPI } from '../../apis/post';
 import CommonButton from '../Common/CommonButton';
 import PostHeader from '../Header/PostHeader/PostHeader';
 import P from '../../pages/profile/Profile.styles';
-import { useEditPostModalStoreValue } from '../../store/editPostStore';
+import { useEditPostModalStoreActions } from '../../store/editPostStore';
 
 // const getBase64 = (file: RcFile): Promise<string> =>
 //   new Promise((resolve, reject) => {
@@ -55,6 +55,12 @@ function PostEditModal() {
   const [loading, setLoading] = useState(false);
   const [imageName, setImageName] = useState<string[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  const { openEditPostModal, editPostId, setOpenEditPostModal } =
+    useEditPostModalStoreActions();
+  console.log('editPostId>>>>', editPostId);
+
+  const open = editPostId ? openEditPostModal[editPostId] : false;
 
   const onSuccess = (data: any) => {
     setImageName(data);
@@ -145,10 +151,12 @@ function PostEditModal() {
       placement="bottom"
       title="게시물 수정"
       closable={false}
-      // onClose={() => setOpenEditPost(false)}
-      // open={openEditPost}
-      // onClose={() => setOpen(false)}
-      // open={open}
+      onClose={() => {
+        if (editPostId) {
+          setOpenEditPostModal(editPostId, false);
+        }
+      }}
+      open={open}
       key="bottom"
       height={'auto'}
       style={{ overflowY: 'scroll' }}
@@ -220,9 +228,15 @@ function PostEditModal() {
         </Upload>
         <span>최대 5장까지 업로드할 수 있습니다.</span>
 
-        <CommonButton type="primary" htmlType="submit" disabled={isDisabled}>
+        <P.SubmitButton
+          block
+          type="primary"
+          htmlType="submit"
+          disabled={isDisabled}
+          style={{ margin: '30px 0 20px' }}
+        >
           작성완료
-        </CommonButton>
+        </P.SubmitButton>
       </form>
     </P.ProfileEditDrawer>
   );

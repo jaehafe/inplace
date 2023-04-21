@@ -7,6 +7,7 @@ import { useInView } from 'react-intersection-observer';
 import Posts from './Posts';
 import { Spin } from 'antd';
 import P from './Posts.styles';
+import PostEditModal from './PostEditModal';
 
 function AllPosts() {
   const { ref: observeRef, inView } = useInView();
@@ -67,6 +68,7 @@ function AllPosts() {
       <P.LoadingWrapper>
         {isFetchingNextPage || isFetching ? <Spin size="large" /> : ''}
       </P.LoadingWrapper>
+      <PostEditModal />
     </div>
   );
 }

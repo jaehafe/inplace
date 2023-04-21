@@ -155,6 +155,19 @@ const ProfileEditDrawer = styled(Drawer)`
   }
 `;
 
+const SubmitButton = styled(Button)`
+  height: 44px;
+  font-size: 15px;
+  font-weight: 600;
+  border: 0;
+  background-color: ${({ theme }) => theme.primary};
+
+  &:hover,
+  &:active {
+    background-color: ${({ theme }) => theme.gray600} !important;
+  }
+`;
+
 const P = {
   Wrapper,
   InfoWrapper,
@@ -167,6 +180,7 @@ const P = {
   ProfileEditDrawer,
   StyledFollowTab,
   FollowButton,
+  SubmitButton,
 };
 
 export default P;
