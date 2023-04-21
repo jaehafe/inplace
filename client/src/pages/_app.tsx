@@ -16,6 +16,8 @@ import { useCookies } from 'react-cookie';
 import { useSetUserInfo } from '../store/userStore';
 import { useEffect } from 'react';
 import { axiosInstance } from '../configs/axios';
+import { authMeAPI } from '../apis/user';
+import AuthUser from '../components/Signup/AuthUser';
 
 const pretendard = localFont({
   src: [
@@ -49,28 +51,31 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-export default function App({ Component, pageProps }: AppProps) {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-      },
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
     },
-  });
+  },
+});
 
-  const setUserInfo = useSetUserInfo();
-  const [cookie] = useCookies(['inplace']);
+export default function App({ Component, pageProps }: AppProps) {
+  // const setUserInfo = useSetUserInfo();
+  // const [cookie] = useCookies(['inplace']);
+  // const { data: authMeData, isLoading, error } = authMeAPI();
 
-  useEffect(() => {
-    if (cookie?.inplace) {
-      const fetchUserInfo = async () => {
-        const { data } = await axiosInstance.get(`/auth/me`);
-        setUserInfo(data);
-      };
+  // useEffect(() => {
+  //   if (cookie?.inplace) {
+  //     // const fetchUserInfo = async () => {
+  //     //   const { data } = await axiosInstance.get(`/auth/me`);
 
-      fetchUserInfo();
-    }
-  }, [cookie?.inplace]);
+  //     //   setUserInfo(data);
+  //     // };
+
+  //     // fetchUserInfo();
+  //     setUserInfo(authMeData);
+  //   }
+  // }, [cookie?.inplace, authMeData]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -86,6 +91,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </Head>
           <AppLayout>
             <main>
+              <AuthUser />
               <Component {...pageProps} />
             </main>
           </AppLayout>

@@ -7,7 +7,7 @@ import {
 import { Button, message, TabsProps } from 'antd';
 import { GetServerSideProps } from 'next';
 
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { getUserInfoAPI } from '../../apis/user';
 import ProfileImage from '../../components/Common/ProfileImage';
 import ProfileCommentTab from '../../components/Common/ProfileTab/ProfileCommentTab';

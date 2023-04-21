@@ -8,6 +8,7 @@ import { message } from 'antd';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { axiosInstance } from '../configs/axios';
+import { useSetUserInfo } from '../store/userStore';
 import { ILogin, ISignup } from '../types';
 
 export const signupAPI = (
@@ -42,12 +43,20 @@ export const logoutAPI = () => {
     // message.success('로그아웃 성공').then(() => router.reload());
     router.reload();
   };
-  const onError = () => {
-    message.error('로그아웃 실패');
-  };
+  const onError = () => message.error('로그아웃 실패');
 
   return useMutation([queryKey], queryFn, { onSuccess, onError });
 };
+
+// export const authMeAPI = (
+//   options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
+// ) => {
+//   const queryKey = `/auth/me`;
+//   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
+
+//   const onError = () => message.error('유저 정보 가져오기 실패');
+
+//   return useQuery([queryKey], queryFn, { onError, ...options });
 
 export const authMeAPI = (
   options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
@@ -55,7 +64,15 @@ export const authMeAPI = (
   const queryKey = `/auth/me`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
 
-  return useQuery([queryKey], queryFn, { ...options });
+  const onError = () => message.error('유저 정보 가져오기 실패');
+  // const onSuccess = (data: any) => useSetUserInfo()(data);
+  // onSuccess,
+  return useQuery([queryKey], queryFn, {
+    staleTime: 1000 * 60 * 5, // 5분
+    cacheTime: 1000 * 60 * 30, // 30분
+    onError,
+    ...options,
+  });
 };
 
 export const getUserInfoAPI = (
