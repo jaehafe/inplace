@@ -75,7 +75,7 @@ export default function App({ Component, pageProps }: AppProps) {
   //     // fetchUserInfo();
   //     setUserInfo(authMeData);
   //   }
-  // }, [cookie?.inplace, authMeData]);
+  // }, [cookie?.inplace]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -91,8 +91,9 @@ export default function App({ Component, pageProps }: AppProps) {
           </Head>
           <AppLayout>
             <main>
-              <AuthUser />
-              <Component {...pageProps} />
+              <AuthUser>
+                <Component {...pageProps} />
+              </AuthUser>
             </main>
           </AppLayout>
         </ThemeProvider>

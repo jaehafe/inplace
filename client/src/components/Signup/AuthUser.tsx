@@ -1,20 +1,28 @@
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { authMeAPI } from '../../apis/user';
-import { useSetUserInfo } from '../../store/userStore';
+import { useSetUserInfo, useUserInfo } from '../../store/userStore';
 
-const AuthUser: React.FC = () => {
+interface AuthUserProps {
+  children: ReactNode;
+}
+
+const AuthUser = ({ children }: AuthUserProps) => {
   const setUserInfo = useSetUserInfo();
   const [cookie] = useCookies(['inplace']);
+
   const { data: authMeData } = cookie?.inplace ? authMeAPI() : { data: null };
+  // console.log('authMeData<<', authMeData);
+  // const currentLoginUser = useUserInfo();
+  // console.log('currentLoginUser>>>', currentLoginUser);
 
   useEffect(() => {
-    if (cookie?.inplace) {
+    if (cookie?.inplace && authMeData) {
       setUserInfo(authMeData);
     }
-  }, [cookie?.inplace]);
+  }, [cookie.inplace, authMeData]);
 
-  return null;
+  return <>{children}</>;
 };
 
 export default AuthUser;
