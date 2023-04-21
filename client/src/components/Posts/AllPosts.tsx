@@ -58,6 +58,8 @@ function AllPosts() {
     }
   }, [inView, hasNextPage, observeRef]);
 
+  console.log('infiniteData>>>', infiniteData);
+
   return (
     <div>
       {infiniteData?.pages?.map((page, pageIndex) => {
