@@ -215,6 +215,24 @@ const getDetailPost = async (req: Request, res: Response) => {
   }
 };
 
+const getVoteResult = async (req: Request, res: Response) => {
+  const user: User = res.locals.user;
+  const { identifier } = req.params;
+
+  try {
+    const post = await Post.findOneOrFail({
+      where: { identifier },
+      relations: ['votes', 'votes.post'],
+    });
+    console.log('post>>>', post);
+
+    return res.json(post);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'something went wrong' });
+  }
+};
+
 const getOwnPosts = async (req: Request, res: Response) => {
   const currentPage: number = (req.query.page || 0) as number;
   const perPage: number = (req.query.count || 4) as number;
@@ -340,6 +358,7 @@ const updatePost = async (req: Request, res: Response) => {
 
 router.get('/', getAllPosts);
 router.get('/hot', getHotPosts);
+router.get('/result/:identifier', userMiddleware, getVoteResult);
 // userMiddleware, authMiddleware,
 router.get('/owned/:identifier', getOwnPosts);
 router.get('/:identifier', getDetailPost);

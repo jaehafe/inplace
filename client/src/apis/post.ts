@@ -83,6 +83,24 @@ export const getDetailPostAPI = (
   });
 };
 
+export const getPostVoteResultAPI = (
+  identifier?: string,
+  options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
+) => {
+  const queryKey = `/posts/result/${identifier}`;
+  const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
+
+  const onError = () => {
+    message.error('불러오기 실패');
+  };
+  return useQuery([queryKey], queryFn, {
+    onError,
+    ...options,
+    enabled: Boolean(identifier),
+    staleTime: 60000,
+  });
+};
+
 export const deletePostAPI = (
   postId?: string,
   options?: UseMutationOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
