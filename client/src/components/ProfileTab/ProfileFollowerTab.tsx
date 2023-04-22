@@ -3,12 +3,11 @@ import { message, Spin } from 'antd';
 import { useRouter } from 'next/router';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { handleFollowAPI } from '../../../apis/follow';
-import { axiosInstance } from '../../../configs/axios';
-import { useUserInfo } from '../../../store/userStore';
-import ProfileImage from '../ProfileImage';
-
-import P from '../../Posts/Posts.styles';
+import { handleFollowAPI } from '../../apis/follow';
+import { axiosInstance } from '../../configs/axios';
+import { useUserInfo } from '../../store/userStore';
+import P from '../Posts/Posts.styles';
+import ProfileImage from '../Common/ProfileImage';
 import T from './Tab.styles';
 
 interface IProfileFollowList {
@@ -16,7 +15,7 @@ interface IProfileFollowList {
   setOpenFollowList: Dispatch<SetStateAction<boolean>>;
 }
 
-function ProfileFollowingTab({
+function ProfileFollowerTab({
   identifier,
   setOpenFollowList,
 }: IProfileFollowList) {
@@ -25,7 +24,7 @@ function ProfileFollowingTab({
   const queryClient = useQueryClient();
   const { ref: observeRef, inView } = useInView();
 
-  const queryKey = `/follows/${identifier}/followings`;
+  const queryKey = `/follows/${identifier}/followers`;
 
   const {
     status,
@@ -58,7 +57,8 @@ function ProfileFollowingTab({
           return undefined;
         }
       },
-      cacheTime: 600000, // 6분 동안 캐시된 데이터 유효
+      cacheTime: 700000, // 6분 동안 캐시된 데이터 유효
+      staleTime: 600000,
     }
   );
 
@@ -69,6 +69,8 @@ function ProfileFollowingTab({
   }, [inView, hasNextPage, observeRef]);
 
   const onSuccessFollow = (data: any) => {
+    console.log('data>>>', data);
+
     message.success(data.message);
     queryClient.invalidateQueries([queryKey]);
     queryClient.invalidateQueries([`/user/${identifier}`]);
@@ -76,13 +78,18 @@ function ProfileFollowingTab({
   const onErrorFollow = (data: any) => {
     message.error(data.response.data.error);
   };
+
+  // console.log('userInfo>>>', userInfo);
+  // console.log('currentLoginUser>>>', currentLoginUser);
+
+  // userInfo?.id,
   const { mutate: followMutate } = handleFollowAPI({
     onSuccess: onSuccessFollow,
     onError: onErrorFollow,
   });
 
   const handleFollowing = (id: number) => {
-    console.log('following id>>', id);
+    console.log('followerId>>', id);
 
     followMutate({ id });
   };
@@ -92,6 +99,7 @@ function ProfileFollowingTab({
     router.push('/login');
   };
 
+  // console.log('infiniteData>>', infiniteData);
   const handleProfileRoute = (username: string) => {
     router.push(`/profile/${username}`);
     setOpenFollowList(false);
@@ -102,10 +110,12 @@ function ProfileFollowingTab({
       {infiniteData?.pages?.map((page) =>
         page?.result?.map((data: any) => {
           const {
-            following: { createdAt, username, image },
+            follower: { createdAt, username, image },
             isFollowing,
-            followingId,
+            followerId,
           } = data;
+          // console.log('팔로워 탭>>>', data);
+          // console.log('팔로워 아이디>>>', followerId);
 
           return (
             <T.Wrapper ref={observeRef} key={createdAt}>
@@ -119,16 +129,16 @@ function ProfileFollowingTab({
                 <span>{username}</span>
               </T.BodyLeft>
 
-              {currentLoginUser?.id !== followingId ? (
+              {currentLoginUser?.id !== followerId ? (
                 <T.BodyRight>
                   {currentLoginUser ? (
                     <T.FollowButton
                       type="dashed"
                       size="small"
-                      onClick={() => handleFollowing(followingId)}
+                      onClick={() => handleFollowing(followerId)}
                       $isFollowing={isFollowing}
                     >
-                      {isFollowing ? '팔로우' : '팔로잉 취소'}
+                      {isFollowing ? '팔로잉 취소' : '팔로우'}
                     </T.FollowButton>
                   ) : (
                     ''
@@ -148,4 +158,4 @@ function ProfileFollowingTab({
   );
 }
 
-export default ProfileFollowingTab;
+export default ProfileFollowerTab;

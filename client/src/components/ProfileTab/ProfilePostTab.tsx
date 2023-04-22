@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { PaginationProps, Spin } from 'antd';
 import React, { useState } from 'react';
-import { getOwnPostsAPI } from '../../../apis/post';
-import { axiosInstance } from '../../../configs/axios';
-import P from '../../Posts/Posts.styles';
+import { getOwnPostsAPI } from '../../apis/post';
+import { axiosInstance } from '../../configs/axios';
+import P from '../Posts/Posts.styles';
 import PostTab from './PostTab';
 import T from './Tab.styles';
 

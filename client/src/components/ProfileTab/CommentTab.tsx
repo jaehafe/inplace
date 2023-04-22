@@ -4,15 +4,15 @@ import { Button, Divider, Input, message, Popover } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { deleteCommentAPI, updateCommentAPI } from '../../../apis/comment';
-import { useUserInfo } from '../../../store/userStore';
+import { deleteCommentAPI, updateCommentAPI } from '../../apis/comment';
+import { useUserInfo } from '../../store/userStore';
 import {
   commentBodyEllipsis,
   formattedDate,
   postTitleEllipsis,
-} from '../../../utils';
-import P from '../../Posts/Posts.styles';
-import ProfileImage from '../ProfileImage';
+} from '../../utils';
+import P from '../Posts/Posts.styles';
+import ProfileImage from '../Common/ProfileImage';
 import T from './Tab.styles';
 
 function CommentTab({ data, queryKey }: any) {

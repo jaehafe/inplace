@@ -75,6 +75,18 @@ export default class Post extends BaseEntity {
     return this.votes?.reduce((memo, curt) => memo + (curt.agree + curt.neutral + curt.disagree), 0);
   }
 
+  @Expose() get agreeScore(): number {
+    return this.votes?.reduce((memo, curt) => memo + curt.agree, 0);
+  }
+
+  @Expose() get neutralScore(): number {
+    return this.votes?.reduce((memo, curt) => memo + curt.neutral, 0);
+  }
+
+  @Expose() get disagreeScore(): number {
+    return this.votes?.reduce((memo, curt) => memo + curt.disagree, 0);
+  }
+
   protected userVote: 'agree' | 'neutral' | 'disagree' | null;
 
   @Expose()

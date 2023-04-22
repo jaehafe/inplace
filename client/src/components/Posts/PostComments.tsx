@@ -41,7 +41,7 @@ function PostComments({ identifier, currentLoginUser }: any) {
 
   const { ref: observeRef, inView } = useInView();
 
-  const queryKey = `/comments/${identifier}`;
+  const queryKey = `/comments`;
 
   const {
     status,
@@ -57,7 +57,9 @@ function PostComments({ identifier, currentLoginUser }: any) {
   } = useInfiniteQuery(
     [queryKey],
     async ({ pageParam = 0 }) => {
-      const { data } = await axiosInstance.get(`${queryKey}?page=${pageParam}`);
+      const { data } = await axiosInstance.get(
+        `${queryKey}/${identifier}?page=${pageParam}`
+      );
       const isLast = data.length === 0;
 
       return {

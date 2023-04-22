@@ -59,7 +59,7 @@ function Post(
   } = post;
   const { username, followers } = user;
 
-  console.log('commentCount>>>', commentCount);
+  // console.log('commentCount>>>', commentCount);
 
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -178,7 +178,13 @@ function Post(
                 <PieChartOutlined />
                 {voteScore}
               </P.StaticsButton>
-              <P.StaticsButton type="primary">
+
+              <P.StaticsButton
+                type="primary"
+                onClick={() => {
+                  router.push(`/post/${postId}`);
+                }}
+              >
                 <CommentOutlined />
                 {commentCount}
               </P.StaticsButton>

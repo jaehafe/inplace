@@ -64,6 +64,7 @@ function AllPosts() {
     <div>
       {infiniteData?.pages?.map((page, pageIndex) => {
         return page?.result?.map((post: any, postIndex: number) => {
+          console.log('post>>>', post);
           return <Posts post={post} ref={observeRef} key={post.identifier} />;
         });
       })}

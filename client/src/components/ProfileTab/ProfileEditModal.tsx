@@ -6,11 +6,11 @@ import { UploadFileStatus } from 'antd/es/upload/interface';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
-import { editUserInfoAPI, uploadImageAPI } from '../../../apis/user';
-import P from '../../../pages/profile/Profile.styles';
-import InputGroup from '../../InputGroup/InputGroup';
-import S from '../../Signup/Signup.styles';
-import CommonButton from '../CommonButton';
+import { editUserInfoAPI, uploadImageAPI } from '../../apis/user';
+import P from '../../pages/profile/Profile.styles';
+import InputGroup from '../InputGroup/InputGroup';
+import S from '../Signup/Signup.styles';
+import CommonButton from '../Common/CommonButton';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();

@@ -1,6 +1,6 @@
 import React from 'react';
 import T from './Tab.styles';
-import ProfileImage from '../ProfileImage';
+import ProfileImage from '../Common/ProfileImage';
 import {
   CommentOutlined,
   DislikeTwoTone,
@@ -11,7 +11,7 @@ import {
 import { Divider } from 'antd';
 
 import Link from 'next/link';
-import { formattedDate } from '../../../utils';
+import { formattedDate } from '../../utils';
 
 function PostTab({ post }: any) {
   const {

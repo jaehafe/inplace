@@ -5,18 +5,18 @@ import { GetServerSideProps } from 'next';
 import React, { memo, useState } from 'react';
 import { getUserInfoAPI } from '../../apis/user';
 import ProfileImage from '../../components/Common/ProfileImage';
-import ProfileCommentTab from '../../components/Common/ProfileTab/ProfileCommentTab';
-import ProfilePostTab from '../../components/Common/ProfileTab/ProfilePostTab';
-import ProfileFollowerTab from '../../components/Common/ProfileTab/ProfileFollowerTab';
+import ProfileCommentTab from '../../components/ProfileTab/ProfileCommentTab';
+import ProfilePostTab from '../../components/ProfileTab/ProfilePostTab';
+import ProfileFollowerTab from '../../components/ProfileTab/ProfileFollowerTab';
 import LogoHeader from '../../components/Header/LogoHeader/LogoHeader';
 import { axiosInstance } from '../../configs/axios';
 import { useUserInfo } from '../../store/userStore';
 import { handleFollowAPI } from '../../apis/follow';
 import P from './Profile.styles';
-import T from '../../components/Common/ProfileTab/Tab.styles';
-import ProfileFollowingTab from '../../components/Common/ProfileTab/ProfileFollowingTab';
-import ProfileInfo from '../../components/Common/ProfileTab/ProfileInfo';
-import ProfileEditModal from '../../components/Common/ProfileTab/ProfileEditModal';
+import T from '../../components/ProfileTab/Tab.styles';
+import ProfileFollowingTab from '../../components/ProfileTab/ProfileFollowingTab';
+import ProfileInfo from '../../components/ProfileTab/ProfileInfo';
+import ProfileEditModal from '../../components/ProfileTab/ProfileEditModal';
 
 function Profile({ identifier }: { identifier: string }) {
   const currentLoginUser = useUserInfo();
