@@ -128,8 +128,8 @@ function PostComment({ data }: any) {
   // console.log('commentVotes>>', commentVotes);
 
   const checkWhetherVoted = (currentLoginUser: any) => {
-    const alreadyVote = commentVotes.find(
-      (vote: any) => vote.userId === currentLoginUser.id
+    const alreadyVote = commentVotes?.find(
+      (vote: any) => vote.userId === currentLoginUser?.id
     );
 
     if (alreadyVote) {

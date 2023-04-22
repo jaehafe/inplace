@@ -58,8 +58,6 @@ function HotPosts() {
     }
   }, [inView, hasNextPage, observeRef]);
 
-  console.log('infiniteData>>>', infiniteHotPostData);
-
   return (
     <div>
       {infiniteHotPostData?.pages?.map((page, pageIndex) => {

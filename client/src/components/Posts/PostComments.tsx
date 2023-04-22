@@ -1,27 +1,18 @@
-import { Collapse, Divider, Input, message } from 'antd';
+import { Collapse, Divider, Input, message, Spin } from 'antd';
 import { useRouter } from 'next/router';
-import React, { FormEvent, useMemo, useState } from 'react';
+import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import { createCommentAPI, getCommentsAPI } from '../../apis/comment';
 import P from './Posts.styles';
 
-import { useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import PostComment from './PostComment';
+import { axiosInstance } from '../../configs/axios';
+import { useInView } from 'react-intersection-observer';
 
 function PostComments({ identifier, currentLoginUser }: any) {
   const router = useRouter();
   const [newComment, setNewComment] = useState('');
   const queryClient = useQueryClient();
-
-  const onSuccess = () => {
-    setNewComment('');
-    queryClient.invalidateQueries([`/comments`]);
-    message.success('댓글이 추가되었습니다');
-  };
-  const { mutate: createCommentMutate } = createCommentAPI(identifier, {
-    onSuccess,
-  });
-
-  const { data: commentData } = getCommentsAPI(identifier);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -37,11 +28,65 @@ function PostComments({ identifier, currentLoginUser }: any) {
     [newComment]
   );
 
+  const onSuccess = () => {
+    setNewComment('');
+    queryClient.invalidateQueries([`/comments`]);
+    message.success('댓글이 추가되었습니다');
+  };
+  const { mutate: createCommentMutate } = createCommentAPI(identifier, {
+    onSuccess,
+  });
+
+  //////////////////
+
+  const { ref: observeRef, inView } = useInView();
+
+  const queryKey = `/comments/${identifier}`;
+
+  const {
+    status,
+    data: comments,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+  } = useInfiniteQuery(
+    [queryKey],
+    async ({ pageParam = 0 }) => {
+      const { data } = await axiosInstance.get(`${queryKey}?page=${pageParam}`);
+      const isLast = data.length === 0;
+
+      return {
+        result: data,
+        nextPage: pageParam + 1,
+        isLast,
+      };
+    },
+    {
+      getNextPageParam: (lastPage) =>
+        !lastPage.isLast ? lastPage.nextPage : undefined,
+
+      staleTime: 600000,
+      cacheTime: 300000,
+    }
+  );
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, observeRef]);
+
   return (
     <P.DetailCommentWrapper>
       <P.CommentHeader>
         <h3>댓글</h3>
-        <span>{commentData?.length}</span>
+        {/* 댓글 총 개수 */}
+        {/* <span>{commentData?.length}</span> */}
       </P.CommentHeader>
 
       {currentLoginUser ? (
@@ -79,11 +124,15 @@ function PostComments({ identifier, currentLoginUser }: any) {
 
       <Divider style={{ margin: '14px 0' }} />
       {/* 게시물 댓글 컴포넌트 */}
-      {commentData?.length > 0
-        ? commentData?.map((data: any) => {
-            return <PostComment data={data} key={data.identifier} />;
-          })
-        : '댓글이 없습니다.'}
+      {comments?.pages?.map((page) =>
+        page?.result?.map((data: any) => {
+          return <PostComment data={data} key={data.identifier} />;
+        })
+      )}
+      <P.LoadingWrapper>
+        {isFetchingNextPage || isFetching ? <Spin size="large" /> : ''}
+      </P.LoadingWrapper>
+      <div ref={observeRef}></div>
     </P.DetailCommentWrapper>
   );
 }

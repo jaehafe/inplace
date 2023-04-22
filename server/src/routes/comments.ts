@@ -34,6 +34,8 @@ const createPostComment = async (req: Request, res: Response) => {
 };
 
 const getPostComments = async (req: Request, res: Response) => {
+  const currentPage: number = (req.query.page || 0) as number;
+  const perPage: number = (req.query.count || 3) as number;
   const { identifier } = req.params;
 
   try {
@@ -43,6 +45,8 @@ const getPostComments = async (req: Request, res: Response) => {
       where: { postId: post.id },
       order: { createdAt: 'DESC' },
       relations: ['commentVotes', 'user', 'user.image'],
+      skip: currentPage * perPage,
+      take: perPage,
     });
 
     return res.json(comments);

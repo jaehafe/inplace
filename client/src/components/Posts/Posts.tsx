@@ -59,6 +59,8 @@ function Post(
   } = post;
   const { username, followers } = user;
 
+  console.log('commentCount>>>', commentCount);
+
   const router = useRouter();
   const queryClient = useQueryClient();
   const [openPostDrawer, setOpenPostDrawer] = useState(false);

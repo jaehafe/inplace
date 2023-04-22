@@ -20,19 +20,12 @@ function NavigateDrawer({
   openSearchUserDrawer,
   setOpenSearchUserDrawer,
 }: INavigateDrawer) {
-  const router = useRouter();
+  const [page, setPage] = useState(0);
+  const [hasResults, setHasResults] = useState(false);
   const [searchUserValue, setSearchUserValue] = useState('');
   const [isShowRecentHistory, setIsShowRecentHistory] = useState(true);
 
   const debouncedSearchValue = useDebounce(searchUserValue, 500);
-
-  // useEffect(() => {
-  //   if (debouncedSearchValue.trim().length === 0) {
-  //     setIsShowRecentHistory(true);
-  //   } else {
-  //     setIsShowRecentHistory(false);
-  //   }
-  // }, [debouncedSearchValue]);
 
   const { ref: observeRef, inView } = useInView();
   const queryKey = `/users/search`;
@@ -82,18 +75,29 @@ function NavigateDrawer({
 
   useEffect(() => {
     if (debouncedSearchValue.trim().length > 0) {
+      setPage(0);
       fetchNextPage({ pageParam: 0 });
       setIsShowRecentHistory(true);
+      setHasResults(false);
     } else {
       setIsShowRecentHistory(false);
     }
   }, [debouncedSearchValue]);
 
   useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage();
+    if (userData && userData.pages.length > 0) {
+      setHasResults(true);
+    } else {
+      setHasResults(false);
     }
-  }, [inView, hasNextPage, observeRef]);
+  }, [userData]);
+
+  useEffect(() => {
+    if (inView && hasNextPage && hasResults) {
+      setPage((prevPage) => prevPage + 1);
+      fetchNextPage({ pageParam: page + 1 });
+    }
+  }, [inView, hasNextPage, observeRef, page]);
 
   const handleSearchUser = (e: React.FormEvent<HTMLInputElement>) => {
     setSearchUserValue(e.currentTarget.value);

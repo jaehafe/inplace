@@ -33,7 +33,7 @@ function PostDetail({ detailPost }: any) {
     user,
   } = detailPost;
   const { username } = user;
-  console.log('user>>', user);
+  // console.log('user>>', user);
 
   const queryClient = useQueryClient();
   const router = useRouter();
