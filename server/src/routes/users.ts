@@ -9,16 +9,10 @@ const router = Router();
 
 // 개별 유저 정보
 const getUserInfo = async (req: Request, res: Response) => {
-  // console.log('req.params>>>', req.params);
   const loggedInUser = res.locals.user;
-
   const { identifier } = req.params;
 
   try {
-    // const userInfo = await User.findOne({
-    //   where: { username: identifier },
-    //   relations: ['image'],
-    // });
     const userInfo = await User.createQueryBuilder('user')
       .select(['user.id', 'user.email', 'user.username', 'user.imageId'])
       .leftJoinAndSelect('user.image', 'image')
@@ -74,8 +68,8 @@ const searchUsername = async (req: Request, res: Response) => {
   const currentPage: number = (req.query.page || 0) as number;
   const perPage: number = (req.query.count || 3) as number;
 
+  console.log('username>>>>', req.params);
   const { username } = req.params;
-  console.log('username>>>>', username);
 
   try {
     const users = await User.find({
@@ -93,7 +87,7 @@ const searchUsername = async (req: Request, res: Response) => {
   }
 };
 
+router.get('/search/:username', userMiddleware, searchUsername);
 router.get('/:identifier', userMiddleware, getUserInfo);
-router.get('/:username', userMiddleware, searchUsername);
 
 export default router;

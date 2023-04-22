@@ -33,7 +33,7 @@ app.get('/', (_, res: Response) => {
   res.send('server is running!!!');
 });
 app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/postVotes', postVoteRoutes);

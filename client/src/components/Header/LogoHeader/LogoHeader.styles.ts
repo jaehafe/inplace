@@ -126,7 +126,7 @@ interface SearchHeaderProps {
   $isSearching: boolean;
 }
 const SearchHeader = styled.div<SearchHeaderProps>`
-  display: ${({ $isSearching }) => ($isSearching ? 'none' : 'flex')};
+  display: ${({ $isSearching }) => ($isSearching ? 'flex' : 'none')};
   align-items: center;
   justify-content: space-between;
 `;
@@ -149,6 +149,9 @@ const SearchLeft = styled.div`
 `;
 const UserNameWrapper = styled.div`
   margin-left: 10px;
+  & h4 {
+    color: ${({ theme }) => theme.gray700};
+  }
 `;
 const SearchRight = styled.div<SearchHeaderProps>`
   display: ${({ $isSearching }) => ($isSearching ? 'none' : 'flex')};

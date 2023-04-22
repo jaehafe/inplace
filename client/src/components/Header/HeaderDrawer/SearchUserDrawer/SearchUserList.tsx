@@ -1,32 +1,43 @@
 import { CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+import Link from 'next/link';
 import React from 'react';
 import ProfileImage from '../../../Common/ProfileImage';
 import L from '../../LogoHeader/LogoHeader.styles';
 
 interface ISearchUserList {
-  isShowRecentHistory: boolean;
+  isShowRecentHistory?: boolean;
+  data: any;
 }
 
-function SearchUserList({ isShowRecentHistory }: ISearchUserList) {
+function SearchUserList({ data, isShowRecentHistory }: ISearchUserList) {
+  const {
+    username,
+    image: { src },
+  } = data;
+  // console.log('src>>>', src);
+
   return (
     <>
-      <L.SearchHeader $isSearching={isShowRecentHistory}>
+      {/* <L.SearchHeader $isSearching={isShowRecentHistory}>
         <h3>최근 검색 항목</h3> <Button type="dashed">모두 지우기</Button>
-      </L.SearchHeader>
+      </L.SearchHeader> */}
       <L.SearchBody>
         <L.SearchWrapper>
-          <L.SearchLeft>
-            <ProfileImage
-              width={50}
-              height={50}
-              style={{ borderRadius: '50%' }}
-            />
-            <L.UserNameWrapper>
-              <h4>React</h4>
-              <span>hooks</span>
-            </L.UserNameWrapper>
-          </L.SearchLeft>
+          <Link href={`/profile/${username}`}>
+            <L.SearchLeft>
+              <ProfileImage
+                src={src}
+                width={50}
+                height={50}
+                style={{ borderRadius: '50%' }}
+              />
+              <L.UserNameWrapper>
+                <h4>{username}</h4>
+                {/* <span>hooks</span> */}
+              </L.UserNameWrapper>
+            </L.SearchLeft>
+          </Link>
           <L.SearchRight $isSearching={true}>
             <CloseOutlined />
           </L.SearchRight>
