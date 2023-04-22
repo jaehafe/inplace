@@ -1,10 +1,5 @@
-import {
-  dehydrate,
-  QueryClient,
-  useInfiniteQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
-import { Button, message, TabsProps } from 'antd';
+import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
+import { message, TabsProps } from 'antd';
 import { GetServerSideProps } from 'next';
 
 import React, { memo, useState } from 'react';
@@ -33,7 +28,7 @@ function Profile({ identifier }: { identifier: string }) {
 
   const onSuccessFollow = (data: any) => {
     message.success(data.message);
-    queryClient.invalidateQueries([`/user/${identifier}`]);
+    queryClient.invalidateQueries([`/users/${identifier}`]);
     queryClient.invalidateQueries([`/follows/${identifier}/followers`]);
     queryClient.invalidateQueries([`/follows/${identifier}/followings`]);
   };
@@ -47,10 +42,6 @@ function Profile({ identifier }: { identifier: string }) {
 
   const handleFollowing = () => {
     followMutate({ id: userInfo?.id });
-  };
-
-  const handleLogin = () => {
-    message.success('프로필 편집 페이지로 이동합니다.(아직 미 구현)');
   };
 
   const MemoizedProfilePostTab = memo(ProfilePostTab);

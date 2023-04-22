@@ -79,7 +79,7 @@ export const getUserInfoAPI = (
   identifier?: string,
   options?: UseQueryOptions<AxiosResponse<any[]>, AxiosError, any, string[]>
 ) => {
-  const queryKey = `/user/${identifier}`;
+  const queryKey = `/users/${identifier}`;
   const queryFn = () => axiosInstance.get(queryKey).then((res) => res.data);
 
   const onSuccess = (data: any) => {

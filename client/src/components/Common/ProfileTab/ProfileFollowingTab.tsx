@@ -1,15 +1,14 @@
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, message, Spin } from 'antd';
+import { message, Spin } from 'antd';
 import { useRouter } from 'next/router';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { handleFollowAPI } from '../../../apis/follow';
-import { getUserInfoAPI } from '../../../apis/user';
 import { axiosInstance } from '../../../configs/axios';
 import { useUserInfo } from '../../../store/userStore';
-import { IIdentifier } from '../../../types';
-import P from '../../Posts/Posts.styles';
 import ProfileImage from '../ProfileImage';
+
+import P from '../../Posts/Posts.styles';
 import T from './Tab.styles';
 
 interface IProfileFollowList {
@@ -23,8 +22,6 @@ function ProfileFollowingTab({
 }: IProfileFollowList) {
   const router = useRouter();
   const currentLoginUser = useUserInfo();
-  const { data: userInfo } = getUserInfoAPI(identifier);
-
   const queryClient = useQueryClient();
   const { ref: observeRef, inView } = useInView();
 
