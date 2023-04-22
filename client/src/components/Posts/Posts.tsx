@@ -35,6 +35,7 @@ import ProfileImage from '../Common/ProfileImage';
 import { handleFollowAPI } from '../../apis/follow';
 import PostDrawer from './PostDrawer';
 import PostEditModal from './PostEditModal';
+import { usePostVoteResultModalStoreActions } from '../../store/postVoteResultStore';
 
 function Post(
   { post, isFetchingNextPage }: any,
@@ -64,8 +65,8 @@ function Post(
   const router = useRouter();
   const queryClient = useQueryClient();
   const [openPostDrawer, setOpenPostDrawer] = useState(false);
-
   const currentLoginUser = useUserInfo();
+  const { openModal } = usePostVoteResultModalStoreActions();
 
   const onSuccessVote = () => {
     message.success('투표 완료');
@@ -174,11 +175,17 @@ function Post(
           {/* 댓글, 투표 통계 버튼 */}
           <P.StaticsWrapper>
             <P.StaticsLeft>
-              <P.StaticsButton type="primary">
+              {/* 게시물 투표 통계 버튼 */}
+              <P.StaticsButton
+                type="primary"
+                onClick={() => {
+                  openModal(postId);
+                }}
+              >
                 <PieChartOutlined />
                 {voteScore}
               </P.StaticsButton>
-
+              {/* 댓글 버튼 */}
               <P.StaticsButton
                 type="primary"
                 onClick={() => {

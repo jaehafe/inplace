@@ -18,6 +18,6 @@ const usePostVoteResultModalStore = create<PostVoteResultModalStore>((set) => ({
   openModal: (postId) => set(() => ({ isOpen: true, postId })),
   closeModal: () => set(() => ({ isOpen: false, postId: null })),
 }));
-
-export const useEditPostModalStoreActions = (): PostVoteResultModalStore =>
-  usePostVoteResultModalStore((state) => state);
+/** 게시물 결과 분석 모달 스토어 */
+export const usePostVoteResultModalStoreActions =
+  (): PostVoteResultModalStore => usePostVoteResultModalStore((state) => state);

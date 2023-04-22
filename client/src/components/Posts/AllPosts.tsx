@@ -9,6 +9,7 @@ import { Spin } from 'antd';
 import P from './Posts.styles';
 import PostEditModal from './PostEditModal';
 import EditPost from './EditPost';
+import PostVoteResultModal from './PostVoteResultModal';
 
 function AllPosts() {
   const { ref: observeRef, inView } = useInView();
@@ -64,7 +65,6 @@ function AllPosts() {
     <div>
       {infiniteData?.pages?.map((page, pageIndex) => {
         return page?.result?.map((post: any, postIndex: number) => {
-          console.log('post>>>', post);
           return <Posts post={post} ref={observeRef} key={post.identifier} />;
         });
       })}
@@ -74,6 +74,7 @@ function AllPosts() {
       </P.LoadingWrapper>
       {/* 게시룰 수정 drawer */}
       <EditPost />
+      <PostVoteResultModal />
     </div>
   );
 }

@@ -293,7 +293,45 @@ const LoginRouterButtonForVote = styled(Button)`
   }
 `;
 
-// CreatePost
+// 투표 결과 분석
+const ResultContainer = styled.div`
+  margin-top: 20px;
+  border: 1px solid;
+`;
+
+const PostInfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const VoteInfoWrapper = styled.div`
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+`;
+const AgreeWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  & span {
+    font-size: 16px;
+  }
+`;
+const VoteResultChartWrapper = styled.div`
+  margin-top: 20px;
+
+  border: 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+`;
 
 const P = {
   Wrapper,
@@ -329,6 +367,11 @@ const P = {
   LoginRouterButtonForVote,
   PostImageWrapper,
   LoadingWrapper,
+  ResultContainer,
+  PostInfoWrapper,
+  VoteInfoWrapper,
+  AgreeWrapper,
+  VoteResultChartWrapper,
 };
 
 export default P;

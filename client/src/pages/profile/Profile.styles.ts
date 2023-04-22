@@ -154,6 +154,9 @@ const ProfileEditDrawer = styled(Drawer)`
     height: 100%;
   }
 `;
+const PostVoteResultDrawer = styled(ProfileEditDrawer)`
+  overflow-y: scroll;
+`;
 
 const SubmitButton = styled(Button)`
   height: 44px;
@@ -181,6 +184,7 @@ const P = {
   StyledFollowTab,
   FollowButton,
   SubmitButton,
+  PostVoteResultDrawer,
 };
 
 export default P;
