@@ -3,11 +3,22 @@ import { PaginationProps, Spin } from 'antd';
 import React, { useState } from 'react';
 import { getOwnPostsAPI } from '../../apis/post';
 import { axiosInstance } from '../../configs/axios';
+import CustomizedEmpty from '../Common/CustomizedEmpty';
 import P from '../Posts/Posts.styles';
 import PostTab from './PostTab';
 import T from './Tab.styles';
 
-function ProfilePostTab({ identifier }: { identifier: string }) {
+interface IProfilePostTab {
+  identifier: string;
+  userInfo: any;
+  currentLoginUser: any;
+}
+
+function ProfilePostTab({
+  identifier,
+  userInfo,
+  currentLoginUser,
+}: IProfilePostTab) {
   const [page, setPage] = useState(1);
   const onChange: PaginationProps['onChange'] = (page) => {
     console.log(page);
@@ -39,10 +50,27 @@ function ProfilePostTab({ identifier }: { identifier: string }) {
   const pageSize = postData?.data?.length;
   const isLastPage = pageSize === 0 || pageSize < postData?.total;
 
+  const isSameUser = (desc: string) => {
+    if (!currentLoginUser || !userInfo) {
+      return null;
+    }
+
+    if (currentLoginUser?.id === userInfo?.id) {
+      return (
+        <CustomizedEmpty
+          desc1={`작성한 ${desc}이 없습니다.`}
+          buttonMessage={`${desc}을 작성해보세요`}
+        />
+      );
+    } else if (currentLoginUser?.id !== userInfo?.id) {
+      return <CustomizedEmpty desc1="작성한 게시글이 없습니다." />;
+    }
+  };
+
   return (
     <>
       <P.LoadingWrapper>
-        {isLoading || isFetching ? <Spin size="large" /> : ''}
+        {isLoading || isFetching ? <Spin size="large" /> : null}
       </P.LoadingWrapper>
       {postData?.data.length > 0 ? (
         <>
@@ -55,11 +83,10 @@ function ProfilePostTab({ identifier }: { identifier: string }) {
             current={page}
             onChange={onChange}
             total={postData?.total}
-            // pageSize={pageSize}
           />
         </>
       ) : (
-        <span>작성한 게시글이 없습니다.</span>
+        <>{isSameUser('게시글')}</>
       )}
     </>
   );

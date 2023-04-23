@@ -9,6 +9,7 @@ import { useUserInfo } from '../../store/userStore';
 import P from '../Posts/Posts.styles';
 import ProfileImage from '../Common/ProfileImage';
 import T from './Tab.styles';
+import CustomizedEmpty from '../Common/CustomizedEmpty';
 
 interface IProfileFollowList {
   identifier: string;
@@ -105,52 +106,60 @@ function ProfileFollowerTab({
     setOpenFollowList(false);
   };
 
+  // <CustomizedEmpty desc1="팔로워가 없습니다." />
+  console.log('infiniteData>>>', infiniteData);
+
   return (
     <T.Container>
-      {infiniteData?.pages?.map((page) =>
-        page?.result?.map((data: any) => {
-          const {
-            follower: { createdAt, username, image },
-            isFollowing,
-            followerId,
-          } = data;
-          // console.log('팔로워 탭>>>', data);
-          // console.log('팔로워 아이디>>>', followerId);
+      <>
+        {infiniteData?.pages[0].result.length === 0 && (
+          <CustomizedEmpty desc1="팔로워가 없습니다." />
+        )}
+      </>
+      <>
+        {infiniteData?.pages?.map((page) => {
+          return page?.result?.map((data: any) => {
+            const {
+              follower: { createdAt, username, image },
+              isFollowing,
+              followerId,
+            } = data;
 
-          return (
-            <T.Wrapper ref={observeRef} key={createdAt}>
-              <T.BodyLeft onClick={() => handleProfileRoute(username)}>
-                <ProfileImage
-                  src={image.src}
-                  width={40}
-                  height={40}
-                  style={{ borderRadius: '50%' }}
-                />
-                <span>{username}</span>
-              </T.BodyLeft>
+            return (
+              <T.Wrapper ref={observeRef} key={createdAt}>
+                <T.BodyLeft onClick={() => handleProfileRoute(username)}>
+                  <ProfileImage
+                    src={image.src}
+                    width={40}
+                    height={40}
+                    style={{ borderRadius: '50%' }}
+                  />
+                  <span>{username}</span>
+                </T.BodyLeft>
 
-              {currentLoginUser?.id !== followerId ? (
-                <T.BodyRight>
-                  {currentLoginUser ? (
-                    <T.FollowButton
-                      type="dashed"
-                      size="small"
-                      onClick={() => handleFollowing(followerId)}
-                      $isFollowing={isFollowing}
-                    >
-                      {isFollowing ? '팔로잉 취소' : '팔로우'}
-                    </T.FollowButton>
-                  ) : (
-                    ''
-                  )}
-                </T.BodyRight>
-              ) : (
-                ''
-              )}
-            </T.Wrapper>
-          );
-        })
-      )}
+                {currentLoginUser?.id !== followerId ? (
+                  <T.BodyRight>
+                    {currentLoginUser ? (
+                      <T.FollowButton
+                        type="dashed"
+                        size="small"
+                        onClick={() => handleFollowing(followerId)}
+                        $isFollowing={isFollowing}
+                      >
+                        {isFollowing ? '팔로잉 취소' : '팔로우'}
+                      </T.FollowButton>
+                    ) : (
+                      ''
+                    )}
+                  </T.BodyRight>
+                ) : (
+                  ''
+                )}
+              </T.Wrapper>
+            );
+          });
+        })}
+      </>
       <P.LoadingWrapper>
         {isFetchingNextPage || isFetching ? <Spin size="large" /> : ''}
       </P.LoadingWrapper>

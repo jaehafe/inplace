@@ -6,6 +6,7 @@ import { useInView } from 'react-intersection-observer';
 import { handleFollowAPI } from '../../apis/follow';
 import { axiosInstance } from '../../configs/axios';
 import { useUserInfo } from '../../store/userStore';
+import CustomizedEmpty from '../Common/CustomizedEmpty';
 import ProfileImage from '../Common/ProfileImage';
 
 import P from '../Posts/Posts.styles';
@@ -99,48 +100,55 @@ function ProfileFollowingTab({
 
   return (
     <T.Container>
-      {infiniteData?.pages?.map((page) =>
-        page?.result?.map((data: any) => {
-          const {
-            following: { createdAt, username, image },
-            isFollowing,
-            followingId,
-          } = data;
+      <>
+        {infiniteData?.pages[0].result.length === 0 && (
+          <CustomizedEmpty desc1="팔로잉 하는 유저가 없습니다." />
+        )}
+      </>
+      <>
+        {infiniteData?.pages?.map((page) =>
+          page?.result?.map((data: any) => {
+            const {
+              following: { createdAt, username, image },
+              isFollowing,
+              followingId,
+            } = data;
 
-          return (
-            <T.Wrapper ref={observeRef} key={createdAt}>
-              <T.BodyLeft onClick={() => handleProfileRoute(username)}>
-                <ProfileImage
-                  src={image.src}
-                  width={40}
-                  height={40}
-                  style={{ borderRadius: '50%' }}
-                />
-                <span>{username}</span>
-              </T.BodyLeft>
+            return (
+              <T.Wrapper ref={observeRef} key={createdAt}>
+                <T.BodyLeft onClick={() => handleProfileRoute(username)}>
+                  <ProfileImage
+                    src={image.src}
+                    width={40}
+                    height={40}
+                    style={{ borderRadius: '50%' }}
+                  />
+                  <span>{username}</span>
+                </T.BodyLeft>
 
-              {currentLoginUser?.id !== followingId ? (
-                <T.BodyRight>
-                  {currentLoginUser ? (
-                    <T.FollowButton
-                      type="dashed"
-                      size="small"
-                      onClick={() => handleFollowing(followingId)}
-                      $isFollowing={isFollowing}
-                    >
-                      {isFollowing ? '팔로우' : '팔로잉 취소'}
-                    </T.FollowButton>
-                  ) : (
-                    ''
-                  )}
-                </T.BodyRight>
-              ) : (
-                ''
-              )}
-            </T.Wrapper>
-          );
-        })
-      )}
+                {currentLoginUser?.id !== followingId ? (
+                  <T.BodyRight>
+                    {currentLoginUser ? (
+                      <T.FollowButton
+                        type="dashed"
+                        size="small"
+                        onClick={() => handleFollowing(followingId)}
+                        $isFollowing={isFollowing}
+                      >
+                        {isFollowing ? '팔로우' : '팔로잉 취소'}
+                      </T.FollowButton>
+                    ) : (
+                      ''
+                    )}
+                  </T.BodyRight>
+                ) : (
+                  ''
+                )}
+              </T.Wrapper>
+            );
+          })
+        )}
+      </>
       <P.LoadingWrapper>
         {isFetchingNextPage || isFetching ? <Spin size="large" /> : ''}
       </P.LoadingWrapper>

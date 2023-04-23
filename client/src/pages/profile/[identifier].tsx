@@ -51,12 +51,24 @@ function Profile({ identifier }: { identifier: string }) {
     {
       key: '작성 글',
       label: `작성 글`,
-      children: <MemoizedProfilePostTab identifier={identifier} />,
+      children: (
+        <MemoizedProfilePostTab
+          identifier={identifier}
+          userInfo={userInfo}
+          currentLoginUser={currentLoginUser}
+        />
+      ),
     },
     {
       key: '작성 댓글',
       label: `작성 댓글`,
-      children: <MemoizedProfileCommentTab identifier={identifier} />,
+      children: (
+        <MemoizedProfileCommentTab
+          identifier={identifier}
+          userInfo={userInfo}
+          currentLoginUser={currentLoginUser}
+        />
+      ),
     },
     {
       key: '응답한 글',

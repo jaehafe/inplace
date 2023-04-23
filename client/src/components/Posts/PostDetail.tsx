@@ -46,7 +46,6 @@ function PostDetail({ detailPost }: any) {
     neutralScore,
   } = detailPost;
   const { username, followers } = user;
-  console.log('voteScore>>>', voteScore);
 
   const queryClient = useQueryClient();
   const router = useRouter();

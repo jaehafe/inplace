@@ -3,11 +3,22 @@ import { PaginationProps, Spin } from 'antd';
 import React, { useState } from 'react';
 import { axiosInstance } from '../../configs/axios';
 import { IIdentifier } from '../../types';
+import CustomizedEmpty from '../Common/CustomizedEmpty';
 import P from '../Posts/Posts.styles';
 import CommentTab from './CommentTab';
 import T from './Tab.styles';
 
-function ProfileCommentTab({ identifier }: IIdentifier) {
+interface IProfileCommentTab {
+  identifier: string;
+  userInfo: any;
+  currentLoginUser: any;
+}
+
+function ProfileCommentTab({
+  identifier,
+  userInfo,
+  currentLoginUser,
+}: IProfileCommentTab) {
   const [page, setPage] = useState(1);
 
   const onChange: PaginationProps['onChange'] = (page) => {
@@ -38,7 +49,22 @@ function ProfileCommentTab({ identifier }: IIdentifier) {
     staleTime: 10000,
   });
 
-  console.log('commentData>>>', commentData);
+  const isSameUser = (desc: string) => {
+    if (!currentLoginUser || !userInfo) {
+      return null;
+    }
+
+    if (currentLoginUser?.id === userInfo?.id) {
+      return (
+        <CustomizedEmpty
+          desc1={`작성한 ${desc}이 없습니다.`}
+          buttonMessage={`${desc}을 작성해보세요`}
+        />
+      );
+    } else if (currentLoginUser?.id !== userInfo?.id) {
+      return <CustomizedEmpty desc1="작성한 게시글이 없습니다." />;
+    }
+  };
 
   return (
     <>
@@ -64,7 +90,7 @@ function ProfileCommentTab({ identifier }: IIdentifier) {
           />
         </>
       ) : (
-        <span>작성한 댓글이 없습니다.</span>
+        <>{isSameUser('댓글')}</>
       )}
     </>
   );

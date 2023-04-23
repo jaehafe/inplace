@@ -241,6 +241,10 @@ const getOwnPosts = async (req: Request, res: Response) => {
   try {
     const user = await User.findOneOrFail({ where: { username: identifier } });
 
+    if (!user) {
+      return res.status(404).json({ error: '존재하지 않는 유저입니다.' });
+    }
+
     const [ownPosts, total] = await Post.createQueryBuilder('post')
       .where('post.userId = :userId', { userId: user.id })
       .orderBy('post.createdAt', 'DESC')
