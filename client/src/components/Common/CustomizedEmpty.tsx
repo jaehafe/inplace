@@ -24,6 +24,16 @@ const EmptyWrapper = styled.div`
 function CustomizedEmpty({ desc1, desc2, buttonMessage }: ICustomizedEmpty) {
   const currentLoginUser = useUserInfo();
 
+  const routerLink = () => {
+    if (buttonMessage === '게시글') {
+      return '/post/create';
+    } else if (buttonMessage === '댓글') {
+      return '/';
+    } else {
+      return '/';
+    }
+  };
+
   return (
     <Empty
       image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -33,7 +43,7 @@ function CustomizedEmpty({ desc1, desc2, buttonMessage }: ICustomizedEmpty) {
           <span>{desc2}</span>
 
           {buttonMessage && (
-            <Link href="/post/create">
+            <Link href={routerLink()}>
               <Button>{buttonMessage}</Button>
             </Link>
           )}
