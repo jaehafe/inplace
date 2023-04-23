@@ -2,9 +2,10 @@ import styled from 'styled-components';
 import { Button } from 'antd';
 
 export default styled(Button)`
-  position: absolute;
+  /* position: absolute;
   bottom: 32px;
-  left: 0;
+  left: 0; */
+  margin: 40px 0 20px;
   width: 100%;
   height: 44px;
   font-size: 15px;
