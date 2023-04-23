@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import React from 'react';
-import P from '../../pages/profile/Profile.styles';
-import { usePostVoteResultModalStoreActions } from '../../store/postVoteResultStore';
-import L from '../Header/LogoHeader/LogoHeader.styles';
-import { AppImages } from '../../configs/AppImages';
-import { getPostVoteResultAPI } from '../../apis/post';
+import P from '../../../pages/profile/Profile.styles';
+import { usePostVoteResultModalStoreActions } from '../../../store/postVoteResultStore';
+import L from '../../Header/LogoHeader/LogoHeader.styles';
+import { AppImages } from '../../../configs/AppImages';
+import { getPostVoteResultAPI } from '../../../apis/post';
 import PostVoteResult from './PostVoteResult';
 
 function PostVoteResultModal() {

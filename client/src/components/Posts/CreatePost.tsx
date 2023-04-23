@@ -4,18 +4,14 @@ import {
   LikeTwoTone,
   LoadingOutlined,
   PlusOutlined,
-  UserOutlined,
 } from '@ant-design/icons';
 import { Collapse, Input, message, Upload, UploadProps } from 'antd';
-import { RcFile, UploadChangeParam, UploadFile } from 'antd/es/upload';
-import axios from 'axios';
+import { RcFile, UploadFile } from 'antd/es/upload';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
 import { createPostAPI, uploadPostImagesAPI } from '../../apis/post';
-import { axiosInstance } from '../../configs/axios';
 import CommonButton from '../Common/CommonButton';
 import PostHeader from '../Header/PostHeader/PostHeader';
-import P from './Posts.styles';
 
 // const getBase64 = (img: RcFile, callback: (url: string) => void) => {
 //   const reader = new FileReader();

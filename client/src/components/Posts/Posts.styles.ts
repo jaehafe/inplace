@@ -325,12 +325,11 @@ const AgreeWrapper = styled.div`
 const VoteResultChartWrapper = styled.div`
   margin-top: 20px;
 
-  border: 1px solid;
+  /* border: 1px solid; */
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 50px;
 `;
 
 const P = {

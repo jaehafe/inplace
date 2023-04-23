@@ -9,7 +9,7 @@ import { Spin } from 'antd';
 import P from './Posts.styles';
 import PostEditModal from './PostEditModal';
 import EditPost from './EditPost';
-import PostVoteResultModal from './PostVoteResultModal';
+import PostVoteResultModal from './PostVoteModal/PostVoteResultModal';
 
 function AllPosts() {
   const { ref: observeRef, inView } = useInView();
