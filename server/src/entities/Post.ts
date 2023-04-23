@@ -63,6 +63,9 @@ export default class Post extends BaseEntity {
   @Column({ type: 'varchar', length: 30 })
   disagree: string;
 
+  @Column()
+  views: number;
+
   @Expose() get url(): string {
     return `/${this.placeName}/${this.identifier}/${this.slug}`;
   }

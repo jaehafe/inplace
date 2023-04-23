@@ -196,7 +196,8 @@ const getHotPosts = async (req: Request, res: Response) => {
 
 const getDetailPost = async (req: Request, res: Response) => {
   const { identifier } = req.params;
-  console.log('req.params>>>', req.params);
+  // console.log('req.params>>>', req.params);
+  // console.log('req.session.viewedPosts>>>', req.session.viewedPosts);
 
   try {
     const post = await Post.findOneOrFail({
@@ -207,6 +208,10 @@ const getDetailPost = async (req: Request, res: Response) => {
       // 'comments',
       // 'images',
     });
+
+    // 조회수 증가
+    post.views += 1;
+    await post.save();
 
     return res.json(post);
   } catch (error) {
