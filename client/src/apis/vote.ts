@@ -35,5 +35,6 @@ export const voteCommentAPI = (
   const onError = () => {
     message.error('댓글 좋아요 실패');
   };
+
   return useMutation([queryKey], queryFn, { onError, ...options });
 };

@@ -140,12 +140,13 @@ function PostComment({ data }: any) {
   };
 
   const handleCommentVote = (value: number, commentId: string) => {
-    voteCommentMutate({ value });
     if (!currentLoginUser) {
       message.error('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
       router.push('/login');
       return;
     }
+
+    voteCommentMutate({ value });
   };
 
   return (
@@ -214,8 +215,6 @@ function PostComment({ data }: any) {
       <P.LikeWrapper>
         <span>좋아요 {voteScore}</span>
         <button onClick={() => handleCommentVote(1, commentId)}>
-          {/* <HeartOutlined className="heart-icon" />
-          <HeartTwoTone twoToneColor="#4e062d" /> */}
           {checkWhetherVoted(currentLoginUser)}
         </button>
       </P.LikeWrapper>
