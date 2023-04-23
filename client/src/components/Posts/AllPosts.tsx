@@ -1,15 +1,11 @@
+import React, { useEffect } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { getAllPostsAPI } from '../../apis/post';
-import { axiosInstance, baseURL } from '../../configs/axios';
+import { axiosInstance } from '../../configs/axios';
 import { useInView } from 'react-intersection-observer';
 import Posts from './Posts';
 import { Spin } from 'antd';
 import P from './Posts.styles';
-import PostEditModal from './PostEditModal';
 import EditPost from './EditPost';
-import PostVoteResultModal from './PostVoteModal/PostVoteResultModal';
 
 function AllPosts() {
   const { ref: observeRef, inView } = useInView();
@@ -74,7 +70,6 @@ function AllPosts() {
       </P.LoadingWrapper>
       {/* 게시룰 수정 drawer */}
       <EditPost />
-      <PostVoteResultModal />
     </div>
   );
 }

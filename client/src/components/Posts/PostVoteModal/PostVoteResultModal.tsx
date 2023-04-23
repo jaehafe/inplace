@@ -9,9 +9,7 @@ import PostVoteResult from './PostVoteResult';
 
 function PostVoteResultModal() {
   const { isOpen, postId, closeModal } = usePostVoteResultModalStoreActions();
-
   const { data: detailPost, isLoading } = getPostVoteResultAPI(postId!);
-  console.log('detailPost>>>', detailPost);
 
   const openModalFn = () => {
     if (isOpen && postId) {
@@ -43,7 +41,7 @@ function PostVoteResultModal() {
           key="bottom"
           height={'auto'}
         >
-          {!isLoading && detailPost && <PostVoteResult data={detailPost} />}
+          <PostVoteResult data={detailPost} />
         </P.PostVoteResultDrawer>
       )}
     </>

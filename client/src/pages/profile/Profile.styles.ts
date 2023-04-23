@@ -156,6 +156,7 @@ const ProfileEditDrawer = styled(Drawer)`
 `;
 const PostVoteResultDrawer = styled(ProfileEditDrawer)`
   overflow-y: scroll;
+  height: auto !important;
 `;
 
 const SubmitButton = styled(Button)`

@@ -60,8 +60,6 @@ function Post(
   } = post;
   const { username, followers } = user;
 
-  // console.log('commentCount>>>', commentCount);
-
   const router = useRouter();
   const queryClient = useQueryClient();
   const [openPostDrawer, setOpenPostDrawer] = useState(false);
@@ -71,6 +69,8 @@ function Post(
   const onSuccessVote = () => {
     message.success('투표 완료');
     queryClient.invalidateQueries([`/posts`]);
+    queryClient.invalidateQueries([`/posts/result/${postId}`]);
+    openModal(postId);
   };
   const { mutate: postVoteMutate } = postVoteAPI(postId, {
     onSuccess: onSuccessVote,

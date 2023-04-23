@@ -43,6 +43,7 @@ function PostDetail({ detailPost }: any) {
   const onSuccessVote = () => {
     message.success('투표 완료');
     queryClient.invalidateQueries([`/posts/${identifier}`]);
+    queryClient.invalidateQueries([`/posts/result/${identifier}`]);
   };
   const { mutate: postVoteMutate } = postVoteAPI(identifier, {
     onSuccess: onSuccessVote,

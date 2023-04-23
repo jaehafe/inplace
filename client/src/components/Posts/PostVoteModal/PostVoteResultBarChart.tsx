@@ -36,10 +36,6 @@ function PostVoteResultBarChart({ ...props }: IPostVoteResultChart) {
   const [agreePercentage, neutralPercentage, disagreePercentage] =
     calculatePercentages(agreeScore, neutralScore, disagreeScore);
 
-  console.log('agreePercentage>>>', agreePercentage);
-  console.log('neutralPercentage>>>', neutralPercentage);
-  console.log('disagreePercentage>>>', disagreePercentage);
-
   const BarData: ChartData<'bar'> = {
     labels: [''],
     datasets: [

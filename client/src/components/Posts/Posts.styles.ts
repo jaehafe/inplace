@@ -296,7 +296,6 @@ const LoginRouterButtonForVote = styled(Button)`
 // 투표 결과 분석
 const ResultContainer = styled.div`
   margin-top: 20px;
-  border: 1px solid;
 `;
 
 const PostInfoWrapper = styled.div`
