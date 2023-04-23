@@ -92,7 +92,7 @@ function PostVoteResultBarChart({ ...props }: IPostVoteResultChart) {
       datalabels: {
         formatter: function (value: number, context: any) {
           let idx = context.dataIndex;
-          return context.chart.data.labels![idx] + value + '%';
+          return context.chart.data.labels![idx] + value.toFixed(0) + '%';
         },
         color: 'white',
       },
