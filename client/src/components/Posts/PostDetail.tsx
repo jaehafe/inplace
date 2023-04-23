@@ -46,6 +46,7 @@ function PostDetail({ detailPost }: any) {
     neutralScore,
   } = detailPost;
   const { username, followers } = user;
+  console.log('voteScore>>>', voteScore);
 
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -116,7 +117,11 @@ function PostDetail({ detailPost }: any) {
             />
             <P.PostInfo>
               <h4>{username}</h4>
-              <span>{formattedDate(updatedAt)}</span> · <span>조회 234</span>
+              <span>
+                {formattedDate(updatedAt)}
+                {createdAt !== updatedAt ? '(수정됨)' : ''}
+              </span>{' '}
+              <span>·</span> <span>조회 234</span>
             </P.PostInfo>
           </P.HeaderLeft>
         </Link>
@@ -172,14 +177,15 @@ function PostDetail({ detailPost }: any) {
           </P.VoteSelect>
         </P.VoteSelectWrapper>
 
-        <div>
-          {' '}
+        {voteScore ? (
           <PostVoteResultBarChart
             agreeScore={agreeScore}
             disagreeScore={disagreeScore}
             neutralScore={neutralScore}
           />
-        </div>
+        ) : (
+          ''
+        )}
 
         {/* 게시물 사진 */}
         {images?.length > 0 ? (

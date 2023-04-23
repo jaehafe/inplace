@@ -133,7 +133,11 @@ function Post(
             </Link>
             <P.PostInfo>
               <h4>{username}</h4>
-              <span>{formattedDate(updatedAt)}</span> · <span>조회 234</span>
+              <span>
+                {formattedDate(updatedAt)}
+                {createdAt !== updatedAt ? '(수정됨)' : ''}
+              </span>{' '}
+              <span>·</span> <span>조회 234</span>
             </P.PostInfo>
           </P.HeaderLeft>
           <P.HeaderRight>

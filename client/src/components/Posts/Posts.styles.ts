@@ -303,6 +303,10 @@ const PostInfoWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  & > h2 {
+    text-align: center;
+  }
 `;
 
 const VoteInfoWrapper = styled.div`
