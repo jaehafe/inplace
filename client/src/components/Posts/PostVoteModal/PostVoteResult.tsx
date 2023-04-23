@@ -2,6 +2,8 @@ import React from 'react';
 import { DislikeTwoTone, FrownTwoTone, LikeTwoTone } from '@ant-design/icons';
 import P from '../Posts.styles';
 import dynamic from 'next/dynamic';
+import { Empty } from 'antd';
+import CustomizedEmpty from '../../Common/CustomizedEmpty';
 
 const PostVoteResultBarChart = dynamic(
   () => import('./PostVoteResultBarChart'),
@@ -30,7 +32,7 @@ function PostVoteResult({ data }: IPostVoteResult) {
     <P.ResultContainer>
       <P.PostInfoWrapper>
         <h2>{title}</h2>
-        <span>총 {voteScore} 명 투표</span>
+        {voteScore.length > 0 ? <span>총 {voteScore} 명 투표</span> : ''}
         <P.VoteInfoWrapper>
           <P.AgreeWrapper>
             <LikeTwoTone twoToneColor="#429CD9" />
@@ -54,7 +56,10 @@ function PostVoteResult({ data }: IPostVoteResult) {
               neutralScore={neutralScore}
             />
           ) : (
-            '아직 투표한 사람이 없네요'
+            <CustomizedEmpty
+              desc1="아직 투표한 사람이 없습니다."
+              desc2="가장 먼저 투표를 해보세요"
+            />
           )}
         </P.VoteResultChartWrapper>
       </P.PostInfoWrapper>
