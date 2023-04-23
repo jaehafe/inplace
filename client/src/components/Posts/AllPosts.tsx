@@ -5,7 +5,6 @@ import { useInView } from 'react-intersection-observer';
 import Posts from './Posts';
 import { Spin } from 'antd';
 import P from './Posts.styles';
-import EditPost from './EditPost';
 
 function AllPosts() {
   const { ref: observeRef, inView } = useInView();
@@ -69,7 +68,6 @@ function AllPosts() {
         {isFetchingNextPage || isFetching ? <Spin size="large" /> : ''}
       </P.LoadingWrapper>
       {/* 게시룰 수정 drawer */}
-      <EditPost />
     </div>
   );
 }

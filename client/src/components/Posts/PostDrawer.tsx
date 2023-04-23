@@ -10,7 +10,7 @@ import P from './Posts.styles';
 
 interface IPostDrawer {
   postId: string;
-  followers: any;
+  followers?: any;
   userInfo?: any;
   postAuthorInfo: any;
   currentLoginUser?: any;

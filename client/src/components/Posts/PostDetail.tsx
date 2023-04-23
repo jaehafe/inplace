@@ -6,16 +6,25 @@ import {
 } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, message, RadioChangeEvent, Image as AntdImage } from 'antd';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { postVoteAPI } from '../../apis/vote';
 import { useUserInfo } from '../../store/userStore';
-import { defaultImg, formattedDate } from '../../utils';
+import { formattedDate } from '../../utils';
 import ProfileImage from '../Common/ProfileImage';
+import EditPost from './EditPost';
 import PostComments from './PostComments';
+import PostDrawer from './PostDrawer';
 import P from './Posts.styles';
-import PostVoteResultBarChart from './PostVoteModal/PostVoteResultBarChart';
+
+const PostVoteResultBarChart = dynamic(
+  () => import('./PostVoteModal/PostVoteResultBarChart'),
+  {
+    ssr: false,
+  }
+);
 
 function PostDetail({ detailPost }: any) {
   const {
@@ -36,13 +45,12 @@ function PostDetail({ detailPost }: any) {
     disagreeScore,
     neutralScore,
   } = detailPost;
-  const { username } = user;
-  // console.log('user>>', user);
+  const { username, followers } = user;
 
   const queryClient = useQueryClient();
   const router = useRouter();
-  const [open, setOpen] = useState(false);
   const currentLoginUser = useUserInfo();
+  const [openPostDrawer, setOpenPostDrawer] = useState(false);
 
   const onSuccessVote = () => {
     message.success('투표 완료');
@@ -113,7 +121,11 @@ function PostDetail({ detailPost }: any) {
           </P.HeaderLeft>
         </Link>
         <P.HeaderRight>
-          <Button type="text" shape="circle" onClick={() => setOpen(true)}>
+          <Button
+            type="text"
+            shape="circle"
+            onClick={() => setOpenPostDrawer(true)}
+          >
             <MoreOutlined style={{ fontSize: '20px' }} />
           </Button>
         </P.HeaderRight>
@@ -201,6 +213,15 @@ function PostDetail({ detailPost }: any) {
           currentLoginUser={currentLoginUser}
         />
       </P.BodyWrapper>
+      <PostDrawer
+        postId={identifier}
+        followers={followers}
+        postAuthorInfo={user}
+        openPostDrawer={openPostDrawer}
+        setOpenPostDrawer={setOpenPostDrawer}
+        currentLoginUser={currentLoginUser}
+      />
+      <EditPost />
     </P.Wrapper>
   );
 }

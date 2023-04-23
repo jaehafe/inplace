@@ -15,14 +15,10 @@ import {
   Avatar,
   Tooltip,
   Image as AntdImage,
-  Spin,
 } from 'antd';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
-import P from './Posts.styles';
 import {
   commentBodyEllipsis,
-  defaultImg,
   formattedDate,
   postDescEllipsis,
   postTitleEllipsis,
@@ -32,10 +28,9 @@ import { postVoteAPI } from '../../apis/vote';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUserInfo } from '../../store/userStore';
 import ProfileImage from '../Common/ProfileImage';
-import { handleFollowAPI } from '../../apis/follow';
 import PostDrawer from './PostDrawer';
-import PostEditModal from './PostEditModal';
 import { usePostVoteResultModalStoreActions } from '../../store/postVoteResultStore';
+import P from './Posts.styles';
 
 function Post(
   { post, isFetchingNextPage }: any,

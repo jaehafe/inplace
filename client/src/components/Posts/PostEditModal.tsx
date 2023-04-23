@@ -7,19 +7,13 @@ import {
 } from '@ant-design/icons';
 import { Collapse, Input, message, Upload, UploadProps } from 'antd';
 import { UploadFile } from 'antd/es/upload';
-import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
-import {
-  createPostAPI,
-  updatePostAPI,
-  uploadPostImagesAPI,
-} from '../../apis/post';
-import PostHeader from '../Header/PostHeader/PostHeader';
-import P from '../../pages/profile/Profile.styles';
+import { updatePostAPI, uploadPostImagesAPI } from '../../apis/post';
 import { useEditPostModalStoreActions } from '../../store/editPostStore';
 import { UploadFileStatus } from 'antd/es/upload/interface';
 import useDebounce from '../../hooks/useDebounce';
 import { useQueryClient } from '@tanstack/react-query';
+import P from '../../pages/profile/Profile.styles';
 
 const beforeUpload = (fileList: UploadFile[]) => {
   return fileList.every((file) => {
@@ -49,7 +43,9 @@ function PostEditModal({ data }: any) {
     desc: descBody,
     id: postId,
     images,
+    identifier,
   } = data;
+  console.log('identifier>>>', identifier);
 
   const queryClient = useQueryClient();
   const { isOpenEditPostModal, editPostId, closeEditPostModal } =
@@ -124,7 +120,8 @@ function PostEditModal({ data }: any) {
 
   const onSuccessUpdatePost = () => {
     queryClient.invalidateQueries([`/posts`]);
-    // setOpenEditPostModal(postId, false);
+    queryClient.invalidateQueries([`/posts/${identifier}`]);
+
     message.success('게시물이 성공적으로 업데이트 되었습니다.');
     closeEditPostModal();
   };
