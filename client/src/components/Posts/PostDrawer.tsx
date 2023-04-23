@@ -35,11 +35,16 @@ function PostDrawer({
   const onSuccessFollow = (data: any) => {
     console.log('data>>>', data);
     message.success(data.message);
+
     queryClient.invalidateQueries([`/posts`]);
     // queryClient.invalidateQueries([`/user/${identifier}`]);
   };
   const onErrorFollow = (data: any) => {
-    message.error(data.response.data.error);
+    // message.error(data.response.data.error);
+    if (data.response.data.error === 'Unauthenticated') {
+      message.error('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
+      router.push('/login');
+    }
   };
 
   const { mutate: followMutate } = handleFollowAPI({
