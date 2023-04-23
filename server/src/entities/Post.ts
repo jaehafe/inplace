@@ -1,4 +1,4 @@
-import { Entity, Index, Column, ManyToOne, JoinColumn, OneToMany, BeforeInsert } from 'typeorm';
+import { Entity, Index, Column, ManyToOne, JoinColumn, OneToMany, BeforeInsert, ManyToMany, JoinTable } from 'typeorm';
 import BaseEntity from './Entity';
 import User from './User';
 import Place from './Place';
@@ -7,6 +7,7 @@ import { Exclude, Expose } from 'class-transformer';
 import { makeId, slugify } from '../utils/helper';
 import Image from './Image';
 import PostVote from './PostVote';
+import { Category } from './Category';
 
 @Entity('posts')
 export default class Post extends BaseEntity {
@@ -65,6 +66,10 @@ export default class Post extends BaseEntity {
 
   @Column()
   views: number;
+
+  @ManyToMany(() => Category, (category) => category.posts)
+  @JoinTable()
+  categories: Category[];
 
   @Expose() get url(): string {
     return `/${this.placeName}/${this.identifier}/${this.slug}`;
