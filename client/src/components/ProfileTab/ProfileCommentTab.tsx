@@ -68,9 +68,6 @@ function ProfileCommentTab({
 
   return (
     <>
-      <P.LoadingWrapper>
-        {isLoading || isFetching ? <Spin size="large" /> : ''}
-      </P.LoadingWrapper>
       {commentData?.data.length > 0 ? (
         <>
           {commentData?.data?.map((data: any) => {
@@ -92,6 +89,9 @@ function ProfileCommentTab({
       ) : (
         <>{isSameUser('댓글')}</>
       )}
+      <P.LoadingWrapper>
+        {isLoading || isFetching ? <Spin size="large" /> : ''}
+      </P.LoadingWrapper>
     </>
   );
 }

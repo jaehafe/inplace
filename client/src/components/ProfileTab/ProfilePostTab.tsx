@@ -69,9 +69,6 @@ function ProfilePostTab({
 
   return (
     <>
-      <P.LoadingWrapper>
-        {isLoading || isFetching ? <Spin size="large" /> : null}
-      </P.LoadingWrapper>
       {postData?.data.length > 0 ? (
         <>
           {postData?.data?.map((data: any) => {
@@ -88,6 +85,9 @@ function ProfilePostTab({
       ) : (
         <>{isSameUser('게시글')}</>
       )}
+      <P.LoadingWrapper>
+        {isLoading || isFetching ? <Spin size="large" /> : null}
+      </P.LoadingWrapper>
     </>
   );
 }
