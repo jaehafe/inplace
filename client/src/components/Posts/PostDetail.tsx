@@ -15,6 +15,7 @@ import { defaultImg, formattedDate } from '../../utils';
 import ProfileImage from '../Common/ProfileImage';
 import PostComments from './PostComments';
 import P from './Posts.styles';
+import PostVoteResultBarChart from './PostVoteModal/PostVoteResultBarChart';
 
 function PostDetail({ detailPost }: any) {
   const {
@@ -31,6 +32,9 @@ function PostDetail({ detailPost }: any) {
     voteScore,
     votes,
     user,
+    agreeScore,
+    disagreeScore,
+    neutralScore,
   } = detailPost;
   const { username } = user;
   // console.log('user>>', user);
@@ -135,38 +139,35 @@ function PostDetail({ detailPost }: any) {
         </P.VoteResultWrapper>
 
         {/* OX 투표기능 */}
-        {/* currentLoginUser ? */}
-        {
-          <P.VoteSelectWrapper>
-            <P.VoteSelect
-              size="large"
-              optionType="button"
-              buttonStyle="solid"
-              onChange={(e) => handleVoteChange(e)}
-              defaultValue={checkWhetherVoted(currentLoginUser?.id)}
-              // defaultValue="disagree"
-            >
-              <P.VoteButton value="agree">
-                <LikeTwoTone twoToneColor="#2515d5" />
-              </P.VoteButton>
-              <P.VoteButton value="neutral">
-                <FrownTwoTone twoToneColor="#eb2f96" />
-              </P.VoteButton>
-              <P.VoteButton value="disagree">
-                <DislikeTwoTone twoToneColor="#52c41a" />
-              </P.VoteButton>
-            </P.VoteSelect>
-          </P.VoteSelectWrapper>
-        }
-        {/* : (
-          <P.LoginRouterButtonForVote
-            type="dashed"
-            block
-            onClick={() => router.push('/login')}
+        <P.VoteSelectWrapper>
+          <P.VoteSelect
+            size="large"
+            optionType="button"
+            buttonStyle="solid"
+            onChange={(e) => handleVoteChange(e)}
+            defaultValue={checkWhetherVoted(currentLoginUser?.id)}
+            // defaultValue="disagree"
           >
-            로그인 후 투표를 해보세요
-          </P.LoginRouterButtonForVote>
-        ) */}
+            <P.VoteButton value="agree">
+              <LikeTwoTone twoToneColor="#2515d5" />
+            </P.VoteButton>
+            <P.VoteButton value="neutral">
+              <FrownTwoTone twoToneColor="#eb2f96" />
+            </P.VoteButton>
+            <P.VoteButton value="disagree">
+              <DislikeTwoTone twoToneColor="#52c41a" />
+            </P.VoteButton>
+          </P.VoteSelect>
+        </P.VoteSelectWrapper>
+
+        <div>
+          {' '}
+          <PostVoteResultBarChart
+            agreeScore={agreeScore}
+            disagreeScore={disagreeScore}
+            neutralScore={neutralScore}
+          />
+        </div>
 
         {/* 게시물 사진 */}
         {images?.length > 0 ? (
