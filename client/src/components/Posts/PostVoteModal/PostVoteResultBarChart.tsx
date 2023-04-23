@@ -40,19 +40,19 @@ function PostVoteResultBarChart({ ...props }: IPostVoteResultChart) {
     labels: [''],
     datasets: [
       {
-        label: '👍',
+        label: `${agreeScore} 👍`,
         data: [agreePercentage],
         backgroundColor: '#429CD9',
         barThickness: 40,
       },
       {
-        label: '🙁',
+        label: `${neutralScore} 🙁 `,
         data: [neutralPercentage],
         backgroundColor: '#FBCD56',
         barThickness: 40,
       },
       {
-        label: '👎',
+        label: `${disagreeScore} 👎`,
         data: [disagreePercentage],
         backgroundColor: '#FB7B77',
         barThickness: 40,
@@ -69,7 +69,7 @@ function PostVoteResultBarChart({ ...props }: IPostVoteResultChart) {
         },
       },
       y: {
-        display: false,
+        // display: false,
         grid: {
           display: false,
           drawTicks: false,
