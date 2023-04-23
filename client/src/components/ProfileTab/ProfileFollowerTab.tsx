@@ -100,14 +100,10 @@ function ProfileFollowerTab({
     router.push('/login');
   };
 
-  // console.log('infiniteData>>', infiniteData);
   const handleProfileRoute = (username: string) => {
     router.push(`/profile/${username}`);
     setOpenFollowList(false);
   };
-
-  // <CustomizedEmpty desc1="팔로워가 없습니다." />
-  console.log('infiniteData>>>', infiniteData);
 
   return (
     <T.Container>
