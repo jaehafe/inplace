@@ -28,8 +28,7 @@ function PostDrawer({
 }: IPostDrawer) {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { setEditPostId, setOpenEditPostModal } =
-    useEditPostModalStoreActions();
+  const { openEditPostModal } = useEditPostModalStoreActions();
 
   const { id, username } = postAuthorInfo;
 
@@ -62,8 +61,7 @@ function PostDrawer({
   };
 
   const handleEditPost = () => {
-    setOpenEditPostModal(postId, true);
-    setEditPostId(postId);
+    openEditPostModal(postId);
     setOpenPostDrawer(false);
   };
 

@@ -52,9 +52,16 @@ function PostEditModal({ data }: any) {
   } = data;
 
   const queryClient = useQueryClient();
-  const { openEditPostModal, editPostId, setOpenEditPostModal } =
+  const { isOpenEditPostModal, editPostId, closeEditPostModal } =
     useEditPostModalStoreActions();
-  const open = editPostId ? openEditPostModal[editPostId] : false;
+
+  const openEditModalFn = () => {
+    if (isOpenEditPostModal && postId) {
+      return true;
+    } else {
+      false;
+    }
+  };
 
   const [title, setTitle] = useState('');
   const [agree, setAgree] = useState('');
@@ -119,9 +126,7 @@ function PostEditModal({ data }: any) {
     queryClient.invalidateQueries([`/posts`]);
     // setOpenEditPostModal(postId, false);
     message.success('게시물이 성공적으로 업데이트 되었습니다.');
-    if (editPostId) {
-      setOpenEditPostModal(editPostId, false);
-    }
+    closeEditPostModal();
   };
   const { mutate: updatePostMutate } = updatePostAPI(postId, {
     onSuccess: onSuccessUpdatePost,
@@ -217,12 +222,8 @@ function PostEditModal({ data }: any) {
       placement="bottom"
       title="게시물 수정"
       closable={false}
-      onClose={() => {
-        if (editPostId) {
-          setOpenEditPostModal(editPostId, false);
-        }
-      }}
-      open={open}
+      onClose={closeEditPostModal}
+      open={openEditModalFn()}
       key="bottom"
       height={'auto'}
       style={{ overflowY: 'scroll' }}
