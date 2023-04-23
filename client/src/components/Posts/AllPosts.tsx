@@ -54,8 +54,6 @@ function AllPosts() {
     }
   }, [inView, hasNextPage, observeRef]);
 
-  // console.log('infiniteData>>>', infiniteData);
-
   return (
     <div>
       {infiniteData?.pages?.map((page, pageIndex) => {
@@ -67,7 +65,6 @@ function AllPosts() {
       <P.LoadingWrapper>
         {isFetchingNextPage || isFetching ? <Spin size="large" /> : ''}
       </P.LoadingWrapper>
-      {/* 게시룰 수정 drawer */}
     </div>
   );
 }

@@ -69,7 +69,6 @@ function HotPosts() {
       <P.LoadingWrapper>
         {isFetchingNextPage || isFetching ? <Spin size="large" /> : ''}
       </P.LoadingWrapper>
-      <EditPost />
     </div>
   );
 }

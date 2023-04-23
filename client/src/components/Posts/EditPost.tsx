@@ -6,9 +6,7 @@ import PostEditModal from './PostEditModal';
 
 function EditPost() {
   const { editPostId } = useEditPostModalStoreActions();
-
   const { data, isLoading } = getDetailPostAPI(editPostId!);
-  console.log('data>>>', data);
 
   return <div>{!isLoading && data && <PostEditModal data={data} />}</div>;
 }

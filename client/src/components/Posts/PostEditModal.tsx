@@ -45,7 +45,6 @@ function PostEditModal({ data }: any) {
     images,
     identifier,
   } = data;
-  console.log('identifier>>>', identifier);
 
   const queryClient = useQueryClient();
   const { isOpenEditPostModal, editPostId, closeEditPostModal } =
