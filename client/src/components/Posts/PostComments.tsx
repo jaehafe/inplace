@@ -126,6 +126,7 @@ function PostComments({ identifier, currentLoginUser }: any) {
 
       <Divider style={{ margin: '14px 0' }} />
       {/* 게시물 댓글 컴포넌트 */}
+
       {comments?.pages?.map((page) =>
         page?.result?.map((data: any) => {
           return <PostComment data={data} key={data.identifier} />;

@@ -165,7 +165,7 @@ const deleteComment = async (req: Request, res: Response) => {
 };
 
 router.get('/owned/:identifier', getOwnComments);
-router.get('/:identifier', userMiddleware, getPostComments);
+router.get('/:identifier', getPostComments);
 router.post('/:identifier', userMiddleware, createPostComment);
 router.patch('/:identifier', userMiddleware, authMiddleware, updateComment);
 router.delete('/:identifier', userMiddleware, authMiddleware, deleteComment);
