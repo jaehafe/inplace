@@ -1,4 +1,4 @@
-import { Button, Drawer, Radio } from 'antd';
+import { Button, Drawer, Radio, Tag } from 'antd';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -335,6 +335,22 @@ const VoteResultChartWrapper = styled.div`
   width: 100%;
 `;
 
+// 카테고리 태그
+const TagsContainer = styled.div`
+  margin: 30px 0 20px;
+`;
+
+const TagWrapper = styled(Tag)`
+  padding: 6px 10px;
+
+  & span {
+    font-size: 13px;
+  }
+  /* & .ant-tag {
+    padding: 6px 10px !important;
+  } */
+`;
+
 const P = {
   Wrapper,
   HeaderWrapper,
@@ -374,6 +390,8 @@ const P = {
   VoteInfoWrapper,
   AgreeWrapper,
   VoteResultChartWrapper,
+  TagsContainer,
+  TagWrapper,
 };
 
 export default P;

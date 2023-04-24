@@ -5,13 +5,14 @@ import {
   LoadingOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
-import { Collapse, Input, message, Upload, UploadProps } from 'antd';
+import { Collapse, Divider, Input, message, Upload, UploadProps } from 'antd';
 import { RcFile, UploadFile } from 'antd/es/upload';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
 import { createPostAPI, uploadPostImagesAPI } from '../../../apis/post';
 import CommonButton from '../../Common/CommonButton.styles';
 import PostHeader from '../../Header/PostHeader/PostHeader';
+import CreateTags from './CreateTags';
 
 // const getBase64 = (img: RcFile, callback: (url: string) => void) => {
 //   const reader = new FileReader();
@@ -66,9 +67,8 @@ function CreatePost() {
   const [agree, setAgree] = useState('');
   const [neutral, setNeutral] = useState('');
   const [disagree, setDisagree] = useState('');
-
-  // const [downVote, setDownVote] = useState('');
   const [desc, setDesc] = useState('');
+  const [tags, setTags] = useState<string[]>(['OX 질문', '인 플레이스']);
 
   const [loading, setLoading] = useState(false);
   const [imageName, setImageName] = useState<string[]>([]);
@@ -130,9 +130,16 @@ function CreatePost() {
 
   const handleSubmitPost = async (e: FormEvent) => {
     e.preventDefault();
-    console.log('12312123');
 
-    createPostMutate({ title, agree, neutral, disagree, desc, imageName });
+    createPostMutate({
+      title,
+      agree,
+      neutral,
+      disagree,
+      desc,
+      imageName,
+      tags,
+    });
   };
 
   return (
@@ -203,7 +210,10 @@ function CreatePost() {
           {fileList.length >= 5 ? null : uploadButton}
         </Upload>
         <span>최대 5장까지 업로드할 수 있습니다.</span>
-
+        <Divider />
+        <CreateTags tags={tags} setTags={setTags} />
+        <span>태그를 추가해보세요.</span>
+        <Divider />
         <CommonButton type="primary" htmlType="submit" disabled={isDisabled}>
           작성완료
         </CommonButton>

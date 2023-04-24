@@ -2,10 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import type { InputRef } from 'antd';
 import { Space, Input, Tag, Tooltip, theme } from 'antd';
+import P from '../Posts.styles';
 
-const CreateTags = () => {
+interface ICreateTags {
+  tags: string[];
+  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+const CreateTags = ({ tags, setTags }: ICreateTags) => {
   const { token } = theme.useToken();
-  const [tags, setTags] = useState(['Unremovable', 'Tag 2', 'Tag 3']);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [editInputIndex, setEditInputIndex] = useState(-1);
@@ -68,70 +73,71 @@ const CreateTags = () => {
   };
 
   return (
-    <Space size={[0, 8]} wrap>
+    <P.TagsContainer>
       <Space size={[0, 8]} wrap>
-        {tags.map((tag, index) => {
-          if (editInputIndex === index) {
-            return (
-              <Input
-                ref={editInputRef}
+        <Space size={[0, 8]} wrap>
+          {tags.map((tag, index) => {
+            if (editInputIndex === index) {
+              return (
+                <Input
+                  ref={editInputRef}
+                  key={tag}
+                  size="small"
+                  style={tagInputStyle}
+                  value={editInputValue}
+                  onChange={handleEditInputChange}
+                  onBlur={handleEditInputConfirm}
+                  onPressEnter={handleEditInputConfirm}
+                />
+              );
+            }
+            const isLongTag = tag.length > 20;
+            const tagElem = (
+              <P.TagWrapper
                 key={tag}
-                size="small"
-                style={tagInputStyle}
-                value={editInputValue}
-                onChange={handleEditInputChange}
-                onBlur={handleEditInputConfirm}
-                onPressEnter={handleEditInputConfirm}
-              />
-            );
-          }
-          const isLongTag = tag.length > 20;
-          const tagElem = (
-            <Tag
-              key={tag}
-              closable={index !== 0}
-              style={{ userSelect: 'none' }}
-              onClose={() => handleClose(tag)}
-            >
-              <span
-                onDoubleClick={(e) => {
-                  if (index !== 0) {
-                    setEditInputIndex(index);
-                    setEditInputValue(tag);
-                    e.preventDefault();
-                  }
-                }}
+                closable={true}
+                style={{ userSelect: 'none' }}
+                onClose={() => handleClose(tag)}
               >
-                {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-              </span>
-            </Tag>
-          );
-          return isLongTag ? (
-            <Tooltip title={tag} key={tag}>
-              {tagElem}
-            </Tooltip>
-          ) : (
-            tagElem
-          );
-        })}
+                <span
+                  onDoubleClick={(e) => {
+                    if (index !== 0) {
+                      setEditInputIndex(index);
+                      setEditInputValue(tag);
+                      e.preventDefault();
+                    }
+                  }}
+                >
+                  {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                </span>
+              </P.TagWrapper>
+            );
+            return isLongTag ? (
+              <Tooltip title={tag} key={tag}>
+                {tagElem}
+              </Tooltip>
+            ) : (
+              tagElem
+            );
+          })}
+        </Space>
+        {inputVisible ? (
+          <Input
+            ref={inputRef}
+            type="text"
+            style={tagInputStyle}
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={handleInputConfirm}
+            onPressEnter={handleInputConfirm}
+          />
+        ) : (
+          <P.TagWrapper style={tagPlusStyle} onClick={showInput}>
+            <PlusOutlined /> 태그 추가
+          </P.TagWrapper>
+        )}
       </Space>
-      {inputVisible ? (
-        <Input
-          ref={inputRef}
-          type="text"
-          size="small"
-          style={tagInputStyle}
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputConfirm}
-          onPressEnter={handleInputConfirm}
-        />
-      ) : (
-        <Tag style={tagPlusStyle} onClick={showInput}>
-          <PlusOutlined /> New Tag
-        </Tag>
-      )}
-    </Space>
+    </P.TagsContainer>
   );
 };
 
