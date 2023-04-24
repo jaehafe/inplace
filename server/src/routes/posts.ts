@@ -126,6 +126,8 @@ const getAllPosts = async (req: Request, res: Response) => {
       .leftJoinAndSelect('post.votes', 'votes')
       .leftJoinAndSelect('post.user', 'user')
       .leftJoinAndSelect('post.images', 'postImages')
+      .leftJoinAndSelect('post.categories', 'categories')
+      .leftJoinAndSelect('categories.category', 'category')
       .leftJoinAndSelect('user.image', 'userImage')
       .leftJoinAndSelect('user.followers', 'followers')
       .orderBy('post.createdAt', 'DESC')
@@ -171,6 +173,8 @@ const getHotPosts = async (req: Request, res: Response) => {
       .leftJoinAndSelect('post.votes', 'votes')
       .leftJoinAndSelect('post.user', 'user')
       .leftJoinAndSelect('post.images', 'postImages')
+      .leftJoinAndSelect('post.categories', 'categories')
+      .leftJoinAndSelect('categories.category', 'category')
       .leftJoinAndSelect('user.image', 'userImage')
       .leftJoinAndSelect('user.followers', 'followers')
       .orderBy('post.createdAt', 'DESC')
@@ -229,7 +233,9 @@ const getDetailPost = async (req: Request, res: Response) => {
   try {
     const post = await Post.findOneOrFail({
       where: { identifier },
-      relations: ['votes', 'images', 'user.image'],
+      relations: ['votes', 'images', 'user.image', 'categories', 'categories.category'],
+      // .leftJoinAndSelect('post.categories', 'categories')
+      // .leftJoinAndSelect('categories.category', 'category')
 
       // 'comments.user.image',
       // 'comments',

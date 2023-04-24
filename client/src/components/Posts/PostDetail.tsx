@@ -14,6 +14,7 @@ import { postVoteAPI } from '../../apis/vote';
 import { useUserInfo } from '../../store/userStore';
 import { formattedDate } from '../../utils';
 import ProfileImage from '../Common/ProfileImage';
+import Tags from '../Common/Tags/Tags';
 import EditPost from './EditPost';
 import PostComments from './PostComments';
 import PostDrawer from './PostDrawer';
@@ -44,7 +45,10 @@ function PostDetail({ detailPost }: any) {
     agreeScore,
     disagreeScore,
     neutralScore,
+    categories,
   } = detailPost;
+  console.log('detailPost>>>', detailPost);
+
   const { username, followers } = user;
 
   const queryClient = useQueryClient();
@@ -153,6 +157,8 @@ function PostDetail({ detailPost }: any) {
             <span>{disagree}</span>
           </P.VoteResult>
         </P.VoteResultWrapper>
+
+        {categories?.length > 0 && <Tags categories={categories} />}
 
         {/* OX 투표기능 */}
         <P.VoteSelectWrapper>

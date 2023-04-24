@@ -31,6 +31,7 @@ import ProfileImage from '../Common/ProfileImage';
 import PostDrawer from './PostDrawer';
 import { usePostVoteResultModalStoreActions } from '../../store/postVoteResultStore';
 import P from './Posts.styles';
+import Tags from '../Common/Tags/Tags';
 
 function Post(
   { post, isFetchingNextPage }: any,
@@ -52,6 +53,7 @@ function Post(
     userVote,
     votes,
     user,
+    categories,
   } = post;
   const { username, followers } = user;
 
@@ -171,6 +173,9 @@ function Post(
               <span>{disagree}</span>
             </P.VoteResult>
           </P.VoteResultWrapper>
+
+          {/* 태그 리스트 */}
+          {categories?.length > 0 && <Tags categories={categories} />}
           {/* 댓글, 투표 통계 버튼 */}
           <P.StaticsWrapper>
             <P.StaticsLeft>
