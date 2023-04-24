@@ -10,7 +10,7 @@ import { editUserInfoAPI, uploadImageAPI } from '../../apis/user';
 import P from '../../pages/profile/Profile.styles';
 import InputGroup from '../InputGroup/InputGroup';
 import S from '../Signup/Signup.styles';
-import CommonButton from '../Common/CommonButton';
+import CommonButton from '../Common/CommonButton.styles';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();

@@ -1,7 +1,7 @@
 import { LeftOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import React from 'react';
-import B from '../../Common/BackButton';
+import B from '../../Common/BackButton.styles';
 import P from './PostHeader.styles';
 
 function PostHeader({ title }: { title?: string }) {

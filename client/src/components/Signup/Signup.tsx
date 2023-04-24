@@ -1,6 +1,6 @@
 import React, { FormEvent, useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import CommonButton from '../Common/CommonButton';
+import CommonButton from '../Common/CommonButton.styles';
 import InputGroup from '../InputGroup/InputGroup';
 import S from './Signup.styles';
 import Link from 'next/link';

@@ -10,7 +10,7 @@ import { RcFile, UploadFile } from 'antd/es/upload';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useMemo, useState } from 'react';
 import { createPostAPI, uploadPostImagesAPI } from '../../apis/post';
-import CommonButton from '../Common/CommonButton';
+import CommonButton from '../Common/CommonButton.styles';
 import PostHeader from '../Header/PostHeader/PostHeader';
 
 // const getBase64 = (img: RcFile, callback: (url: string) => void) => {

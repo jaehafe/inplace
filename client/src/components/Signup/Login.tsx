@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useMemo, useState } from 'react';
 import { loginAPI } from '../../apis/user';
-import CommonButton from '../Common/CommonButton';
+import CommonButton from '../Common/CommonButton.styles';
 import InputGroup from '../InputGroup/InputGroup';
 import S from './Signup.styles';
 
