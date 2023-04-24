@@ -30,7 +30,7 @@ function SearchUserList({ data, isShowRecentHistory }: ISearchUserList) {
                 src={src}
                 width={50}
                 height={50}
-                style={{ borderRadius: '50%' }}
+                style={{ borderRadius: '50%', objectFit: 'contain' }}
               />
               <L.UserNameWrapper>
                 <h4>{username}</h4>

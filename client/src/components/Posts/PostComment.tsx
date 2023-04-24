@@ -157,7 +157,7 @@ function PostComment({ data }: any) {
             src={user?.image?.src}
             width={36}
             height={36}
-            style={{ borderRadius: '50px' }}
+            style={{ borderRadius: '50px', objectFit: 'contain' }}
           />
         </Link>
         <P.CommentInfo>
