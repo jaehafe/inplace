@@ -1,6 +1,6 @@
 import React from 'react';
 import L from '../../components/Layout/Layout.styles';
-import CreatePost from '../../components/Posts/CreatePost';
+import CreatePost from '../../components/Posts/CreatePost/CreatePost';
 
 function PostCreate() {
   return (
