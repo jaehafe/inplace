@@ -9,7 +9,7 @@ const router = Router();
 
 const handlePostVote = async (req: Request, res: Response) => {
   const { value } = req.body;
-  // console.log('postVotes value!!!!!!!!', value);
+
   const { identifier } = req.params;
 
   if (!['agree', 'neutral', 'disagree'].includes(value)) {

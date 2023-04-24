@@ -15,7 +15,6 @@ function SearchUserList({ data, isShowRecentHistory }: ISearchUserList) {
     username,
     image: { src },
   } = data;
-  // console.log('src>>>', src);
 
   return (
     <>

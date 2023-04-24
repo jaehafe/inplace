@@ -30,7 +30,6 @@ const CreateTags = ({ tags, setTags }: ICreateTags) => {
 
   const handleClose = (removedTag: string) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
-    console.log(newTags);
     setTags(newTags);
   };
 

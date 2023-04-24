@@ -124,8 +124,6 @@ function PostComment({ data }: any) {
       );
     }
   };
-  // console.log('currentLoginUser>>>', currentLoginUser);
-  // console.log('commentVotes>>', commentVotes);
 
   const checkWhetherVoted = (currentLoginUser: any) => {
     const alreadyVote = commentVotes?.find(

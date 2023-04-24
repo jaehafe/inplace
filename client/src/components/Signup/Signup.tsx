@@ -65,17 +65,12 @@ function Signup() {
     if (info.file.status === 'done') {
       // Get this url from response in real world.
       const imageData = info.file.originFileObj;
-      console.log('info>>>', info);
-
-      console.log('imageData>>', imageData);
 
       const imageFormData = new FormData();
 
       imageFormData.append('image', imageData as any);
 
       uploadImageAPI<any>(imageFormData).then((res) => {
-        console.log('imageData>>>>>>', res.data);
-
         return setImageName(res.data);
       });
       setImageInfo(info.file.originFileObj);
@@ -92,7 +87,6 @@ function Signup() {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
-  // console.log(email, username, password, imageUrl);
 
   const isDisabled = useMemo(
     () => Boolean(!email || !username || !password),
@@ -101,7 +95,6 @@ function Signup() {
 
   const handleSubmitSignup = async (e: FormEvent) => {
     e.preventDefault();
-    console.log('imageInfo', imageInfo);
 
     mutate({ email, password, username, imageName } as ISignup);
   };

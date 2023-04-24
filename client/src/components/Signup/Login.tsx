@@ -27,8 +27,6 @@ function Login() {
   );
 
   const onClickLogin = () => {
-    console.log(email, password);
-
     mutate({ email, password });
   };
 

@@ -70,8 +70,6 @@ function ProfileFollowerTab({
   }, [inView, hasNextPage, observeRef]);
 
   const onSuccessFollow = (data: any) => {
-    console.log('data>>>', data);
-
     message.success(data.message);
     queryClient.invalidateQueries([queryKey]);
     queryClient.invalidateQueries([`/user/${identifier}`]);
@@ -80,18 +78,12 @@ function ProfileFollowerTab({
     message.error(data.response.data.error);
   };
 
-  // console.log('userInfo>>>', userInfo);
-  // console.log('currentLoginUser>>>', currentLoginUser);
-
-  // userInfo?.id,
   const { mutate: followMutate } = handleFollowAPI({
     onSuccess: onSuccessFollow,
     onError: onErrorFollow,
   });
 
   const handleFollowing = (id: number) => {
-    console.log('followerId>>', id);
-
     followMutate({ id });
   };
 

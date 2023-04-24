@@ -12,9 +12,6 @@ const AuthUser = ({ children }: AuthUserProps) => {
   const [cookie] = useCookies(['inplace']);
 
   const { data: authMeData } = cookie?.inplace ? authMeAPI() : { data: null };
-  // console.log('authMeData<<', authMeData);
-  // const currentLoginUser = useUserInfo();
-  // console.log('currentLoginUser>>>', currentLoginUser);
 
   useEffect(() => {
     if (cookie?.inplace && authMeData) {

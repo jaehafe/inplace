@@ -50,9 +50,6 @@ const upload = multer({
 
 const createPost = async (req: Request, res: Response) => {
   const { title, agree, neutral, disagree, desc = '', imageName = [], tags } = req.body;
-  console.log('tags>>?', tags);
-
-  console.log('createPost>>>', createPost);
 
   const user = res.locals.user;
 
@@ -69,7 +66,6 @@ const createPost = async (req: Request, res: Response) => {
     await post.save();
 
     // 이미지 업로드 및 게시물에 연결
-    console.log('imagePath>>>', imageName);
 
     if (imageName.length > 0) {
       const images = [];
@@ -111,7 +107,6 @@ const createPost = async (req: Request, res: Response) => {
       }
       post.categories = tagsArr;
     }
-    console.log('post>>>', post);
 
     return res.json(post);
   } catch (error) {
@@ -230,8 +225,6 @@ const getHotPosts = async (req: Request, res: Response) => {
 
 const getDetailPost = async (req: Request, res: Response) => {
   const { identifier } = req.params;
-  // console.log('req.params>>>', req.params);
-  // console.log('req.session.viewedPosts>>>', req.session.viewedPosts);
 
   try {
     const post = await Post.findOneOrFail({
@@ -259,7 +252,6 @@ const getVoteResult = async (req: Request, res: Response) => {
       where: { identifier },
       relations: ['votes', 'votes.post'],
     });
-    console.log('post>>>', post);
 
     return res.json(post);
   } catch (error) {
@@ -344,12 +336,11 @@ const deletePost = async (req: Request, res: Response) => {
 
 const updatePost = async (req: Request, res: Response) => {
   const { title, agree, neutral, disagree, desc = '', imageName = [], isImageChanged = false, tags } = req.body;
-  console.log('imageChanged>>>>', isImageChanged);
+
   const { identifier } = req.params;
 
   try {
     const post = await Post.findOneOrFail({ where: { id: Number(identifier) }, relations: ['images'] });
-    console.log('post>>>>>>>', post);
 
     if (!post) {
       return res.status(404).json({ error: '게시물을 찾을 수 없습니다.' });
@@ -473,9 +464,6 @@ router.post(
   authMiddleware,
   upload.array('postImages'),
   async (req: RequestWithFile, res: Response) => {
-    console.log('req>>', req.files);
-
-    // console.log('req.file.path>>> ', req.file);
     return res.json(req.files.map((file) => file.filename));
   }
 );
@@ -485,28 +473,3 @@ router.delete('/:identifier', userMiddleware, authMiddleware, deletePost);
 router.patch('/:identifier', userMiddleware, authMiddleware, updatePost);
 
 export default router;
-
-// const getAllPosts = async (req: Request, res: Response) => {
-//   const currentPage: number = (req.query.page || 0) as number;
-//   const perPage: number = (req.query.count || 3) as number;
-
-//   console.log('req.query.page...', req.query.page);
-
-//   try {
-//     const allPosts = await Post.find({
-//       order: { createdAt: 'DESC' },
-//       relations: ['votes', 'comments', 'images', 'user.image', 'comments.user', 'user', 'comments.user.image'],
-//       skip: currentPage * perPage,
-//       take: perPage,
-//     });
-
-//     // if (res.locals.user) {
-//     //   allPosts.forEach((p) => p.setUserVote(res.locals.user));
-//     // }
-
-//     return res.json(allPosts);
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ error: 'something went wrong' });
-//   }
-// };

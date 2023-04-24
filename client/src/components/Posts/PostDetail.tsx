@@ -100,7 +100,6 @@ function PostDetail({ detailPost }: any) {
         break;
 
       default:
-        console.log('123');
         break;
     }
   };
@@ -189,10 +188,10 @@ function PostDetail({ detailPost }: any) {
         {images?.length > 0 ? (
           <P.PostImageWrapper>
             <AntdImage.PreviewGroup
-              preview={{
-                onChange: (current, prev) =>
-                  console.log(`current index: ${current}, prev index: ${prev}`),
-              }}
+            // preview={{
+            //   onChange: (current, prev) =>
+            //     console.log(`current index: ${current}, prev index: ${prev}`),
+            // }}
             >
               {images?.map((img: any) => {
                 return (

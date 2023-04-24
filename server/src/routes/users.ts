@@ -68,7 +68,6 @@ const searchUsername = async (req: Request, res: Response) => {
   const currentPage: number = (req.query.page || 0) as number;
   const perPage: number = (req.query.count || 3) as number;
 
-  console.log('username>>>>', req.params);
   const { username } = req.params;
 
   try {

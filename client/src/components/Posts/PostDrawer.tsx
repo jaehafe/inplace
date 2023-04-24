@@ -33,7 +33,6 @@ function PostDrawer({
   const { id, username } = postAuthorInfo;
 
   const onSuccessFollow = (data: any) => {
-    console.log('data>>>', data);
     message.success(data.message);
 
     queryClient.invalidateQueries([`/posts`]);
@@ -53,8 +52,6 @@ function PostDrawer({
   });
 
   const handleFollowing = (id: number) => {
-    console.log('followerId>>', id);
-
     followMutate({ id });
   };
 

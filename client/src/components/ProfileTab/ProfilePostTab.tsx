@@ -21,7 +21,6 @@ function ProfilePostTab({
 }: IProfilePostTab) {
   const [page, setPage] = useState(1);
   const onChange: PaginationProps['onChange'] = (page) => {
-    console.log(page);
     setPage(page);
   };
 

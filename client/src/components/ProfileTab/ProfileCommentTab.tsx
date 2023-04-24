@@ -22,7 +22,6 @@ function ProfileCommentTab({
   const [page, setPage] = useState(1);
 
   const onChange: PaginationProps['onChange'] = (page) => {
-    console.log(page);
     setPage(page);
   };
 
@@ -30,7 +29,6 @@ function ProfileCommentTab({
 
   const fetchOwnComments = async (page = 0) => {
     const { data } = await axiosInstance.get(`${queryKey}`);
-    // console.log('댓글>>>', data);
 
     return data;
   };

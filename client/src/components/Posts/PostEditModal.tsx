@@ -47,7 +47,6 @@ function PostEditModal({ data }: any) {
     identifier,
     categories,
   } = data;
-  console.log('categories>>>', categories);
 
   const queryClient = useQueryClient();
   const { isOpenEditPostModal, editPostId, closeEditPostModal } =
@@ -106,7 +105,6 @@ function PostEditModal({ data }: any) {
   });
 
   const getTags = categories.map((c: any) => c.category.name);
-  console.log('tags>>>', tags);
 
   useEffect(() => {
     setTitle(titleBody);
@@ -161,12 +159,9 @@ function PostEditModal({ data }: any) {
         desc === descBody;
 
       const isChanged = await isImageArrayDifferent(images, fileList);
-      // console.log('isChanged?>>', isChanged);
-      // console.log('isEmpty?>>>', isEmpty);
 
       setIsDisabled(isEmpty && !isSame && !isChanged);
     };
-    // console.log('disabled>>>', isDisabled);
 
     checkIsDisabled();
   }, [

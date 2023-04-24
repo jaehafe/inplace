@@ -58,24 +58,7 @@ function ProfileEditModal({
   const [imagePath, setImagePath] = useState<string>('');
   const [imageName, setImageName] = useState('');
 
-  // console.log('userInfo>>>', userInfo);
-
-  // const getFileListFromUserImage = (userImage: any) => {
-  //   if (userImage) {
-  //     return [
-  //       {
-  //         uid: userImage.id,
-  //         name: userImage.src,
-  //         status: 'done' as UploadFileStatus,
-  //         url: userImage.src,
-  //       },
-  //     ];
-  //   }
-  //   return [];
-  // };
-
   const [fileList, setFileList] = useState();
-  // getFileListFromUserImage(userInfo?.image)
 
   useEffect(() => {
     setEmail(userInfo?.email);
@@ -94,16 +77,11 @@ function ProfileEditModal({
     if (info.file.status === 'done') {
       // Get this url from response in real world.
       const imageData = info.file.originFileObj;
-      console.log('info>>>', info);
-
-      console.log('imageData>>', imageData);
 
       const imageFormData = new FormData();
       imageFormData.append('image', imageData as any);
 
       uploadImageAPI<any>(imageFormData).then((res) => {
-        console.log('imageData>>>>>>', res.data);
-
         setImageName(res.data);
         setFileList(res.data);
         return;
@@ -145,7 +123,6 @@ function ProfileEditModal({
 
   const submitEditForm = async (e: FormEvent) => {
     e.preventDefault();
-    console.log('imageInfo', imageInfo);
 
     mutate({ username, imageName });
   };

@@ -83,8 +83,6 @@ function ProfileFollowingTab({
   });
 
   const handleFollowing = (id: number) => {
-    console.log('following id>>', id);
-
     followMutate({ id });
   };
 
