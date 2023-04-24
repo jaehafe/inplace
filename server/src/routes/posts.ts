@@ -12,7 +12,7 @@ import User from '../entities/User';
 import CommentVote from '../entities/CommentVote';
 import PostVote from '../entities/PostVote';
 import Category from '../entities/Category';
-import { getRepository } from 'typeorm';
+import { FindOneOptions, getRepository } from 'typeorm';
 import PostCategory from '../entities/PostCategory';
 
 const router = Router();
@@ -50,7 +50,9 @@ const upload = multer({
 });
 
 const createPost = async (req: Request, res: Response) => {
-  const { title, agree, neutral, disagree, desc = '', imageName = [], tags = [] } = req.body;
+  const { title, agree, neutral, disagree, desc = '', imageName = [], tags } = req.body;
+  console.log('tags>>?', tags);
+
   console.log('createPost>>>', createPost);
 
   const user = res.locals.user;
@@ -87,6 +89,7 @@ const createPost = async (req: Request, res: Response) => {
 
     if (tags.length > 0) {
       const tagsArr = [];
+
       for (const tagName of tags) {
         // 카테고리(태그)가 있는지 db에서 확인
         let category = await AppDataSource.getRepository(Category).findOne({ where: { name: tagName } });
@@ -128,6 +131,8 @@ const getAllPosts = async (req: Request, res: Response) => {
       .leftJoinAndSelect('post.images', 'postImages')
       .leftJoinAndSelect('post.categories', 'categories')
       .leftJoinAndSelect('categories.category', 'category')
+      // .leftJoinAndSelect('post.categories', 'postCategories') // 수정된 부분
+      // .leftJoinAndSelect('postCategories.category', 'category') // 수정된 부분
       .leftJoinAndSelect('user.image', 'userImage')
       .leftJoinAndSelect('user.followers', 'followers')
       .orderBy('post.createdAt', 'DESC')
@@ -173,8 +178,10 @@ const getHotPosts = async (req: Request, res: Response) => {
       .leftJoinAndSelect('post.votes', 'votes')
       .leftJoinAndSelect('post.user', 'user')
       .leftJoinAndSelect('post.images', 'postImages')
-      .leftJoinAndSelect('post.categories', 'categories')
-      .leftJoinAndSelect('categories.category', 'category')
+      // .leftJoinAndSelect('post.categories', 'categories')
+      // .leftJoinAndSelect('categories.category', 'category')
+      .leftJoinAndSelect('post.categories', 'postCategories') // 수정된 부분
+      .leftJoinAndSelect('postCategories.category', 'category') // 수정된 부분
       .leftJoinAndSelect('user.image', 'userImage')
       .leftJoinAndSelect('user.followers', 'followers')
       .orderBy('post.createdAt', 'DESC')
@@ -307,7 +314,7 @@ const deletePost = async (req: Request, res: Response) => {
   try {
     const post = await Post.findOneOrFail({
       where: { identifier },
-      relations: ['comments', 'images', 'comments.commentVotes', 'votes'],
+      relations: ['comments', 'images', 'comments.commentVotes', 'votes', 'categories'],
     });
 
     if (post.userId !== user.id) {
@@ -326,6 +333,11 @@ const deletePost = async (req: Request, res: Response) => {
     // 4. images 삭제
     await Promise.all(post.images.map((image) => Image.delete({ id: image.id })));
 
+    // 5. PostCategory 삭제
+    // await PostCategory.delete(post.id);
+    // const postCategories = await PostCategory.find({ where: { post: post } });
+    // await Promise.all(postCategories.map((postCategory) => postCategory.remove()));
+
     // 5. 마지막으로 post 삭제
     await Post.delete({ identifier });
 
@@ -337,7 +349,7 @@ const deletePost = async (req: Request, res: Response) => {
 };
 
 const updatePost = async (req: Request, res: Response) => {
-  const { title, agree, neutral, disagree, desc = '', imageName = [], isImageChanged = false } = req.body;
+  const { title, agree, neutral, disagree, desc = '', imageName = [], isImageChanged = false, tags } = req.body;
   console.log('imageChanged>>>>', isImageChanged);
   const { identifier } = req.params;
 
@@ -388,6 +400,8 @@ const updatePost = async (req: Request, res: Response) => {
         post.images = images;
       }
     }
+
+    // 3. 카테고리 업데이트
 
     await post.save();
 
