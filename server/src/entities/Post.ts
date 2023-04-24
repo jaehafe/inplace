@@ -7,8 +7,8 @@ import { Exclude, Expose } from 'class-transformer';
 import { makeId, slugify } from '../utils/helper';
 import Image from './Image';
 import PostVote from './PostVote';
-import { Category } from './Category';
-import { PostCategory } from './PostCategory';
+import Category from './Category';
+import PostCategory from './PostCategory';
 
 @Entity('posts')
 export default class Post extends BaseEntity {
@@ -65,8 +65,8 @@ export default class Post extends BaseEntity {
   @Column({ type: 'varchar', length: 30 })
   disagree: string;
 
-  @Column()
-  views: number;
+  // @Column()
+  // views: number;
 
   @OneToMany(() => PostCategory, (postCategory) => postCategory.post)
   categories: PostCategory[];

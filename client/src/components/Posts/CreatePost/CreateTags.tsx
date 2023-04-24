@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import type { InputRef } from 'antd';
-import { Space, Input, Tag, Tooltip, theme } from 'antd';
+import { Space, Input, Tooltip, theme } from 'antd';
 import P from '../Posts.styles';
 
 interface ICreateTags {

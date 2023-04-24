@@ -11,6 +11,9 @@ import Comment from '../entities/Comment';
 import User from '../entities/User';
 import CommentVote from '../entities/CommentVote';
 import PostVote from '../entities/PostVote';
+import Category from '../entities/Category';
+import { getRepository } from 'typeorm';
+import PostCategory from '../entities/PostCategory';
 
 const router = Router();
 
@@ -18,7 +21,6 @@ interface RequestWithFile extends Request {
   file: any; // 혹은 multer.File 타입
   files: any[];
 }
-
 interface DestinationCallback {
   (error: Error | null, destination: string): void;
 }
@@ -48,7 +50,7 @@ const upload = multer({
 });
 
 const createPost = async (req: Request, res: Response) => {
-  const { title, agree, neutral, disagree, desc = '', imageName = [] } = req.body;
+  const { title, agree, neutral, disagree, desc = '', imageName = [], tags = [] } = req.body;
   console.log('createPost>>>', createPost);
 
   const user = res.locals.user;
@@ -82,6 +84,31 @@ const createPost = async (req: Request, res: Response) => {
         post.images = image.id;
       }
     }
+
+    if (tags.length > 0) {
+      const tagsArr = [];
+      for (const tagName of tags) {
+        // 카테고리(태그)가 있는지 db에서 확인
+        let category = await AppDataSource.getRepository(Category).findOne({ where: { name: tagName } });
+
+        // 카테고리(태그)가 없으면 새로 셍성
+        if (!category) {
+          category = new Category();
+          category.name = tagName;
+          await AppDataSource.getRepository(Category).save(category);
+        }
+
+        // PostCategory 연결
+        const postCategory = new PostCategory();
+        postCategory.post = post;
+        postCategory.category = category;
+        await AppDataSource.getRepository(PostCategory).save(postCategory);
+
+        tagsArr.push(category);
+      }
+      post.categories = tagsArr;
+    }
+    console.log('post>>>', post);
 
     return res.json(post);
   } catch (error) {
@@ -210,7 +237,7 @@ const getDetailPost = async (req: Request, res: Response) => {
     });
 
     // 조회수 증가
-    post.views += 1;
+    // post.views += 1;
     await post.save();
 
     return res.json(post);

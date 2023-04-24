@@ -1,9 +1,9 @@
 import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import Post from './Post';
-import { PostCategory } from './PostCategory';
+import PostCategory from './PostCategory';
 
 @Entity('categories')
-export class Category {
+export default class Category {
   @PrimaryGeneratedColumn()
   id: number;
 
