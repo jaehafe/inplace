@@ -129,8 +129,6 @@ function Post(
                 src={user.image && `${user.image.src}`}
                 width={46}
                 height={46}
-                style={{ borderRadius: '50px', objectFit: 'contain' }}
-                alt="avatar"
               />
             </Link>
             <P.PostInfo>
@@ -241,6 +239,7 @@ function Post(
                       width={100}
                       height={100}
                       alt="alt"
+                      style={{ objectFit: 'contain' }}
                     />
                   );
                 })}
@@ -261,7 +260,6 @@ function Post(
                       src={c.user?.image?.src}
                       width={20}
                       height={20}
-                      style={{ borderRadius: '50px' }}
                       alt="avatar"
                     />
                     <span>{commentBodyEllipsis(body)}</span>

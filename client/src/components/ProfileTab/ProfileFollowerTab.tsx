@@ -124,12 +124,7 @@ function ProfileFollowerTab({
             return (
               <T.Wrapper ref={observeRef} key={createdAt}>
                 <T.BodyLeft onClick={() => handleProfileRoute(username)}>
-                  <ProfileImage
-                    src={image.src}
-                    width={40}
-                    height={40}
-                    style={{ borderRadius: '50%' }}
-                  />
+                  <ProfileImage src={image.src} width={40} height={40} />
                   <span>{username}</span>
                 </T.BodyLeft>
 

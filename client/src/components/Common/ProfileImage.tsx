@@ -14,7 +14,7 @@ function ProfileImage({
   height = 80,
   src,
   alt = 'profile-logo',
-  style,
+  style = { objectFit: 'contain', borderRadius: '50%' },
 }: IProfileImageProps) {
   return (
     <>

@@ -26,12 +26,7 @@ function SearchUserList({ data, isShowRecentHistory }: ISearchUserList) {
         <L.SearchWrapper>
           <Link href={`/profile/${username}`}>
             <L.SearchLeft>
-              <ProfileImage
-                src={src}
-                width={50}
-                height={50}
-                style={{ borderRadius: '50%', objectFit: 'contain' }}
-              />
+              <ProfileImage src={src} width={50} height={50} />
               <L.UserNameWrapper>
                 <h4>{username}</h4>
                 {/* <span>hooks</span> */}

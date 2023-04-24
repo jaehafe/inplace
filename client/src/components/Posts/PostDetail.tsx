@@ -110,13 +110,7 @@ function PostDetail({ detailPost }: any) {
       <P.HeaderWrapper>
         <Link href={`/profile/${username}`}>
           <P.HeaderLeft>
-            <ProfileImage
-              src={user?.image.src}
-              width={46}
-              height={46}
-              style={{ borderRadius: '50px' }}
-              alt="avatar"
-            />
+            <ProfileImage src={user?.image.src} width={46} height={46} />
             <P.PostInfo>
               <h4>{username}</h4>
               <span>

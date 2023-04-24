@@ -68,7 +68,6 @@ function NavigateDrawer({
             src={currentLoginUser?.image.src}
             width={100}
             height={100}
-            style={{ borderRadius: '50px', objectFit: 'contain' }}
           />
           {currentLoginUser && (
             <>

@@ -16,7 +16,6 @@ import ProfileImage from '../Common/ProfileImage';
 import T from './Tab.styles';
 
 function CommentTab({ data, queryKey }: any) {
-  // console.log('comment Data>>>', data);
   const {
     identifier: commentId,
     body: commentBody,
