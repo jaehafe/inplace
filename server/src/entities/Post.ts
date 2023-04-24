@@ -8,6 +8,7 @@ import { makeId, slugify } from '../utils/helper';
 import Image from './Image';
 import PostVote from './PostVote';
 import { Category } from './Category';
+import { PostCategory } from './PostCategory';
 
 @Entity('posts')
 export default class Post extends BaseEntity {
@@ -67,9 +68,8 @@ export default class Post extends BaseEntity {
   @Column()
   views: number;
 
-  @ManyToMany(() => Category, (category) => category.posts)
-  @JoinTable()
-  categories: Category[];
+  @OneToMany(() => PostCategory, (postCategory) => postCategory.post)
+  categories: PostCategory[];
 
   @Expose() get url(): string {
     return `/${this.placeName}/${this.identifier}/${this.slug}`;
