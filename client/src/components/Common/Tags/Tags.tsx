@@ -17,12 +17,10 @@ function Tags({ categories }: ITags) {
   return (
     <T.TagContainer>
       <Space size={[0, 'small']} wrap>
-        {categories.map((c: any) => {
+        {categories.map((c) => {
           return (
-            <Link href={`/tags/${c.id}`}>
-              <Tag color="red" key={c.id}>
-                {c.category.name}
-              </Tag>
+            <Link href={`/tags/${c.id}`} key={c.id}>
+              <Tag color="red">{c.category.name}</Tag>
             </Link>
           );
         })}
