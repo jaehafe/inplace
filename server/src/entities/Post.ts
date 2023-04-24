@@ -69,6 +69,9 @@ export default class Post extends BaseEntity {
   // views: number;
 
   @OneToMany(() => PostCategory, (postCategory) => postCategory.post)
+  // name 속성은 외래 키가 있는 엔티티의 컬럼명을 참조
+  // referencedColumnName 속성은 참조하는 엔티티의 컬럼명을 참조
+  @JoinColumn({ name: 'postId', referencedColumnName: 'id' })
   categories: PostCategory[];
 
   @Expose() get url(): string {

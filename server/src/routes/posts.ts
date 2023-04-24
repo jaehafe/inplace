@@ -12,7 +12,6 @@ import User from '../entities/User';
 import CommentVote from '../entities/CommentVote';
 import PostVote from '../entities/PostVote';
 import Category from '../entities/Category';
-import { FindOneOptions, getRepository } from 'typeorm';
 import PostCategory from '../entities/PostCategory';
 
 const router = Router();
@@ -87,6 +86,7 @@ const createPost = async (req: Request, res: Response) => {
       }
     }
 
+    // 태그 생성
     if (tags.length > 0) {
       const tagsArr = [];
 
@@ -131,8 +131,6 @@ const getAllPosts = async (req: Request, res: Response) => {
       .leftJoinAndSelect('post.images', 'postImages')
       .leftJoinAndSelect('post.categories', 'categories')
       .leftJoinAndSelect('categories.category', 'category')
-      // .leftJoinAndSelect('post.categories', 'postCategories') // 수정된 부분
-      // .leftJoinAndSelect('postCategories.category', 'category') // 수정된 부분
       .leftJoinAndSelect('user.image', 'userImage')
       .leftJoinAndSelect('user.followers', 'followers')
       .orderBy('post.createdAt', 'DESC')
@@ -178,10 +176,8 @@ const getHotPosts = async (req: Request, res: Response) => {
       .leftJoinAndSelect('post.votes', 'votes')
       .leftJoinAndSelect('post.user', 'user')
       .leftJoinAndSelect('post.images', 'postImages')
-      // .leftJoinAndSelect('post.categories', 'categories')
-      // .leftJoinAndSelect('categories.category', 'category')
-      .leftJoinAndSelect('post.categories', 'postCategories') // 수정된 부분
-      .leftJoinAndSelect('postCategories.category', 'category') // 수정된 부분
+      .leftJoinAndSelect('post.categories', 'categories')
+      .leftJoinAndSelect('categories.category', 'category')
       .leftJoinAndSelect('user.image', 'userImage')
       .leftJoinAndSelect('user.followers', 'followers')
       .orderBy('post.createdAt', 'DESC')
@@ -241,12 +237,6 @@ const getDetailPost = async (req: Request, res: Response) => {
     const post = await Post.findOneOrFail({
       where: { identifier },
       relations: ['votes', 'images', 'user.image', 'categories', 'categories.category'],
-      // .leftJoinAndSelect('post.categories', 'categories')
-      // .leftJoinAndSelect('categories.category', 'category')
-
-      // 'comments.user.image',
-      // 'comments',
-      // 'images',
     });
 
     // 조회수 증가
@@ -334,11 +324,15 @@ const deletePost = async (req: Request, res: Response) => {
     await Promise.all(post.images.map((image) => Image.delete({ id: image.id })));
 
     // 5. PostCategory 삭제
-    // await PostCategory.delete(post.id);
-    // const postCategories = await PostCategory.find({ where: { post: post } });
-    // await Promise.all(postCategories.map((postCategory) => postCategory.remove()));
+    const postCategoryRepository = AppDataSource.getRepository(PostCategory);
+    await postCategoryRepository
+      .createQueryBuilder()
+      .delete()
+      .from(PostCategory)
+      .where('postId = :postId', { postId: post.id })
+      .execute();
 
-    // 5. 마지막으로 post 삭제
+    // 6. 마지막으로 post 삭제
     await Post.delete({ identifier });
 
     return res.json({ message: '게시물 삭제 완료' });
@@ -355,6 +349,7 @@ const updatePost = async (req: Request, res: Response) => {
 
   try {
     const post = await Post.findOneOrFail({ where: { id: Number(identifier) }, relations: ['images'] });
+    console.log('post>>>>>>>', post);
 
     if (!post) {
       return res.status(404).json({ error: '게시물을 찾을 수 없습니다.' });
@@ -402,6 +397,60 @@ const updatePost = async (req: Request, res: Response) => {
     }
 
     // 3. 카테고리 업데이트
+    if (tags) {
+      const categoryRepository = AppDataSource.getRepository(Category);
+      const postCategoryRepository = AppDataSource.getRepository(PostCategory);
+
+      // 기존 카테고리 찾기
+      // const existingPostCategories = await postCategoryRepository.find({ where: { post: post.id } });
+      const existingPostCategories = await postCategoryRepository
+        .createQueryBuilder('postCategory')
+        .innerJoinAndSelect('postCategory.post', 'post', 'post.id = :postId', { postId: post.id })
+        .innerJoinAndSelect('postCategory.category', 'category')
+        .getMany();
+
+      // 새로운 카테고리를 찾거나 생성
+      const newCategories = await Promise.all(
+        tags.map(async (tag) => {
+          let category = await categoryRepository.findOne({ where: { name: tag } });
+
+          if (!category) {
+            category = new Category();
+            category.name = tag;
+            await category.save();
+          }
+
+          return category;
+        })
+      );
+
+      // 추가해야 할 카테고리 찾기
+      const categoriesToAdd = newCategories.filter(
+        (newCategory) => !existingPostCategories.some((postCategory) => postCategory.category.id === newCategory.id)
+      );
+
+      // 제거해야 할 카테고리 찾기
+      const categoriesToRemove = existingPostCategories.filter(
+        (postCategory) => !newCategories.some((newCategory) => newCategory.id === postCategory.category.id)
+      );
+
+      // 추가해야 할 카테고리 추가
+      await Promise.all(
+        categoriesToAdd.map(async (categoryToAdd) => {
+          const postCategory = new PostCategory();
+          postCategory.post = post;
+          postCategory.category = categoryToAdd;
+          await postCategory.save();
+        })
+      );
+
+      // 제거해야 할 카테고리 삭제
+      await Promise.all(
+        categoriesToRemove.map(async (postCategoryToRemove) => {
+          await postCategoryRepository.delete(postCategoryToRemove.id);
+        })
+      );
+    }
 
     await post.save();
 
