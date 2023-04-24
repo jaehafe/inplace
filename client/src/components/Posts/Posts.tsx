@@ -129,7 +129,7 @@ function Post(
                 src={user.image && `${user.image.src}`}
                 width={46}
                 height={46}
-                style={{ borderRadius: '50px' }}
+                style={{ borderRadius: '50px', objectFit: 'contain' }}
                 alt="avatar"
               />
             </Link>

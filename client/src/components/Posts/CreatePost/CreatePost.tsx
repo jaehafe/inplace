@@ -130,6 +130,7 @@ function CreatePost() {
 
   const handleSubmitPost = async (e: FormEvent) => {
     e.preventDefault();
+    console.log('tags><>>>>>', tags);
 
     createPostMutate({
       title,

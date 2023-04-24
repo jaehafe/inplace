@@ -14,6 +14,7 @@ import { UploadFileStatus } from 'antd/es/upload/interface';
 import useDebounce from '../../hooks/useDebounce';
 import { useQueryClient } from '@tanstack/react-query';
 import P from '../../pages/profile/Profile.styles';
+import CreateTags from './CreatePost/CreateTags';
 
 const beforeUpload = (fileList: UploadFile[]) => {
   return fileList.every((file) => {
@@ -44,7 +45,9 @@ function PostEditModal({ data }: any) {
     id: postId,
     images,
     identifier,
+    categories,
   } = data;
+  console.log('categories>>>', categories);
 
   const queryClient = useQueryClient();
   const { isOpenEditPostModal, editPostId, closeEditPostModal } =
@@ -63,6 +66,8 @@ function PostEditModal({ data }: any) {
   const [neutral, setNeutral] = useState('');
   const [disagree, setDisagree] = useState('');
   const [desc, setDesc] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+
   const [isDisabled, setIsDisabled] = useState(true);
   const [previousImage, setPreviousImage] = useState<UploadFile[]>([]);
 
@@ -100,12 +105,16 @@ function PostEditModal({ data }: any) {
     };
   });
 
+  const getTags = categories.map((c: any) => c.category.name);
+  console.log('tags>>>', tags);
+
   useEffect(() => {
     setTitle(titleBody);
     setAgree(agreeBody);
     setNeutral(neutralBody);
     setDisagree(disagreeBody);
     setDesc(descBody);
+    setTags(getTags);
     setFileList(getFileListFromPostImage);
     // setPreviousImage(getFileListFromPostImage);
   }, [data]);
@@ -210,6 +219,7 @@ function PostEditModal({ data }: any) {
       desc,
       imageName: setNewImageName,
       isImageChanged,
+      tags,
     });
   };
 
@@ -266,6 +276,7 @@ function PostEditModal({ data }: any) {
           onChange={(e) => setDisagree(e.target.value)}
           value={disagree}
         />
+        <CreateTags tags={tags} setTags={setTags} />
         <br />
         <br />
         <Collapse>
