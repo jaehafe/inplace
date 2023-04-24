@@ -73,7 +73,6 @@ function PostDrawer({
   const { mutate: deletePostMutate } = deletePostAPI(postId);
 
   const handleDeletePost = () => {
-    // console.log('게시글 삭제>>', postId);
     deletePostMutate(postId);
   };
 

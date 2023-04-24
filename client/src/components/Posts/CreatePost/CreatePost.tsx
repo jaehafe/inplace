@@ -83,12 +83,7 @@ function CreatePost() {
   };
   const { mutate: uploadPostImageMutate } = uploadPostImagesAPI({ onSuccess });
 
-  const onSuccessCreatePost = (data: any) => {
-    console.log('data>>>>', data);
-  };
-  const { mutate: createPostMutate } = createPostAPI({
-    onSuccess: onSuccessCreatePost,
-  });
+  const { mutate: createPostMutate } = createPostAPI();
 
   const isDisabled = useMemo(
     () =>

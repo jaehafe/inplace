@@ -47,7 +47,6 @@ function PostDetail({ detailPost }: any) {
     neutralScore,
     categories,
   } = detailPost;
-  console.log('detailPost>>>', detailPost);
 
   const { username, followers } = user;
 

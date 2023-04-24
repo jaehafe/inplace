@@ -13,13 +13,17 @@ import { axiosInstance } from '../configs/axios';
 export const createPostAPI = (
   options?: UseMutationOptions<AxiosResponse<string>, AxiosError, any>
 ): any => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
   const queryKey = `/posts`;
   const queryFn = (data: any) =>
     axiosInstance.post(queryKey, data).then((res) => res.data);
 
   const onSuccess = () => {
     message.success('게시물이 생성 완료');
-    // router.push('/');
+    queryClient.invalidateQueries([`/posts`]);
+    router.push('/');
   };
 
   const onError = () => {
@@ -110,8 +114,8 @@ export const deletePostAPI = (
   const queryFn = () => axiosInstance.delete(queryKey).then((res) => res.data);
 
   const onSuccess = () => {
-    queryClient.invalidateQueries([`/posts`]);
     message.success('게시글 삭제 완료');
+    queryClient.invalidateQueries([`/posts`]);
   };
 
   const onError = () => {
