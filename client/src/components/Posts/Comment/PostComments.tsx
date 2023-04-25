@@ -1,12 +1,12 @@
 import { Collapse, Divider, Input, message, Spin } from 'antd';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
-import { createCommentAPI, getCommentsAPI } from '../../apis/comment';
-import P from './Posts.styles';
+import { createCommentAPI, getCommentsAPI } from '../../../apis/comment';
+import P from '../Posts.styles';
 
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import PostComment from './PostComment';
-import { axiosInstance } from '../../configs/axios';
+import { axiosInstance } from '../../../configs/axios';
 import { useInView } from 'react-intersection-observer';
 
 function PostComments({ identifier, currentLoginUser }: any) {

@@ -1,24 +1,15 @@
+import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import ProfileImage from '../../Common/ProfileImage';
+import { deleteCommentAPI, updateCommentAPI } from '../../../apis/comment';
+import { voteCommentAPI } from '../../../apis/vote';
 import { HeartOutlined, HeartTwoTone, MoreOutlined } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Divider, Input, message, Popover } from 'antd';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, {
-  FormEvent,
-  MouseEvent,
-  MouseEventHandler,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { deleteCommentAPI, updateCommentAPI } from '../../apis/comment';
-import { voteCommentAPI } from '../../apis/vote';
-import { useUserInfo } from '../../store/userStore';
-import { formattedDate } from '../../utils';
-import ProfileImage from '../Common/ProfileImage';
-import P from './Posts.styles';
+import { useUserInfo } from '../../../store/userStore';
+import { formattedDate } from '../../../utils';
+import P from '../Posts.styles';
 
 function PostComment({ data }: any) {
   const {

@@ -80,9 +80,6 @@ function PostDrawer({
       icon: <ExclamationCircleFilled />,
       content: '삭제 후에는 복구가 불가능합니다.',
       onOk: () => {
-        // return new Promise((resolve, reject) => {
-        //   setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-        // }).catch(() => console.log('Oops errors!'));
         deletePostMutate(postId);
       },
       onCancel: () => {},

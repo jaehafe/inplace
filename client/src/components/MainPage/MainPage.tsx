@@ -16,8 +16,8 @@ function MainPage() {
         return <AllPosts />;
       case '인기글':
         return <HotPosts />;
-      case '플레이스':
-        return <Places />;
+      // case '플레이스':
+      //   return <Places />;
 
       default:
         return <AllPosts />;
@@ -33,7 +33,7 @@ function MainPage() {
             options={[
               { label: '전체', value: '전체' },
               { label: '인기글', value: '인기글' },
-              { label: '플레이스', value: '플레이스' },
+              // { label: '플레이스', value: '플레이스' },
             ]}
             value={value}
             onChange={setValue}

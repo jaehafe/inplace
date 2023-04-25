@@ -16,7 +16,7 @@ import { formattedDate } from '../../utils';
 import ProfileImage from '../Common/ProfileImage';
 import TagList from '../Common/Tags/TagList';
 import EditPost from './EditPost';
-import PostComments from './PostComments';
+import PostComments from './Comment/PostComments';
 import PostDrawer from './PostDrawer';
 import LinkifyText from '../Linkify';
 import P from './Posts.styles';
