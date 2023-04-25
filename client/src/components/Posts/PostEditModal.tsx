@@ -101,7 +101,8 @@ function PostEditModal({ data }: any) {
       uid: `${image.id}`,
       name: image.src,
       status: 'done' as UploadFileStatus,
-      url: `http://localhost:4000/${image.src}`,
+      url: `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/${image.src}`,
+      // ${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/${src}
     };
   });
 

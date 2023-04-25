@@ -234,7 +234,7 @@ function Post(
                   return (
                     <AntdImage
                       key={img?.src}
-                      src={`http://localhost:4000/${img.src}`}
+                      src={`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/${img.src}`}
                       width={100}
                       height={100}
                       alt="alt"

@@ -175,7 +175,7 @@ function ProfileEditModal({
         >
           {fileList ? (
             <img
-              src={`http://localhost:4000/${fileList}`}
+              src={`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/${fileList}`}
               alt="avatar"
               style={{ width: '100%' }}
             />

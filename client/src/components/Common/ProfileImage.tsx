@@ -21,7 +21,7 @@ function ProfileImage({
       <Image
         src={
           src
-            ? `http://localhost:4000/${src}`
+            ? `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/${src}`
             : 'https://www.gravatar.com/avatar?d=mp&f=y'
         }
         alt={alt}

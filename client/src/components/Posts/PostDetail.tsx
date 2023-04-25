@@ -199,7 +199,7 @@ function PostDetail({ detailPost }: any) {
                 return (
                   <AntdImage
                     key={img.src}
-                    src={`http://localhost:4000/${img.src}`}
+                    src={`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/${img.src}`}
                     width={80}
                     height={80}
                     alt="alt"
