@@ -31,7 +31,7 @@ import ProfileImage from '../Common/ProfileImage';
 import PostDrawer from './PostDrawer';
 import { usePostVoteResultModalStoreActions } from '../../store/postVoteResultStore';
 import P from './Posts.styles';
-import Tags from '../Common/Tags/Tags';
+import TagList from '../Common/Tags/TagList';
 
 function Post(
   { post, isFetchingNextPage }: any,
@@ -172,7 +172,7 @@ function Post(
           </P.VoteResultWrapper>
 
           {/* 태그 리스트 */}
-          {categories?.length > 0 && <Tags categories={categories} />}
+          {categories?.length > 0 && <TagList categories={categories} />}
           {/* 댓글, 투표 통계 버튼 */}
           <P.StaticsWrapper>
             <P.StaticsLeft>

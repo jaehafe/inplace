@@ -14,7 +14,7 @@ import { postVoteAPI } from '../../apis/vote';
 import { useUserInfo } from '../../store/userStore';
 import { formattedDate } from '../../utils';
 import ProfileImage from '../Common/ProfileImage';
-import Tags from '../Common/Tags/Tags';
+import TagList from '../Common/Tags/TagList';
 import EditPost from './EditPost';
 import PostComments from './PostComments';
 import PostDrawer from './PostDrawer';
@@ -152,7 +152,7 @@ function PostDetail({ detailPost }: any) {
           </P.VoteResult>
         </P.VoteResultWrapper>
 
-        {categories?.length > 0 && <Tags categories={categories} />}
+        {categories?.length > 0 && <TagList categories={categories} />}
 
         {/* OX 투표기능 */}
         <P.VoteSelectWrapper>

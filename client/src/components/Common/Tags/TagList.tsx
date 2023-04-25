@@ -1,9 +1,9 @@
 import { Space, Tag } from 'antd';
 import Link from 'next/link';
 import React from 'react';
-import T from './Tags.styles';
+import T from './TagList.styles';
 
-interface ITags {
+interface ITagList {
   categories: {
     id: number;
     category: {
@@ -13,7 +13,7 @@ interface ITags {
   }[];
 }
 
-function Tags({ categories }: ITags) {
+function TagList({ categories }: ITagList) {
   return (
     <T.TagContainer>
       <Space size={[0, 'small']} wrap>
@@ -29,7 +29,7 @@ function Tags({ categories }: ITags) {
   );
 }
 
-export default Tags;
+export default TagList;
 
 {
   /* <Tag color="magenta">magenta</Tag>
