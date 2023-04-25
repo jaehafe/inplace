@@ -278,6 +278,8 @@ const getOwnPosts = async (req: Request, res: Response) => {
       .leftJoinAndSelect('post.votes', 'votes')
       .leftJoinAndSelect('post.comments', 'comments')
       .leftJoinAndSelect('post.images', 'images')
+      .leftJoinAndSelect('post.categories', 'postCategories')
+      .leftJoinAndSelect('postCategories.category', 'categoryData')
       .skip(currentPage * perPage)
       .take(perPage)
       .getManyAndCount();
@@ -308,6 +310,8 @@ const getResponsedPosts = async (req: Request, res: Response) => {
       .leftJoinAndSelect('post.votes', 'votes')
       .leftJoinAndSelect('post.comments', 'comments')
       .leftJoinAndSelect('post.images', 'images')
+      .leftJoinAndSelect('post.categories', 'postCategories')
+      .leftJoinAndSelect('postCategories.category', 'categoryData')
       .skip(currentPage * perPage)
       .take(perPage)
       .getManyAndCount();

@@ -47,7 +47,7 @@ const handlePostVote = async (req: Request, res: Response) => {
 
     return res.json({ voteScore });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({ error: 'Something went wrong' });
   }
 };
