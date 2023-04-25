@@ -17,6 +17,7 @@ import T from '../../components/ProfileTab/Tab.styles';
 import ProfileFollowingTab from '../../components/ProfileTab/ProfileFollowingTab';
 import ProfileInfo from '../../components/ProfileTab/ProfileInfo';
 import ProfileEditModal from '../../components/ProfileTab/ProfileEditModal';
+import ProfileResponseTab from '../../components/ProfileTab/ProfileResponseTab';
 
 function Profile({ identifier }: { identifier: string }) {
   const currentLoginUser = useUserInfo();
@@ -46,6 +47,7 @@ function Profile({ identifier }: { identifier: string }) {
 
   const MemoizedProfilePostTab = memo(ProfilePostTab);
   const MemoizedProfileCommentTab = memo(ProfileCommentTab);
+  const MemoizedProfileResponseTab = memo(ProfileResponseTab);
 
   const items: TabsProps['items'] = [
     {
@@ -73,7 +75,13 @@ function Profile({ identifier }: { identifier: string }) {
     {
       key: '응답한 글',
       label: `응답한 글`,
-      children: <>123</>,
+      children: (
+        <MemoizedProfileResponseTab
+          identifier={identifier}
+          userInfo={userInfo}
+          currentLoginUser={currentLoginUser}
+        />
+      ),
     },
   ];
 

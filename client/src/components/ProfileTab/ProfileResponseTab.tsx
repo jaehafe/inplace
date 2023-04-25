@@ -7,23 +7,23 @@ import P from '../Posts/Posts.styles';
 import PostTab from './PostTab';
 import T from './Tab.styles';
 
-interface IProfilePostTab {
+interface IProfileResponseTab {
   identifier: string;
   userInfo: any;
   currentLoginUser: any;
 }
 
-function ProfilePostTab({
+function ProfileResponseTab({
   identifier,
   userInfo,
   currentLoginUser,
-}: IProfilePostTab) {
+}: IProfileResponseTab) {
   const [page, setPage] = useState(1);
   const onChange: PaginationProps['onChange'] = (page) => {
     setPage(page);
   };
 
-  const queryKey = `/posts/owned/${identifier}?page=${page - 1}`;
+  const queryKey = `/posts/responsed/${identifier}?page=${page - 1}`;
 
   const fetchOwnPosts = async (page = 0) => {
     const { data } = await axiosInstance.get(`${queryKey}`);
@@ -33,7 +33,7 @@ function ProfilePostTab({
 
   const {
     status,
-    data: postData,
+    data: responseData,
     error,
     isLoading,
     isFetching,
@@ -45,8 +45,8 @@ function ProfilePostTab({
     staleTime: 100000,
   });
 
-  const pageSize = postData?.data?.length;
-  const isLastPage = pageSize === 0 || pageSize < postData?.total;
+  const pageSize = responseData?.data?.length;
+  const isLastPage = pageSize === 0 || pageSize < responseData?.total;
 
   const isSameUser = (desc: string) => {
     if (!currentLoginUser || !userInfo) {
@@ -56,20 +56,20 @@ function ProfilePostTab({
     if (currentLoginUser?.id === userInfo?.id) {
       return (
         <CustomizedEmpty
-          desc1={`작성한 ${desc}이 없습니다.`}
-          buttonMessage={`${desc}을 작성해보세요`}
+          desc1={`응답한 ${desc}이 없습니다.`}
+          // buttonMessage={`${desc} `}
         />
       );
     } else if (currentLoginUser?.id !== userInfo?.id) {
-      return <CustomizedEmpty desc1="작성한 게시글이 없습니다." />;
+      return <CustomizedEmpty desc1="응답한 게시글이 없습니다." />;
     }
   };
 
   return (
     <>
-      {postData?.data.length > 0 ? (
+      {responseData?.data?.length > 0 ? (
         <>
-          {postData?.data?.map((data: any) => {
+          {responseData?.data?.map((data: any) => {
             return (
               <PostTab post={data} key={data.identifier} queryKey={queryKey} />
             );
@@ -77,11 +77,11 @@ function ProfilePostTab({
           <T.AntdPagination
             current={page}
             onChange={onChange}
-            total={postData?.total}
+            total={responseData?.total}
           />
         </>
       ) : (
-        <>{isSameUser('게시글')}</>
+        <>{isSameUser('개시글')}</>
       )}
       <P.LoadingWrapper>
         {isLoading || isFetching ? <Spin size="large" /> : null}
@@ -89,4 +89,4 @@ function ProfilePostTab({
     </>
   );
 }
-export default ProfilePostTab;
+export default ProfileResponseTab;

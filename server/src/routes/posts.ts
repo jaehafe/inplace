@@ -289,6 +289,36 @@ const getOwnPosts = async (req: Request, res: Response) => {
   }
 };
 
+const getResponsedPosts = async (req: Request, res: Response) => {
+  const currentPage: number = (req.query.page || 0) as number;
+  const perPage: number = (req.query.count || 4) as number;
+  const { identifier } = req.params;
+
+  try {
+    const user = await User.findOneOrFail({ where: { username: identifier } });
+
+    if (!user) {
+      return res.status(404).json({ error: '존재하지 않는 유저입니다.' });
+    }
+
+    const [responsedPosts, total] = await Post.createQueryBuilder('post')
+      .leftJoin('post.votes', 'postVote')
+      .where('postVote.userId = :userId', { userId: user.id })
+      .orderBy('post.createdAt', 'DESC')
+      .leftJoinAndSelect('post.votes', 'votes')
+      .leftJoinAndSelect('post.comments', 'comments')
+      .leftJoinAndSelect('post.images', 'images')
+      .skip(currentPage * perPage)
+      .take(perPage)
+      .getManyAndCount();
+
+    return res.json({ data: responsedPosts, total });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'something went wrong' });
+  }
+};
+
 const deletePost = async (req: Request, res: Response) => {
   const { identifier } = req.params;
   const user = res.locals.user;
@@ -457,6 +487,7 @@ router.get('/hot', getHotPosts);
 router.get('/result/:identifier', userMiddleware, getVoteResult);
 // userMiddleware, authMiddleware,
 router.get('/owned/:identifier', getOwnPosts);
+router.get('/responsed/:identifier', getResponsedPosts);
 router.get('/:identifier', getDetailPost);
 router.post(
   '/images',
