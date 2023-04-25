@@ -1,5 +1,6 @@
+import { ExclamationCircleFilled } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
-import { Button, Divider, message } from 'antd';
+import { Button, Divider, message, Modal } from 'antd';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { handleFollowAPI } from '../../apis/follow';
@@ -70,7 +71,22 @@ function PostDrawer({
   const { mutate: deletePostMutate } = deletePostAPI(postId);
 
   const handleDeletePost = () => {
-    deletePostMutate(postId);
+    showPromiseConfirm();
+  };
+
+  const showPromiseConfirm = () => {
+    Modal.confirm({
+      title: '게시물을 삭제하시겠어요?',
+      icon: <ExclamationCircleFilled />,
+      content: '삭제 후에는 복구가 불가능합니다.',
+      onOk: () => {
+        // return new Promise((resolve, reject) => {
+        //   setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+        // }).catch(() => console.log('Oops errors!'));
+        deletePostMutate(postId);
+      },
+      onCancel: () => {},
+    });
   };
 
   return (
