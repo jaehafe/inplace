@@ -179,6 +179,10 @@ function CreatePost() {
         />
         <br />
         <br />
+        {/* 태그 */}
+        <CreateTags tags={tags} setTags={setTags} />
+        <span>태그를 추가해보세요.</span>
+        <Divider />
         <P.CollapseWrapper>
           <Collapse.Panel header="링크 및 내용 추가" key="1">
             <Input.TextArea
@@ -205,10 +209,7 @@ function CreatePost() {
           {fileList.length >= 5 ? null : uploadButton}
         </Upload>
         <span>최대 5장까지 업로드할 수 있습니다.</span>
-        <Divider />
-        <CreateTags tags={tags} setTags={setTags} />
-        <span>태그를 추가해보세요.</span>
-        <Divider />
+
         <CommonButton type="primary" htmlType="submit" disabled={isDisabled}>
           작성완료
         </CommonButton>
