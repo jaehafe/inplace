@@ -17,9 +17,9 @@ function TagList({ categories }: ITagList) {
   return (
     <T.TagContainer>
       <Space size={[0, 'small']} wrap>
-        {categories.map((c) => {
+        {categories?.map((c) => {
           return (
-            <Link href={`/tags/${c.id}`} key={c.id}>
+            <Link href={`/category/${c.id}`} key={c.id}>
               <Tag color="red">{c.category.name}</Tag>
             </Link>
           );
