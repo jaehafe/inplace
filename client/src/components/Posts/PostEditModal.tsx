@@ -14,6 +14,7 @@ import { UploadFileStatus } from 'antd/es/upload/interface';
 import useDebounce from '../../hooks/useDebounce';
 import { useQueryClient } from '@tanstack/react-query';
 import P from '../../pages/profile/Profile.styles';
+import Post from './Posts.styles';
 import CreateTags from './CreatePost/CreateTags';
 
 const beforeUpload = (fileList: UploadFile[]) => {
@@ -274,7 +275,7 @@ function PostEditModal({ data }: any) {
         <CreateTags tags={tags} setTags={setTags} />
         <br />
         <br />
-        <Collapse>
+        <Post.CollapseWrapper>
           <Collapse.Panel header="링크 및 내용 추가" key="1">
             <Input.TextArea
               placeholder="추가 내용을 작성해 보세요"
@@ -286,7 +287,7 @@ function PostEditModal({ data }: any) {
               value={desc}
             />
           </Collapse.Panel>
-        </Collapse>
+        </Post.CollapseWrapper>
         <br />
         <br />
 

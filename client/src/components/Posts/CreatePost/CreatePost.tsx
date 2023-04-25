@@ -12,6 +12,7 @@ import React, { FormEvent, useMemo, useState } from 'react';
 import { createPostAPI, uploadPostImagesAPI } from '../../../apis/post';
 import CommonButton from '../../Common/CommonButton.styles';
 import PostHeader from '../../Header/PostHeader/PostHeader';
+import P from '../Posts.styles';
 import CreateTags from './CreateTags';
 
 // const getBase64 = (img: RcFile, callback: (url: string) => void) => {
@@ -178,7 +179,7 @@ function CreatePost() {
         />
         <br />
         <br />
-        <Collapse>
+        <P.CollapseWrapper>
           <Collapse.Panel header="링크 및 내용 추가" key="1">
             <Input.TextArea
               placeholder="추가 내용을 작성해 보세요"
@@ -189,7 +190,7 @@ function CreatePost() {
               style={{ height: 200, resize: 'none' }}
             />
           </Collapse.Panel>
-        </Collapse>
+        </P.CollapseWrapper>
         <br />
         <br />
 

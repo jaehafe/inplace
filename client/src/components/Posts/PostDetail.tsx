@@ -18,6 +18,7 @@ import Tags from '../Common/Tags/Tags';
 import EditPost from './EditPost';
 import PostComments from './PostComments';
 import PostDrawer from './PostDrawer';
+import LinkifyText from '../Linkify';
 import P from './Posts.styles';
 
 const PostVoteResultBarChart = dynamic(
@@ -116,7 +117,8 @@ function PostDetail({ detailPost }: any) {
                 {formattedDate(updatedAt)}
                 {createdAt !== updatedAt ? '(수정됨)' : ''}
               </span>{' '}
-              <span>·</span> <span>조회 234</span>
+              {/* 조회수 */}
+              {/* <span>·</span> <span>조회 234</span> */}
             </P.PostInfo>
           </P.HeaderLeft>
         </Link>
@@ -133,7 +135,7 @@ function PostDetail({ detailPost }: any) {
       <P.BodyWrapper>
         {/* 제목, 내용 */}
         <pre>{title}</pre>
-        <pre>{desc}</pre>
+        <pre>{<LinkifyText text={desc} />}</pre>
         {/* O X  문장*/}
         <P.VoteResultWrapper>
           <P.VoteResult>

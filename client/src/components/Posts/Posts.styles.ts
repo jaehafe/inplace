@@ -1,4 +1,4 @@
-import { Button, Drawer, Radio, Tag } from 'antd';
+import { Button, Collapse, Drawer, Radio, Tag } from 'antd';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -351,6 +351,13 @@ const TagWrapper = styled(Tag)`
   } */
 `;
 
+// CreatePost.tsx
+const CollapseWrapper = styled(Collapse)`
+  & .ant-collapse-content {
+    padding: 0 0 20px;
+  }
+`;
+
 const P = {
   Wrapper,
   HeaderWrapper,
@@ -392,6 +399,7 @@ const P = {
   VoteResultChartWrapper,
   TagsContainer,
   TagWrapper,
+  CollapseWrapper,
 };
 
 export default P;
