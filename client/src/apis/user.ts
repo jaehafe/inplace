@@ -96,7 +96,7 @@ export const getUserInfoAPI = (
 };
 
 export const uploadImageAPI = <T>(data: FormData) => {
-  return axiosInstance.post<T>(`/auth/images`, data);
+  return axiosInstance.post<T>(`/image/images`, data);
 };
 
 export const editUserInfoAPI = (
