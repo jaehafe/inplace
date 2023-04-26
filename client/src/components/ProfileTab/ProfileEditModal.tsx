@@ -53,7 +53,6 @@ function ProfileEditModal({
   const [errors, setErrors] = useState<any>({});
 
   const [profileUploadLoading, setProfileUploadLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string>();
   const [imageInfo, setImageInfo] = useState<any>(null);
   const [imagePath, setImagePath] = useState<string>('');
   const [imageName, setImageName] = useState('');
@@ -89,7 +88,6 @@ function ProfileEditModal({
       setImageInfo(info.file.originFileObj);
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setProfileUploadLoading(false);
-        setImageUrl(url);
       });
     }
   };
