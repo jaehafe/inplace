@@ -54,7 +54,7 @@ function ProfileEditModal({
 
   const [profileUploadLoading, setProfileUploadLoading] = useState(false);
   const [imageInfo, setImageInfo] = useState<any>(null);
-  const [imagePath, setImagePath] = useState<string>('');
+  // const [imagePath, setImagePath] = useState<string>('');
   const [imageName, setImageName] = useState('');
 
   const [fileList, setFileList] = useState();

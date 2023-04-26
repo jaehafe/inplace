@@ -78,7 +78,7 @@ function Signup() {
       setImageInfo(info.file.originFileObj);
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setProfileUploadLoading(false);
-        setImageUrl(url);
+        // setImageUrl(url);
       });
     }
   };
@@ -105,6 +105,7 @@ function Signup() {
     <S.SignupWrapper
       onSubmit={handleSubmitSignup}
       encType="multipart/form-data"
+      method="POST"
     >
       <h2>
         인플레이스 활동에 필요한
