@@ -7,7 +7,7 @@ import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import { editUserInfoAPI, uploadImageAPI } from '../../apis/user';
-import P from '../../pages/profile/Profile.styles';
+import P from './Profile.styles';
 import InputGroup from '../InputGroup/InputGroup';
 import S from '../Signup/Signup.styles';
 import CommonButton from '../Common/CommonButton.styles';

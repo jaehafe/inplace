@@ -13,7 +13,7 @@ import { useEditPostModalStoreActions } from '../../store/editPostStore';
 import { UploadFileStatus } from 'antd/es/upload/interface';
 import useDebounce from '../../hooks/useDebounce';
 import { useQueryClient } from '@tanstack/react-query';
-import P from '../../pages/profile/Profile.styles';
+import P from '../ProfileTab/Profile.styles';
 import Post from './Posts.styles';
 import CreateTags from './CreatePost/CreateTags';
 

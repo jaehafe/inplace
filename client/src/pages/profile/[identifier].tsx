@@ -12,7 +12,7 @@ import LogoHeader from '../../components/Header/LogoHeader/LogoHeader';
 import { axiosInstance } from '../../configs/axios';
 import { useUserInfo } from '../../store/userStore';
 import { handleFollowAPI } from '../../apis/follow';
-import P from './Profile.styles';
+import P from '../../components/ProfileTab/Profile.styles';
 import T from '../../components/ProfileTab/Tab.styles';
 import ProfileFollowingTab from '../../components/ProfileTab/ProfileFollowingTab';
 import ProfileInfo from '../../components/ProfileTab/ProfileInfo';

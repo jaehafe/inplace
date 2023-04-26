@@ -1,6 +1,6 @@
 import React from 'react';
 import LogoHeader from '../../components/Header/LogoHeader/LogoHeader';
-import P from '../profile/Profile.styles';
+import P from '../../components/ProfileTab/Profile.styles';
 import Category from '../../components/Category/Category';
 import { GetServerSideProps } from 'next';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
