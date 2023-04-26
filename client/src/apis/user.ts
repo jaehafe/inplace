@@ -96,7 +96,10 @@ export const getUserInfoAPI = (
 };
 
 export const uploadImageAPI = <T>(data: FormData) => {
-  return axiosInstance.post<T>(`/image/images`, data);
+  return axiosInstance.post<T>(
+    `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/api/image/images`,
+    data
+  );
 };
 
 export const editUserInfoAPI = (
