@@ -43,4 +43,5 @@ router.post('/images', upload.single('image'), (req: RequestWithFile, res: Respo
   return res.json(req.file.filename);
 });
 
-export default router;
+// export default router;
+export { router as imageRoutes };

@@ -15,7 +15,8 @@ import postVoteRoutes from './routes/postVotes';
 import commentVoteRoutes from './routes/commentVotes';
 import followRoutes from './routes/follows';
 import categoryRoutes from './routes/categories';
-import imageRoutes from './routes/images';
+// import imageRoutes from './routes/images';
+import { imageRoutes } from './routes/images';
 
 dotenv.config();
 const app = express();
@@ -35,10 +36,7 @@ dotenv.config();
 app.get('/', (_, res: Response) => {
   res.send('server is running!!!');
 });
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Methods', 'POST');
-  next();
-});
+
 app.use('/api/image', imageRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
