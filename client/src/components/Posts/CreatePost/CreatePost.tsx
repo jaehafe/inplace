@@ -140,7 +140,7 @@ function CreatePost() {
   return (
     <div>
       <PostHeader title="OX 질문" />
-      <form onSubmit={handleSubmitPost}>
+      <form onSubmit={handleSubmitPost} encType="multipart/form-data">
         {/* 제목 */}
         <Input.TextArea
           showCount
