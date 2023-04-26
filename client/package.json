@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build:dev": "env-cmd -f .env.development next build",
-    "build:prod": "env-cmd -f .env.production next build",
+    "build:prod": "GENERATE_SOURCEMAP=false env-cmd -f .env.production next build",
     "start:dev": "env-cmd -f .env.development next start",
     "start:prod": "env-cmd -f .env.production next start",
     "lint": "next lint"
