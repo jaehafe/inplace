@@ -74,7 +74,6 @@ function ProfileEditModal({
       return;
     }
     if (info.file.status === 'done') {
-      // Get this url from response in real world.
       const imageData = info.file.originFileObj;
 
       const imageFormData = new FormData();

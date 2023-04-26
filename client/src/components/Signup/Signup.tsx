@@ -64,7 +64,6 @@ function Signup() {
       return;
     }
     if (info.file.status === 'done') {
-      // Get this url from response in real world.
       const imageData = info.file.originFileObj;
 
       const imageFormData = new FormData();
@@ -105,7 +104,6 @@ function Signup() {
     <S.SignupWrapper
       onSubmit={handleSubmitSignup}
       encType="multipart/form-data"
-      method="POST"
     >
       <h2>
         인플레이스 활동에 필요한

@@ -224,15 +224,15 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-router.get('/me', userMiddleware, authMiddleware, me);
-router.post('/signup', signup);
-router.post('/login', userMiddleware, login);
-router.post('/logout', logout);
-
 // 이미지 업로드
 router.post('/images', upload.single('image'), (req: RequestWithFile, res: Response) => {
   return res.json(req.file.filename);
 });
+
+router.get('/me', userMiddleware, authMiddleware, me);
+router.post('/signup', signup);
+router.post('/login', userMiddleware, login);
+router.post('/logout', logout);
 
 // 유저 정보 수정 라우터
 router.patch('/edit', userMiddleware, authMiddleware, updateUser);
