@@ -20,7 +20,8 @@ import imageRoutes from './routes/images';
 dotenv.config();
 const app = express();
 const origin = process.env.ORIGIN;
-
+// origin: 클라이언트에서 온 요청을 허용할 도메인을 지정
+// credentials: 쿠키를 전송할 수 있도록
 app.use(cors({ origin, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,6 +34,10 @@ dotenv.config();
 
 app.get('/', (_, res: Response) => {
   res.send('server is running!!!');
+});
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  next();
 });
 app.use('/api/image', imageRoutes);
 app.use('/api/auth', authRoutes);
