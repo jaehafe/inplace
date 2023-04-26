@@ -54,6 +54,7 @@ function Signup() {
   const [imageUrl, setImageUrl] = useState<string>();
   const [imageInfo, setImageInfo] = useState<any>(null);
   const [imageName, setImageName] = useState('');
+  const [fileList, setFileList] = useState();
 
   const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
@@ -67,11 +68,12 @@ function Signup() {
       const imageData = info.file.originFileObj;
 
       const imageFormData = new FormData();
-
       imageFormData.append('image', imageData as any);
 
       uploadImageAPI<any>(imageFormData).then((res) => {
-        return setImageName(res.data);
+        setImageName(res.data);
+        setFileList(res?.data);
+        return;
       });
       setImageInfo(info.file.originFileObj);
       getBase64(info.file.originFileObj as RcFile, (url) => {
@@ -154,8 +156,17 @@ function Signup() {
         beforeUpload={beforeUpload}
         onChange={handleProfileChange}
       >
-        {imageUrl ? (
+        {/* {imageUrl ? (
           <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+        ) : (
+          uploadButton
+        )} */}
+        {fileList ? (
+          <img
+            src={`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/${fileList}`}
+            alt="avatar"
+            style={{ width: '100%' }}
+          />
         ) : (
           uploadButton
         )}
