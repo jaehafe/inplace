@@ -123,8 +123,9 @@ function CreatePost() {
     </div>
   );
 
-  const handleSubmitPost = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmitPost = async () => {
+    // e: FormEvent
+    // e.preventDefault();
 
     createPostMutate({
       title,
@@ -141,7 +142,8 @@ function CreatePost() {
     <div>
       <PostHeader title="OX 질문" />
       {/* method='POST' */}
-      <form onSubmit={handleSubmitPost} encType="multipart/form-data">
+      {/* encType="multipart/form-data" */}
+      <div>
         {/* 제목 */}
         <Input.TextArea
           showCount
@@ -199,22 +201,28 @@ function CreatePost() {
         <br />
         <br />
 
-        <Upload
-          listType="picture-card"
-          fileList={fileList}
-          onChange={handleChange}
-          // beforeUpload={beforeUpload}
-          multiple={true}
-          maxCount={5}
-        >
-          {fileList.length >= 5 ? null : uploadButton}
-        </Upload>
+        <div>
+          <Upload
+            listType="picture-card"
+            fileList={fileList}
+            onChange={handleChange}
+            // beforeUpload={beforeUpload}
+            multiple={true}
+            maxCount={5}
+          >
+            {fileList.length >= 5 ? null : uploadButton}
+          </Upload>
+        </div>
         <span>최대 5장까지 업로드할 수 있습니다.</span>
-
-        <CommonButton type="primary" htmlType="submit" disabled={isDisabled}>
+        {/* htmlType="submit" */}
+        <CommonButton
+          type="primary"
+          disabled={isDisabled}
+          onClick={handleSubmitPost}
+        >
           작성완료
         </CommonButton>
-      </form>
+      </div>
     </div>
   );
 }
