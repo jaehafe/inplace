@@ -45,7 +45,7 @@ app.use('/api/categories', categoryRoutes);
 let port = 4000;
 
 app.listen(port, async () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running at ${process.env.ORIGIN}`);
 
   try {
     await AppDataSource.initialize();
