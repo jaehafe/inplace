@@ -48,7 +48,6 @@ function PostEditModal({ data }: any) {
     identifier,
     categories,
   } = data;
-  console.log('post edit modal images', images);
 
   const queryClient = useQueryClient();
   const { isOpenEditPostModal, editPostId, closeEditPostModal } =
@@ -69,7 +68,7 @@ function PostEditModal({ data }: any) {
   const [desc, setDesc] = useState('');
   const [tags, setTags] = useState<string[]>([]);
 
-  const [isDisabled, setIsDisabled] = useState(true);
+  // const [isDisabled, setIsDisabled] = useState(true);
   const [previousImage, setPreviousImage] = useState<UploadFile[]>([]);
 
   const [newImageName, setNewImageName] = useState<string[]>([]);
@@ -121,20 +120,18 @@ function PostEditModal({ data }: any) {
   }, [data]);
 
   const onSuccess = (data: any) => {
-    console.log('data>>>', data);
-
     setNewImageName([...data]);
-    console.log('newImageName>>>', newImageName);
+    // console.log('newImageName>>>', newImageName);
 
     // message.success('이미지 업로드 완료');
     // router.push('/');
   };
-  console.log('fileList>>>', fileList);
-  console.log('newImageName>>>', newImageName);
+  // console.log('fileList>>>', fileList);
+  // console.log('newImageName>>>', newImageName);
   const { mutate: uploadPostImageMutate } = uploadPostImagesAPI({ onSuccess });
 
   const onSuccessUpdatePost = (data: any) => {
-    console.log('onSuccessUpdatePost>>>>>', data);
+    // console.log('onSuccessUpdatePost>>>>>', data);
 
     queryClient.invalidateQueries([`/posts`]);
     queryClient.invalidateQueries([`/posts/${identifier}`]);
@@ -146,49 +143,67 @@ function PostEditModal({ data }: any) {
     onSuccess: onSuccessUpdatePost,
   });
 
-  const debouncedTitle = useDebounce(title, 2000);
-  const debouncedAgree = useDebounce(agree, 2000);
-  const debouncedNeutral = useDebounce(neutral, 2000);
-  const debouncedDisagree = useDebounce(disagree, 2000);
-  const debouncedDesc = useDebounce(desc, 2000);
+  const debouncedTitle = useDebounce(title, 1000);
+  const debouncedAgree = useDebounce(agree, 1000);
+  const debouncedNeutral = useDebounce(neutral, 1000);
+  const debouncedDisagree = useDebounce(disagree, 1000);
+  const debouncedDesc = useDebounce(desc, 1000);
 
   /** 비어있거나 이전과 같으면 Disabled */
-  useEffect(() => {
-    const checkIsDisabled = async () => {
-      const isEmpty =
-        !debouncedTitle.trim() ||
-        !debouncedAgree.trim() ||
-        !debouncedNeutral.trim() ||
-        !debouncedDisagree.trim() ||
-        !debouncedDesc.trim();
+  // useEffect(() => {
+  //   const checkIsDisabled = async () => {
+  //     const isEmpty =
+  //       !debouncedTitle.trim() ||
+  //       !debouncedAgree.trim() ||
+  //       !debouncedNeutral.trim() ||
+  //       !debouncedDisagree.trim() ||
+  //       !debouncedDesc.trim();
 
-      const isSame =
-        title === titleBody &&
-        agree === agreeBody &&
-        neutral === neutralBody &&
-        disagree === disagreeBody &&
-        desc === descBody;
+  //     const isSame =
+  //       title === titleBody &&
+  //       agree === agreeBody &&
+  //       neutral === neutralBody &&
+  //       disagree === disagreeBody &&
+  //       desc === descBody;
 
-      const isChanged = await isImageArrayDifferent(images, fileList);
+  //     // const isChanged = await isImageArrayDifferent(images, fileList);
+  //     // && !isChanged
+  //     setIsDisabled(isEmpty && !isSame);
+  //   };
 
-      setIsDisabled(isEmpty && !isSame && !isChanged);
-    };
+  //   checkIsDisabled();
+  // }, [
+  //   debouncedTitle,
+  //   debouncedAgree,
+  //   debouncedNeutral,
+  //   debouncedDisagree,
+  //   debouncedDesc,
+  //   titleBody,
+  //   agreeBody,
+  //   neutralBody,
+  //   disagreeBody,
+  //   descBody,
+  //   images,
+  //   isDisabled,
+  // ]);
 
-    checkIsDisabled();
-  }, [
-    debouncedTitle,
-    debouncedAgree,
-    debouncedNeutral,
-    debouncedDisagree,
-    debouncedDesc,
-    titleBody,
-    agreeBody,
-    neutralBody,
-    disagreeBody,
-    descBody,
-    images,
-    isDisabled,
-  ]);
+  // agree: agreeBody,
+  //   disagree: disagreeBody,
+  //   neutral: neutralBody,
+  //   title: titleBody,
+  //   desc: descBody,
+
+  const isDisabled = useMemo(
+    () =>
+      Boolean(
+        !agreeBody.trim() ||
+          !disagreeBody.trim() ||
+          !neutralBody.trim() ||
+          !titleBody.trim() ||
+          !descBody.trim()
+      ),
+    [agreeBody, disagreeBody, neutralBody, titleBody, descBody]
+  );
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setLoading(true);
@@ -222,7 +237,7 @@ function PostEditModal({ data }: any) {
     .filter((file) => file.imageName !== undefined)
     .map((file) => file.imageName);
 
-  console.log('fileListName>>>', fileListName);
+  // console.log('fileListName>>>', fileListName);
 
   const handleSubmitPost = async (e: FormEvent) => {
     e.preventDefault();
@@ -329,7 +344,7 @@ function PostEditModal({ data }: any) {
           block
           type="primary"
           htmlType="submit"
-          disabled={isDisabled}
+          disabled={false}
           style={{ margin: '30px 0 20px' }}
         >
           작성완료
