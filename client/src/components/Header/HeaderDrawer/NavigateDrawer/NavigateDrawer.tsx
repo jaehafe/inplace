@@ -31,10 +31,13 @@ function NavigateDrawer({
       text: '작성 글',
       onClick: () => router.push(`/profile/${currentLoginUser?.username}`),
     },
-    { text: '작성 댓글', onClick: () => console.log('작성 댓글 버튼 클릭') },
+    {
+      text: '작성 댓글',
+      onClick: () => router.push(`/profile/${currentLoginUser?.username}`),
+    },
     {
       text: '프로필 편집',
-      onClick: () => console.log('프로필 편집 버튼 클릭'),
+      onClick: () => router.push(`/profile/${currentLoginUser?.username}`),
     },
   ];
 

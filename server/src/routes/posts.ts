@@ -369,7 +369,16 @@ const deletePost = async (req: Request, res: Response) => {
 };
 
 const updatePost = async (req: Request, res: Response) => {
-  const { title, agree, neutral, disagree, desc = '', imageName = [], isImageChanged = false, tags } = req.body;
+  const {
+    title,
+    agree,
+    neutral,
+    disagree,
+    desc = '',
+    newImageName: imageName = [],
+    isImageChanged = false,
+    tags,
+  } = req.body;
 
   const { identifier } = req.params;
 

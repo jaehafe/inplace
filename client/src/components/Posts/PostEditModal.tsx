@@ -48,7 +48,7 @@ function PostEditModal({ data }: any) {
     identifier,
     categories,
   } = data;
-  console.log('post edit modal', data);
+  console.log('post edit modal images', images);
 
   const queryClient = useQueryClient();
   const { isOpenEditPostModal, editPostId, closeEditPostModal } =
@@ -74,8 +74,8 @@ function PostEditModal({ data }: any) {
 
   const [newImageName, setNewImageName] = useState<string[]>([]);
 
-  const [imageName, setImageName] = useState<string[]>([]);
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  // const [imageName, setImageName] = useState<string[]>([]);
+  const [fileList, setFileList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   /** 이미지가 변경되었는지 체크 서버에 넘겨줄 값 */
@@ -100,7 +100,7 @@ function PostEditModal({ data }: any) {
     return {
       // type: `png`,
       uid: `${image.id}`,
-      name: image.src,
+      imageName: image.src,
       status: 'done' as UploadFileStatus,
       url: `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/${image.src}`,
       // ${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/${src}
@@ -123,11 +123,14 @@ function PostEditModal({ data }: any) {
   const onSuccess = (data: any) => {
     console.log('data>>>', data);
 
-    setNewImageName(data);
+    setNewImageName([...data]);
     console.log('newImageName>>>', newImageName);
+
     // message.success('이미지 업로드 완료');
     // router.push('/');
   };
+  console.log('fileList>>>', fileList);
+  console.log('newImageName>>>', newImageName);
   const { mutate: uploadPostImageMutate } = uploadPostImagesAPI({ onSuccess });
 
   const onSuccessUpdatePost = (data: any) => {
@@ -210,6 +213,17 @@ function PostEditModal({ data }: any) {
     </div>
   );
 
+  // const fileListName = fileList.map((file) => {
+  //   console.log('file.imageName>>>', file.imageName);
+
+  //   return file.imageName;
+  // });
+  const fileListName = fileList
+    .filter((file) => file.imageName !== undefined)
+    .map((file) => file.imageName);
+
+  console.log('fileListName>>>', fileListName);
+
   const handleSubmitPost = async (e: FormEvent) => {
     e.preventDefault();
     const isImageChanged = await isImageArrayDifferent(images, newImageName);
@@ -220,7 +234,8 @@ function PostEditModal({ data }: any) {
       neutral,
       disagree,
       desc,
-      imageName: setNewImageName,
+      newImageName: [...fileListName, ...newImageName],
+      // imageName: setNewImageName,
       isImageChanged,
       tags,
     });
