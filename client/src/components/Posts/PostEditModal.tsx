@@ -120,7 +120,10 @@ function PostEditModal({ data }: any) {
   }, [data]);
 
   const onSuccess = (data: any) => {
+    console.log('data>>>', data);
+
     setNewImageName(data);
+    console.log('imageName>>>', imageName);
     // message.success('이미지 업로드 완료');
     // router.push('/');
   };
