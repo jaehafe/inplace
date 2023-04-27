@@ -71,9 +71,6 @@ function PostComments({ identifier, currentLoginUser }: any) {
     {
       getNextPageParam: (lastPage) =>
         !lastPage.isLast ? lastPage.nextPage : undefined,
-
-      staleTime: 600000,
-      cacheTime: 300000,
     }
   );
 
