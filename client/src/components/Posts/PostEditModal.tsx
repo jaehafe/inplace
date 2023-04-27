@@ -204,17 +204,20 @@ function PostEditModal({ data }: any) {
   );
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    if (isUploadable(newFileList)) {
-      setLoading(true);
-      setFileList(newFileList);
-      const imageFormData = new FormData();
-      setLoading(false);
-      imageFormData.append(
-        'postImages',
-        newFileList.at(-1)!.originFileObj as any
-      );
-      uploadPostImageMutate(imageFormData);
+    if (newFileList.length < 1) {
+      return; // newFileList가 undefined인 경우 함수 종료
     }
+    // if (isUploadable(newFileList)) {
+    setLoading(true);
+    setFileList(newFileList);
+    const imageFormData = new FormData();
+    setLoading(false);
+    imageFormData.append(
+      'postImages',
+      newFileList.at(-1)!.originFileObj as any
+    );
+    uploadPostImageMutate(imageFormData);
+    // }
   };
 
   const uploadButton = (
@@ -233,7 +236,7 @@ function PostEditModal({ data }: any) {
     .filter((file) => file.imageName !== undefined)
     .map((file) => file.imageName);
 
-  // console.log('fileListName>>>', fileListName);
+  console.log('fileListName>>>', fileListName);
 
   const handleSubmitPost = async (e: FormEvent) => {
     e.preventDefault();
@@ -247,14 +250,20 @@ function PostEditModal({ data }: any) {
       desc,
       newImageName: [...fileListName, ...newImageName],
       // imageName: setNewImageName,
-      isImageChanged,
+      isImageChanged: true,
       tags,
     });
   };
+  console.log('newImageName>>>', newImageName);
 
   const beforeUpload = () => {
     return false;
   };
+
+  const handleRemove = (data: any) => {
+    setFileList(fileList.filter((file) => file.uid !== data.uid));
+  };
+  console.log('fileList', fileList);
 
   return (
     <P.ProfileEditDrawer
@@ -335,6 +344,7 @@ function PostEditModal({ data }: any) {
           beforeUpload={beforeUpload}
           multiple={true}
           maxCount={5}
+          onRemove={handleRemove}
         >
           {fileList.length >= 5 ? null : uploadButton}
         </Upload>
