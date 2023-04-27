@@ -1,15 +1,7 @@
-import { isEmpty, validate } from 'class-validator';
 import { Request, Response, Router } from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import cookie from 'cookie';
-import User from '../entities/User';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import { userMiddleware } from '../middlewares/userMiddleware';
-import { authMiddleware } from '../middlewares/authMiddleware';
-import Image from '../entities/Image';
 
 const router = Router();
 
