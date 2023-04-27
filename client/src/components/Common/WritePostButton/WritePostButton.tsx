@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Divider } from 'antd';
+import { Button, Divider, message } from 'antd';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import W from './WritePostButton.styles';
@@ -30,11 +30,21 @@ function WritePostButton() {
           OX 질문
         </Button>
         <Divider />
-        <Button type="text" shape="round">
+        <Button
+          type="text"
+          shape="round"
+          disabled={true}
+          onClick={() => message.error('서비스 준비중입니다.')}
+        >
           자유글
         </Button>
         <Divider />
-        <Button type="text" shape="round">
+        <Button
+          type="text"
+          shape="round"
+          disabled={true}
+          onClick={() => message.error('서비스 준비중입니다.')}
+        >
           유형 테스트
         </Button>
       </W.AddPostDrawer>
