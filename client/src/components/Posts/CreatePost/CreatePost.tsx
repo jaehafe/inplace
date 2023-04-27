@@ -62,7 +62,7 @@ const isUploadable = (fileList: UploadFile[]) => {
     return true;
   });
 };
-
+// 일단은.. 구조를 좀 바꿔야할 것 같다는 생각이 듭니다.
 function CreatePost() {
   const [title, setTitle] = useState('');
   const [agree, setAgree] = useState('');
@@ -75,10 +75,8 @@ function CreatePost() {
   const [imageName, setImageName] = useState<string[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const router = useRouter();
-
   const onSuccess = (data: any) => {
-    setImageName(data);
+    setImageName([...imageName, data[0]]);
     // message.success('이미지 업로드 완료');
     // router.push('/');
   };
@@ -98,34 +96,29 @@ function CreatePost() {
     if (isUploadable(newFileList)) {
       setLoading(true);
       setFileList(newFileList);
-
-      if (newFileList.every((file) => file.status === 'done')) {
-        const imageFormData = new FormData();
-        setLoading(false);
-
-        for (let i = 0; i < newFileList.length; i++) {
-          imageFormData.append(
-            'postImages',
-            newFileList[i].originFileObj as any
-          );
-        }
-
-        uploadPostImageMutate(imageFormData);
-      }
+      const imageFormData = new FormData();
+      setLoading(false);
+      imageFormData.append(
+        'postImages',
+        newFileList.at(-1)!.originFileObj as any
+      );
+      uploadPostImageMutate(imageFormData);
     }
+  };
+
+  const beforeUpload = () => {
+    return false;
   };
 
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      {/* <PlusOutlined /> */}
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
 
-  const handleSubmitPost = async () => {
-    // e: FormEvent
-    // e.preventDefault();
+  const handleSubmitPost = async (e: FormEvent) => {
+    e.preventDefault();
 
     createPostMutate({
       title,
@@ -141,9 +134,7 @@ function CreatePost() {
   return (
     <div>
       <PostHeader title="OX 질문" />
-      {/* method='POST' */}
-      {/* encType="multipart/form-data" */}
-      <div>
+      <form encType="multipart/form-data" onSubmit={handleSubmitPost}>
         {/* 제목 */}
         <Input.TextArea
           showCount
@@ -200,13 +191,12 @@ function CreatePost() {
         </P.CollapseWrapper>
         <br />
         <br />
-
         <div>
           <Upload
             listType="picture-card"
             fileList={fileList}
             onChange={handleChange}
-            // beforeUpload={beforeUpload}
+            beforeUpload={beforeUpload}
             multiple={true}
             maxCount={5}
           >
@@ -214,15 +204,11 @@ function CreatePost() {
           </Upload>
         </div>
         <span>최대 5장까지 업로드할 수 있습니다.</span>
-        {/* htmlType="submit" */}
-        <CommonButton
-          type="primary"
-          disabled={isDisabled}
-          onClick={handleSubmitPost}
-        >
+
+        <CommonButton type="primary" disabled={isDisabled} htmlType="submit">
           작성완료
         </CommonButton>
-      </div>
+      </form>
     </div>
   );
 }
