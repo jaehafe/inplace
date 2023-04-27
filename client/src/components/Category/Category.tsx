@@ -44,13 +44,13 @@ function Category({ categoryId }: { categoryId: string }) {
 
   return (
     <C.Container>
-      <h2>검색한 카테고리</h2>
+      <h2>카테고리 관련 게시물</h2>
       {/* <span>{}</span> */}
-      <C.HeaderWrapper>
+      {/* <C.HeaderWrapper>
         <Space size={[0, 8]} wrap>
           <Tag color="#f50">magenta</Tag>
         </Space>
-      </C.HeaderWrapper>
+      </C.HeaderWrapper> */}
 
       <C.CategoryListWrapper>
         {responseData?.data?.length > 0 ? (

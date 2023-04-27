@@ -19,7 +19,7 @@ function TagList({ categories }: ITagList) {
       <Space size={[0, 'small']} wrap>
         {categories?.map((c) => {
           return (
-            <Link href={`/category/${c.id}`} key={c.id}>
+            <Link href={`/category/${c.category.id}`} key={c.id}>
               <Tag color="red">{c.category.name}</Tag>
             </Link>
           );
