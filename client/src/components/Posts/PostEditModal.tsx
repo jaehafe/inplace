@@ -48,6 +48,7 @@ function PostEditModal({ data }: any) {
     identifier,
     categories,
   } = data;
+  console.log('post edit modal', data);
 
   const queryClient = useQueryClient();
   const { isOpenEditPostModal, editPostId, closeEditPostModal } =
@@ -123,13 +124,15 @@ function PostEditModal({ data }: any) {
     console.log('data>>>', data);
 
     setNewImageName(data);
-    console.log('imageName>>>', imageName);
+    console.log('newImageName>>>', newImageName);
     // message.success('이미지 업로드 완료');
     // router.push('/');
   };
   const { mutate: uploadPostImageMutate } = uploadPostImagesAPI({ onSuccess });
 
-  const onSuccessUpdatePost = () => {
+  const onSuccessUpdatePost = (data: any) => {
+    console.log('onSuccessUpdatePost>>>>>', data);
+
     queryClient.invalidateQueries([`/posts`]);
     queryClient.invalidateQueries([`/posts/${identifier}`]);
 
