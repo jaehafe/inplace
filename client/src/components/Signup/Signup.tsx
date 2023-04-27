@@ -22,19 +22,40 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   reader.readAsDataURL(img);
 };
 
-const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng =
-    file.type === 'image/jpeg' ||
-    file.type === 'image/png' ||
-    file.type === 'image/svg';
-  if (!isJpgOrPng) {
-    message.error('JPG/PNG/SVG 형식의 파일만 업로드 가능합니다.');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('2MB이하의 파일사이즈만 업로드 가능합니다.');
-  }
-  return isJpgOrPng && isLt2M;
+// const beforeUpload = (file: RcFile) => {
+//   const isJpgOrPng =
+//     file.type === 'image/jpeg' ||
+//     file.type === 'image/png' ||
+//     file.type === 'image/svg';
+//   if (!isJpgOrPng) {
+//     message.error('JPG/PNG/SVG 형식의 파일만 업로드 가능합니다.');
+//     return false;
+//   }
+//   const isLt2M = file.size / 1024 / 1024 < 2;
+//   if (!isLt2M) {
+//     message.error('2MB이하의 파일사이즈만 업로드 가능합니다.');
+//     return false;
+//   }
+//   return true
+// };
+
+const isUploadable = (fileList: UploadFile[]) => {
+  return fileList.every((file) => {
+    const isJpgOrPng =
+      file.type === 'image/jpeg' ||
+      file.type === 'image/png' ||
+      file.type === 'image/svg';
+    if (!isJpgOrPng) {
+      message.error('JPG/PNG/SVG 형식의 파일만 업로드 가능합니다.');
+      return false;
+    }
+    const isLt2M = file.size! / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('총 20MB이하의 파일사이즈만 업로드 가능합니다.');
+      return false;
+    }
+    return true;
+  });
 };
 
 function Signup() {
@@ -52,20 +73,45 @@ function Signup() {
   // 프로필 업로드
   const [profileUploadLoading, setProfileUploadLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
-  const [imageInfo, setImageInfo] = useState<any>(null);
   const [imageName, setImageName] = useState('');
   const [fileList, setFileList] = useState();
+
+  // const handleProfileChange: UploadProps['onChange'] = (
+  //   info: UploadChangeParam<UploadFile>
+  // ) => {
+  //   console.log('info');
+
+  //   if (info.file.status === 'uploading') {
+  //     setProfileUploadLoading(true);
+  //     return;
+  //   }
+  //   if (info.file.status === 'done') {
+  //     const imageData = info.file.originFileObj;
+
+  //     const imageFormData = new FormData();
+  //     imageFormData.append('image', imageData as any);
+
+  //     uploadImageAPI<any>(imageFormData).then((res) => {
+  //       console.log('res.data>>>>>', res.data);
+
+  //       setImageName(res.data);
+  //       setFileList(res?.data);
+  //       return;
+  //     });
+  //     setImageInfo(info.file.originFileObj);
+  //     getBase64(info.file.originFileObj as RcFile, (url) => {
+  //       setProfileUploadLoading(false);
+  //       // setImageUrl(url);
+  //     });
+  //   }
+  // };
 
   const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
   ) => {
-    if (info.file.status === 'uploading') {
+    if (isUploadable(info.fileList)) {
       setProfileUploadLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      const imageData = info.file.originFileObj;
-
+      const imageData = info.fileList.at(-1)!.originFileObj;
       const imageFormData = new FormData();
       imageFormData.append('image', imageData as any);
 
@@ -76,11 +122,8 @@ function Signup() {
         setFileList(res?.data);
         return;
       });
-      setImageInfo(info.file.originFileObj);
-      getBase64(info.file.originFileObj as RcFile, (url) => {
-        setProfileUploadLoading(false);
-        // setImageUrl(url);
-      });
+      setProfileUploadLoading(false);
+      // getBase64(info.file.originFileObj as RcFile, (url) => {});
     }
   };
 
@@ -100,6 +143,10 @@ function Signup() {
     e.preventDefault();
 
     mutate({ email, password, username, imageName } as ISignup);
+  };
+
+  const beforeUpload = () => {
+    return false;
   };
 
   return (
