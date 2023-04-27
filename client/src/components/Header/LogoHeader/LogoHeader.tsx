@@ -34,11 +34,7 @@ function LogoHeader({ headerIcons }: IProps) {
       {headerIcons ? (
         <>
           <L.HeaderIcons>
-            <Button
-              type="text"
-              shape="circle"
-              onClick={() => router.push(`/tags`)}
-            >
+            <Button type="text" shape="circle" onClick={() => router.push(`/`)}>
               <Image src={AppImages.ArchiveIcon} alt="ArchiveIcon" />
             </Button>
             <Button
