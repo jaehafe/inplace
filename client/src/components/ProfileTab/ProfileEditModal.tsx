@@ -18,19 +18,23 @@ const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   reader.readAsDataURL(img);
 };
 
-const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng =
-    file.type === 'image/jpeg' ||
-    file.type === 'image/png' ||
-    file.type === 'image/svg';
-  if (!isJpgOrPng) {
-    message.error('JPG/PNG/SVG 형식의 파일만 업로드 가능합니다.');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('2MB이하의 파일사이즈만 업로드 가능합니다.');
-  }
-  return isJpgOrPng && isLt2M;
+const isUploadable = (fileList: UploadFile[]) => {
+  return fileList.every((file) => {
+    const isJpgOrPng =
+      file.type === 'image/jpeg' ||
+      file.type === 'image/png' ||
+      file.type === 'image/svg';
+    if (!isJpgOrPng) {
+      message.error('JPG/PNG/SVG 형식의 파일만 업로드 가능합니다.');
+      return false;
+    }
+    const isLt2M = file.size! / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('총 20MB이하의 파일사이즈만 업로드 가능합니다.');
+      return false;
+    }
+    return true;
+  });
 };
 
 interface IProfileEditModal {
@@ -54,9 +58,8 @@ function ProfileEditModal({
 
   const [profileUploadLoading, setProfileUploadLoading] = useState(false);
   const [imageInfo, setImageInfo] = useState<any>(null);
-  // const [imagePath, setImagePath] = useState<string>('');
-  const [imageName, setImageName] = useState('');
 
+  const [imageName, setImageName] = useState('');
   const [fileList, setFileList] = useState();
 
   useEffect(() => {
@@ -69,25 +72,18 @@ function ProfileEditModal({
   const handleProfileChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
   ) => {
-    if (info.file.status === 'uploading') {
+    if (isUploadable(info.fileList)) {
       setProfileUploadLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      const imageData = info.file.originFileObj;
-
+      const imageData = info.fileList.at(-1)!.originFileObj;
       const imageFormData = new FormData();
       imageFormData.append('image', imageData as any);
 
       uploadImageAPI<any>(imageFormData).then((res) => {
         setImageName(res.data);
-        setFileList(res.data);
+        setFileList(res?.data);
         return;
       });
-      setImageInfo(info.file.originFileObj);
-      getBase64(info.file.originFileObj as RcFile, (url) => {
-        setProfileUploadLoading(false);
-      });
+      setProfileUploadLoading(false);
     }
   };
 
@@ -122,6 +118,10 @@ function ProfileEditModal({
     e.preventDefault();
 
     mutate({ username, imageName });
+  };
+
+  const beforeUpload = () => {
+    return false;
   };
 
   return (
