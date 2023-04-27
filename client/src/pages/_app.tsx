@@ -12,11 +12,6 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import theme from '../styles/theme';
 import AppLayout from '../components/Layout/AppLayout';
 import Head from 'next/head';
-import { useCookies } from 'react-cookie';
-import { useSetUserInfo } from '../store/userStore';
-import { useEffect } from 'react';
-import { axiosInstance } from '../configs/axios';
-import { authMeAPI } from '../apis/user';
 import AuthUser from '../components/Signup/AuthUser';
 
 const pretendard = localFont({
