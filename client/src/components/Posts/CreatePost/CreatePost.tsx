@@ -62,7 +62,7 @@ const isUploadable = (fileList: UploadFile[]) => {
     return true;
   });
 };
-// 일단은.. 구조를 좀 바꿔야할 것 같다는 생각이 듭니다.
+
 function CreatePost() {
   const [title, setTitle] = useState('');
   const [agree, setAgree] = useState('');

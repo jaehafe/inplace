@@ -17,7 +17,7 @@ import P from '../ProfileTab/Profile.styles';
 import Post from './Posts.styles';
 import CreateTags from './CreatePost/CreateTags';
 
-const beforeUpload = (fileList: UploadFile[]) => {
+const isUploadable = (fileList: UploadFile[]) => {
   return fileList.every((file) => {
     const isJpgOrPng =
       file.type === 'image/jpeg' ||
@@ -69,8 +69,6 @@ function PostEditModal({ data }: any) {
   const [tags, setTags] = useState<string[]>([]);
 
   // const [isDisabled, setIsDisabled] = useState(true);
-  const [previousImage, setPreviousImage] = useState<UploadFile[]>([]);
-
   const [newImageName, setNewImageName] = useState<string[]>([]);
 
   // const [imageName, setImageName] = useState<string[]>([]);
@@ -206,17 +204,15 @@ function PostEditModal({ data }: any) {
   );
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setLoading(true);
-    setFileList(newFileList);
-
-    if (newFileList.every((file) => file.status === 'done')) {
+    if (isUploadable(newFileList)) {
+      setLoading(true);
+      setFileList(newFileList);
       const imageFormData = new FormData();
       setLoading(false);
-
-      for (let i = 0; i < newFileList.length; i++) {
-        imageFormData.append('postImages', newFileList[i].originFileObj as any);
-      }
-
+      imageFormData.append(
+        'postImages',
+        newFileList.at(-1)!.originFileObj as any
+      );
       uploadPostImageMutate(imageFormData);
     }
   };
@@ -254,6 +250,10 @@ function PostEditModal({ data }: any) {
       isImageChanged,
       tags,
     });
+  };
+
+  const beforeUpload = () => {
+    return false;
   };
 
   return (
@@ -332,7 +332,7 @@ function PostEditModal({ data }: any) {
           listType="picture-card"
           fileList={fileList}
           onChange={handleChange}
-          // beforeUpload={beforeUpload}
+          beforeUpload={beforeUpload}
           multiple={true}
           maxCount={5}
         >
