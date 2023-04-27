@@ -76,10 +76,12 @@ function CreatePost() {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const onSuccess = (data: any) => {
-    setImageName([...imageName, data[0]]);
+    setImageName([...imageName, ...data]);
     // message.success('이미지 업로드 완료');
     // router.push('/');
   };
+  // console.log('imageName>>', imageName);
+
   const { mutate: uploadPostImageMutate } = uploadPostImagesAPI({ onSuccess });
 
   const { mutate: createPostMutate } = createPostAPI();
@@ -93,22 +95,45 @@ function CreatePost() {
   );
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    if (newFileList.length < 1) {
+      return; // newFileList가 undefined인 경우 함수 종료
+    }
+
     if (isUploadable(newFileList)) {
       setLoading(true);
       setFileList(newFileList);
       const imageFormData = new FormData();
       setLoading(false);
+
       imageFormData.append(
         'postImages',
         newFileList.at(-1)!.originFileObj as any
       );
+
       uploadPostImageMutate(imageFormData);
     }
   };
 
+  // if (newFileList) {
+  //   for (let i = 0; i < newFileList.length; i++) {
+  //     imageFormData.append(
+  //       'postImages',
+  //       newFileList[i].originFileObj as any
+  //     );
+  //   }
+  // }
+
   const beforeUpload = () => {
     return false;
   };
+
+  const handleRemove = (data: any) => {
+    console.log('data>>>', data);
+
+    setFileList(fileList.filter((file) => file.uid !== data.uid));
+  };
+  // console.log('fileList>>', fileList);
+  console.log('imageName>>', imageName);
 
   const uploadButton = (
     <div>
@@ -199,6 +224,7 @@ function CreatePost() {
             beforeUpload={beforeUpload}
             multiple={true}
             maxCount={5}
+            onRemove={handleRemove}
           >
             {fileList.length >= 5 ? null : uploadButton}
           </Upload>
