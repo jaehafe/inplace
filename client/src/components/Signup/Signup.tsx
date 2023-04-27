@@ -116,14 +116,11 @@ function Signup() {
       imageFormData.append('image', imageData as any);
 
       uploadImageAPI<any>(imageFormData).then((res) => {
-        console.log('res.data>>>>>', res.data);
-
         setImageName(res.data);
         setFileList(res?.data);
         return;
       });
       setProfileUploadLoading(false);
-      // getBase64(info.file.originFileObj as RcFile, (url) => {});
     }
   };
 

@@ -379,7 +379,6 @@ const updatePost = async (req: Request, res: Response) => {
     isImageChanged = true,
     tags,
   } = req.body;
-  console.log('imageName>>>', imageName, isImageChanged);
 
   const { identifier } = req.params;
 

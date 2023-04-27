@@ -128,12 +128,10 @@ function CreatePost() {
   };
 
   const handleRemove = (data: any) => {
-    console.log('data>>>', data);
-
     setFileList(fileList.filter((file) => file.uid !== data.uid));
   };
   // console.log('fileList>>', fileList);
-  console.log('imageName>>', imageName);
+  // console.log('imageName>>', imageName);
 
   const uploadButton = (
     <div>
