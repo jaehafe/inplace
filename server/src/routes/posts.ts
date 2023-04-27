@@ -375,10 +375,11 @@ const updatePost = async (req: Request, res: Response) => {
     neutral,
     disagree,
     desc = '',
-    newImageName: imageName = [],
-    isImageChanged = false,
+    newImageName: imageName = '',
+    isImageChanged = true,
     tags,
   } = req.body;
+  console.log('imageName>>>', imageName, isImageChanged);
 
   const { identifier } = req.params;
 
@@ -409,6 +410,27 @@ const updatePost = async (req: Request, res: Response) => {
       post.desc = desc;
     }
 
+    // if (isImageChanged) {
+    //   if (imageName.length > 0) {
+    //     // 1. 기존 이미지 삭제
+    //     for (const image of post.images) {
+    //       await Image.delete({ id: image.id });
+    //     }
+
+    //     // 2. 새로운 이미지 업로드 및 게시물과 연결
+    //     const images = [];
+    //     for (const file of imageName) {
+    //       const image = new Image();
+    //       image.src = file;
+    //       image.post = post;
+    //       await image.save();
+    //       images.push(image);
+    //     }
+
+    //     post.images = images;
+    //   }
+    // }
+
     if (isImageChanged) {
       if (imageName.length > 0) {
         // 1. 기존 이미지 삭제
@@ -427,6 +449,10 @@ const updatePost = async (req: Request, res: Response) => {
         }
 
         post.images = images;
+        // console.log('post.images>>>', post.images);
+      } else {
+        // 이미지가 없는 경우
+        post.images = []; // 이미지 ID 배열을 빈 배열로 초기화
       }
     }
 
