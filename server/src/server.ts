@@ -15,8 +15,7 @@ import postVoteRoutes from './routes/postVotes';
 import commentVoteRoutes from './routes/commentVotes';
 import followRoutes from './routes/follows';
 import categoryRoutes from './routes/categories';
-// import imageRoutes from './routes/images';
-import { imageRoutes } from './routes/images';
+import imageRoutes from './routes/images';
 
 dotenv.config();
 const app = express();
