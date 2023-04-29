@@ -1,6 +1,3 @@
-// components/Common/ProfileInfo.tsx
-
-import { message } from 'antd';
 import P from './Profile.styles';
 
 interface IProfileInfoProps {
