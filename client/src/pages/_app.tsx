@@ -55,23 +55,6 @@ const queryClient = new QueryClient({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
-  // const setUserInfo = useSetUserInfo();
-  // const [cookie] = useCookies(['inplace']);
-  // const { data: authMeData, isLoading, error } = authMeAPI();
-
-  // useEffect(() => {
-  //   if (cookie?.inplace) {
-  //     // const fetchUserInfo = async () => {
-  //     //   const { data } = await axiosInstance.get(`/auth/me`);
-
-  //     //   setUserInfo(data);
-  //     // };
-
-  //     // fetchUserInfo();
-  //     setUserInfo(authMeData);
-  //   }
-  // }, [cookie?.inplace]);
-
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps?.dehydratedState}>
