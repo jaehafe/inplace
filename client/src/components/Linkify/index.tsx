@@ -15,7 +15,6 @@ const showConfirm = (e: MouseEvent) => {
     icon: <ExclamationCircleFilled />,
     // content: 'Some descriptions',
     onOk(e) {
-      // console.log('OK');
       window.open(e.target.getAttribute('href'));
     },
     onCancel() {
