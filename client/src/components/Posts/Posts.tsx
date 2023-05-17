@@ -222,14 +222,7 @@ function Post(
           {/* 게시물 사진 */}
           {images?.length > 0 ? (
             <P.PostImageWrapper>
-              <AntdImage.PreviewGroup
-              // preview={{
-              //   onChange: (current, prev) =>
-              //     console.log(
-              //       `current index: ${current}, prev index: ${prev}`
-              //     ),
-              // }}
-              >
+              <AntdImage.PreviewGroup>
                 {images?.map((img: any) => {
                   return (
                     <AntdImage

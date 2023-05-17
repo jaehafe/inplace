@@ -1,32 +1,22 @@
+import React, { useEffect } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { getAllPostsAPI } from '../../apis/post';
-import { axiosInstance, baseURL } from '../../configs/axios';
+import { axiosInstance } from '../../configs/axios';
 import { useInView } from 'react-intersection-observer';
 import Posts from './Posts';
 import { Spin } from 'antd';
 import P from './Posts.styles';
-import PostEditModal from './PostEditModal';
-import EditPost from './EditPost';
 
 function HotPosts() {
   const { ref: observeRef, inView } = useInView();
-  // const [queryKey, setQueryKey] = useState(`/posts?page=0`);
 
   const queryKey = `/posts/hot`;
 
   const {
-    status,
     data: infiniteHotPostData,
-    error,
     isFetching,
     isFetchingNextPage,
-    isFetchingPreviousPage,
     fetchNextPage,
-    fetchPreviousPage,
     hasNextPage,
-    hasPreviousPage,
   } = useInfiniteQuery(
     [queryKey],
     async ({ pageParam = 0 }) => {

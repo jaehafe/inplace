@@ -8,7 +8,6 @@ import P from './Posts.styles';
 
 function AllPosts() {
   const { ref: observeRef, inView } = useInView();
-  // const [queryKey, setQueryKey] = useState(`/posts?page=0`);
 
   const queryKey = `/posts`;
 

@@ -1,11 +1,10 @@
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { PaginationProps, Spin } from 'antd';
-import React, { useState } from 'react';
 import { axiosInstance } from '../../configs/axios';
-import { IIdentifier } from '../../types';
 import CustomizedEmpty from '../Common/CustomizedEmpty';
-import P from '../Posts/Posts.styles';
 import CommentTab from './CommentTab';
+import P from '../Posts/Posts.styles';
 import T from './Tab.styles';
 
 interface IProfileCommentTab {
@@ -34,12 +33,9 @@ function ProfileCommentTab({
   };
 
   const {
-    status,
     data: commentData,
-    error,
     isLoading,
     isFetching,
-    isPreviousData,
   } = useQuery({
     queryKey: [queryKey],
     queryFn: () => fetchOwnComments(page),

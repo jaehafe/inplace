@@ -1,5 +1,4 @@
-import { Spin } from 'antd';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { getDetailPostAPI } from '../../apis/post';
 import { useEditPostModalStoreActions } from '../../store/editPostStore';
 import PostEditModal from './PostEditModal';
