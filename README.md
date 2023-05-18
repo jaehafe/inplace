@@ -42,4 +42,4 @@ https://www.youtube.com/watch?v=ux-HIHMjINw
 - 게시물, 댓글, 유저 찾기 팔로워/팔로잉 - React Query 페이지네이션, 무한 스크롤 기능
 
 ## 6. 문제 해결 및 추가 기능 설명
-https://app.gitbook.com/o/VIET5ntJgbtvra81Psat/s/bYcvv7IylJ9jaNhqGBno/undefined-3/undefined/sns-app
+https://adam-37.gitbook.io/joomadeung/undefined-3/undefined/sns-app
