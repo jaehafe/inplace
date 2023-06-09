@@ -8,7 +8,8 @@
 - 배포 주소 (현재 서버 중단)
 
 ## 2. ERD
-![inplace erd](https://github.com/jaehafe/inplace/assets/108874515/b9ebea8a-68a2-4a85-96c3-e953c5a2e564)
+![inplace erd highlight](https://github.com/jaehafe/inplace/assets/108874515/b07490c4-dad3-4f6c-abd3-4e7e5ba52b1b)
+
 
 ## 3. 사용한 기술
 
