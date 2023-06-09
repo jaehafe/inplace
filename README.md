@@ -6,12 +6,15 @@
 - Github Repo [https://github.com/jaehafe/inplace](https://github.com/jaehafe/inplace)
 
 - 배포 주소 (현재 서버 중단)
+## 2. components flow chart
+![inplace-flow-chart](https://github.com/jaehafe/inplace/assets/108874515/22306a4b-904f-4071-909a-85fb6654b7ce)
 
-## 2. ERD
+
+## 3. ERD
 ![inplace erd highlight](https://github.com/jaehafe/inplace/assets/108874515/b07490c4-dad3-4f6c-abd3-4e7e5ba52b1b)
 
 
-## 3. 사용한 기술
+## 4. 사용한 기술
 
 - 공통 TypeScript v5
 - **client**
@@ -30,10 +33,10 @@
   - Docker
   - EC2
   - 
-## 4. 시연 영상
+## 5. 시연 영상
 https://www.youtube.com/watch?v=ux-HIHMjINw
 
-## 5. 주요 구현 기능
+## 6. 주요 구현 기능
 - CRUD(post, comment),
 - 회원가입 및 인증(로그인/로그아웃)
 - post 좋아요/싫어요/글쎄요 투표 기능
