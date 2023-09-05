@@ -56,19 +56,9 @@ function Category({ categoryId }: { categoryId: string }) {
         {responseData?.data?.length > 0 ? (
           <>
             {responseData?.data?.map((data: any) => {
-              return (
-                <PostTab
-                  post={data}
-                  key={data.identifier}
-                  queryKey={queryKey}
-                />
-              );
+              return <PostTab post={data} key={data.identifier} queryKey={queryKey} />;
             })}
-            <T.AntdPagination
-              current={page}
-              onChange={onChange}
-              total={responseData?.total}
-            />
+            <T.AntdPagination current={page} onChange={onChange} total={responseData?.total} />
           </>
         ) : (
           // <>{isSameUser('개시글')}</>
@@ -77,9 +67,7 @@ function Category({ categoryId }: { categoryId: string }) {
             // buttonMessage={`${desc} `}
           />
         )}
-        <P.LoadingWrapper>
-          {isLoading || isFetching ? <Spin size="large" /> : null}
-        </P.LoadingWrapper>
+        <P.LoadingWrapper>{isLoading || isFetching ? <Spin size="large" /> : null}</P.LoadingWrapper>
 
         {/* <CategoryList /> */}
       </C.CategoryListWrapper>
