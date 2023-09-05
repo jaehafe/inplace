@@ -45,13 +45,6 @@ function Category({ categoryId }: { categoryId: string }) {
   return (
     <C.Container>
       <h2>카테고리 관련 게시물</h2>
-      {/* <span>{}</span> */}
-      {/* <C.HeaderWrapper>
-        <Space size={[0, 8]} wrap>
-          <Tag color="#f50">magenta</Tag>
-        </Space>
-      </C.HeaderWrapper> */}
-
       <C.CategoryListWrapper>
         {responseData?.data?.length > 0 ? (
           <>
@@ -67,7 +60,9 @@ function Category({ categoryId }: { categoryId: string }) {
             // buttonMessage={`${desc} `}
           />
         )}
-        <P.LoadingWrapper>{isLoading || isFetching ? <Spin size="large" /> : null}</P.LoadingWrapper>
+        <P.LoadingWrapper>
+          {isLoading || isFetching ? <Spin size="large" /> : null}
+        </P.LoadingWrapper>
 
         {/* <CategoryList /> */}
       </C.CategoryListWrapper>
